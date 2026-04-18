@@ -1,8 +1,10 @@
+import { NumberTicker } from "@/components/ui/number-ticker";
+
 const stats = [
-  { value: "12M+", label: "Bookings completed" },
-  { value: "98.7%", label: "On-time reliability" },
-  { value: "240+", label: "Destinations served" },
-  { value: "24/7", label: "Global support" },
+  { value: 120, label: "Bookings completed" },
+  { value: 98.7, label: "On-time reliability" },
+  { value: 240, label: "Destinations served" },
+  { value: "24/7", label: "Hours of support" },
 ];
 
 export function Stats() {
@@ -13,7 +15,11 @@ export function Stats() {
           {stats.map((s) => (
             <div key={s.label} className="text-center md:text-left">
               <div className="font-display text-4xl font-semibold tracking-tight md:text-5xl">
-                <span className="text-accent">{s.value}</span>
+                {typeof s.value === "number" ? (
+                  <NumberTicker value={s.value} className="text-accent" />
+                ) : (
+                  <span className="text-accent">{s.value}</span>
+                )}
               </div>
               <div className="mt-2 text-sm text-primary-foreground/70">
                 {s.label}
