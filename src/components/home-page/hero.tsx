@@ -1,4 +1,4 @@
-import { Sparkles } from "lucide-react";
+import { Plane } from "lucide-react";
 import { BookingCard } from "./booking-card";
 import Image from "next/image";
 
@@ -21,10 +21,13 @@ export function Hero() {
 
       <div className="mx-auto max-w-7xl px-4">
         <div className="mx-auto max-w-3xl text-center animate-fade-up">
-          <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/70 px-3 py-1 text-xs font-medium text-muted-foreground backdrop-blur">
-            <Sparkles className="h-3.5 w-3.5 text-accent" />
-            New routes added across 6 continents
-          </span>
+          <div className="inline-flex items-center gap-2 border border-border/60 bg-white/40  rounded-full px-4 py-2 mb-8">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[12px] font-medium">
+              Live seat availability • Instant booking
+            </span>
+            <Plane className="w-3 h-3 text-accent -rotate-45" />
+          </div>
           <h1 className="font-display mt-5 text-4xl font-semibold leading-[1.05] tracking-tight text-foreground md:text-6xl lg:text-7xl">
             Book flights <span className="text-accent">seamlessly</span>
             <br className="hidden md:block" /> across the world.
