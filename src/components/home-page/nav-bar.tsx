@@ -1,24 +1,43 @@
-import { Plane, Menu } from "lucide-react";
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
-  SheetTrigger,
   SheetTitle,
+  SheetTrigger,
 } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
+import { Menu, Plane } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const links = [
-  { label: "Flights", to: "/" },
-  { label: "Manage Booking", to: "/" },
-  { label: "Help", to: "/" },
+  { label: "Flights", href: "/" },
+  { label: "Manage Booking", href: "/" },
+  { label: "Help", href: "/" },
 ];
 
 export function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handler);
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
+
   return (
     <header className="fixed top-0 z-50 w-full">
       <div className="mx-auto mt-3 max-w-7xl px-4">
-        <nav className="glass shadow-elegant flex items-center justify-between rounded-2xl px-4 py-2.5 md:px-6">
+        <nav
+          className={cn(
+            "flex items-center justify-between py-4  ",
+            scrolled
+              ? "glass shadow-elegant flex items-center justify-between rounded-2xl px-4 py-2.5 md:px-6"
+              : "px-6  ",
+          )}
+        >
           <Link href="/" className="flex items-center gap-2 group">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-elegant transition-transform group-hover:-rotate-6">
               <Plane className="h-4.5 w-4.5" strokeWidth={2.4} />
@@ -32,8 +51,8 @@ export function Navbar() {
             {links.map((l) => (
               <Link
                 key={l.label}
-                href={l.to}
-                className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                href={l.href}
+                className="rounded-lg px-3 py-2 text font-bold text-primary transition-colors hover:bg-secondary hover:text-foreground"
               >
                 {l.label}
               </Link>
@@ -64,7 +83,7 @@ export function Navbar() {
                   {links.map((l) => (
                     <Link
                       key={l.label}
-                      href={l.to}
+                      href={l.href}
                       className="rounded-lg px-3 py-3 text-base font-medium hover:bg-secondary"
                     >
                       {l.label}
