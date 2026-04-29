@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { ThemeProvider } from "@/components/global/theme/theme-provider";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -28,7 +29,15 @@ export default function RootLayout({
           className={`${geist.className} antialiased`}
           suppressHydrationWarning
         >
-          {children}
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+
           <Toaster richColors position="top-center" />
         </body>
       </html>
