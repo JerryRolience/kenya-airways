@@ -24,14 +24,14 @@ export function HelpCta() {
             <div className="flex flex-col gap-3 md:flex-row md:justify-end">
               <Button
                 size="lg"
-                className="rounded-xl bg-accent text-accent-foreground hover:bg-accent/90"
+                className="rounded-xl bg-accent text-accent-foreground hover:bg-accent/90 hover:cursor-pointer"
               >
                 <MessageCircle className="mr-2 h-4 w-4" /> Chat with support
               </Button>
               <Button
                 size="lg"
                 variant="outline"
-                className="rounded-xl border-white/30 bg-transparent text-primary-foreground hover:bg-white/10 hover:text-primary-foreground"
+                className="rounded-xl border-white/30 bg-transparent text-primary-foreground hover:bg-white/10 hover:text-primary-foreground hover:cursor-pointer"
               >
                 Visit Help Center
               </Button>
