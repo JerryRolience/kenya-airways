@@ -1,13 +1,15 @@
 import { Check, Crown, Sofa, Ticket } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const cabins = [
   {
     icon: Crown,
     name: "Executive",
+    badge: "Class A",
     tagline: "Lie-flat suites & priority everything",
-    price: "from $1,890",
+    price: "from KES 85,000",
     perks: [
       "Lie-flat seats",
       "Lounge access",
@@ -19,8 +21,9 @@ const cabins = [
   {
     icon: Sofa,
     name: "Middle",
+    badge: "Class B",
     tagline: "Extra space, extra comfort",
-    price: "from $890",
+    price: "from KES 45,000",
     perks: [
       "Premium recliner",
       "Priority check-in",
@@ -31,9 +34,10 @@ const cabins = [
   },
   {
     icon: Ticket,
-    name: "Low",
+    name: "Economy",
+    badge: "Class C",
     tagline: "Smart fares without compromise",
-    price: "from $380",
+    price: "from KES 22,000",
     perks: [
       "Comfortable seat",
       "One free bag",
@@ -88,9 +92,23 @@ export function FlightExperience() {
                 >
                   <c.icon className="h-5 w-5" />
                 </div>
-                <h3 className="font-display mt-5 text-xl font-semibold">
-                  {c.name}
-                </h3>
+
+                <div className="mt-5 flex items-center gap-2">
+                  <h3 className="font-display text-xl font-semibold">
+                    {c.name}
+                  </h3>
+                  <span
+                    className={cn(
+                      "text-[10px] font-semibold px-2 py-0.5 rounded-full",
+                      c.highlight
+                        ? "bg-accent/20 text-accent-foreground"
+                        : "bg-muted text-muted-foreground",
+                    )}
+                  >
+                    {c.badge}
+                  </span>
+                </div>
+
                 <p
                   className={
                     c.highlight
@@ -100,9 +118,11 @@ export function FlightExperience() {
                 >
                   {c.tagline}
                 </p>
-                <div className="font-display mt-4 text-2xl font-semibold">
+
+                <div className="font-display mt-4 text-xl font-semibold">
                   {c.price}
                 </div>
+
                 <ul className="mt-5 space-y-2 text-sm">
                   {c.perks.map((p) => (
                     <li key={p} className="flex items-center gap-2">
