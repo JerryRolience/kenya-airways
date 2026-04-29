@@ -1,0 +1,17 @@
+model User {
+    id        String   @id @default(cuid())
+    clerkId   String   @unique
+    email     String   @unique
+    firstName String
+    lastName  String
+    phone     String?
+    role      Role     @default(PASSENGER)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    employee   Employee?
+    passengers Passenger[]
+    bookings   Booking[]
+
+    @@map("users")
+}

@@ -1,0 +1,13 @@
+model EmployeeAssignment {
+    id         String   @id @default(cuid())
+    employeeId String
+    openingId  String
+    matchedAt  DateTime @default(now())
+    notes      String?
+
+    employee Employee   @relation(fields: [employeeId], references: [id])
+    opening  JobOpening @relation(fields: [openingId], references: [id])
+
+    @@unique([employeeId, openingId])
+    @@map("employee_assignments")
+}

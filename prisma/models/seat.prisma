@@ -1,0 +1,21 @@
+model Seat {
+    id          String       @id @default(cuid())
+    flightId    String
+    seatClassId String
+    seatNumber  String // e.g. "1A", "14C", "34F"
+    row         Int // e.g. 1
+    column      String // e.g. "A"
+    position    SeatPosition // WINDOW, MIDDLE, AISLE
+    isBooked    Boolean      @default(false)
+    isBlocked   Boolean      @default(false) // crew seats, broken seats etc.
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
+
+    flight           Flight            @relation(fields: [flightId], references: [id], onDelete: Cascade)
+    seatClass        SeatClass         @relation(fields: [seatClassId], references: [id], onDelete: Cascade)
+    bookingPassenger BookingPassenger? @relation("SeatAssignment")
+
+    // A seat can only be booked once per flight
+    @@unique([flightId, seatNumber])
+    @@map("seats")
+}

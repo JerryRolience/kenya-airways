@@ -1,0 +1,23 @@
+model Flight {
+    id               String       @id @default(cuid())
+    flightNumber     String       @unique
+    aircraftLayoutId String?
+    departureId      String
+    arrivalId        String
+    departureTime    DateTime
+    arrivalTime      DateTime
+    status           FlightStatus @default(SCHEDULED)
+    createdAt        DateTime     @default(now())
+    updatedAt        DateTime     @updatedAt
+
+    departure      Airport         @relation("DepartureAirport", fields: [departureId], references: [id])
+    arrival        Airport         @relation("ArrivalAirport", fields: [arrivalId], references: [id])
+    aircraftLayout AircraftLayout? @relation(fields: [aircraftLayoutId], references: [id])
+
+    seats          Seat[]
+    seatClasses    SeatClass[]
+    bookings       Booking[]
+    returnBookings Booking[]   @relation("ReturnFlight")
+
+    @@map("flights")
+}

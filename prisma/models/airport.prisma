@@ -1,0 +1,14 @@
+model Airport {
+    id        String   @id @default(cuid())
+    code      String   @unique // e.g. NBO, LHR, DXB
+    name      String
+    city      String
+    country   String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    departureFlights Flight[] @relation("DepartureAirport")
+    arrivalFlights   Flight[] @relation("ArrivalAirport")
+
+    @@map("airports")
+}

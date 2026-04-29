@@ -1,0 +1,14 @@
+model JobOpening {
+  id          String    @id @default(cuid())
+  title       String
+  department  String
+  description String
+  isOpen      Boolean   @default(true)
+  closedAt    DateTime? // set when opening is filled or closed
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  assignments EmployeeAssignment[]
+
+  @@map("job_openings")
+}

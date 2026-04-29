@@ -1,0 +1,17 @@
+model SeatClass {
+    id          String    @id @default(cuid())
+    flightId    String
+    class       ClassType
+    totalSeats  Int
+    bookedSeats Int       @default(0)
+    priceKES    Float
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+
+    flight   Flight    @relation(fields: [flightId], references: [id], onDelete: Cascade)
+    bookings Booking[]
+    seats    Seat[]
+
+    @@unique([flightId, class])
+    @@map("seat_classes")
+}

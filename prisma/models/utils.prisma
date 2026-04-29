@@ -1,0 +1,64 @@
+enum Role {
+    PASSENGER
+    SUPER_ADMIN
+    ADMIN
+    EMPLOYEE
+}
+
+enum PassengerRelation {
+    SELF
+    SPOUSE
+    CHILD
+    PARENT
+    COLLEAGUE
+    OTHER
+}
+
+enum FlightStatus {
+    SCHEDULED
+    BOARDING
+    DEPARTED
+    ARRIVED
+    CANCELLED
+    DELAYED
+}
+
+enum ClassType {
+    EXECUTIVE // Class A
+    MIDDLE // Class B
+    ECONOMY // Class C
+}
+
+enum SeatPosition {
+    WINDOW
+    MIDDLE
+    AISLE
+}
+
+enum BookingStatus {
+    PENDING
+    CONFIRMED
+    CANCELLED
+    COMPLETED
+}
+
+enum PaymentStatus {
+    UNPAID
+    PAID
+    REFUNDED
+}
+
+enum TicketStatus {
+    ACTIVE
+    USED
+    CANCELLED
+}
+
+enum PaymentMethod {
+    MPESA // Kenya mobile money
+    VISA // Visa card
+    MASTERCARD // Mastercard
+    AMEX // American Express
+    BANK_TRANSFER
+    CASH // Counter payments
+}

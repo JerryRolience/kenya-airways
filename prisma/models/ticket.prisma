@@ -1,0 +1,11 @@
+model Ticket {
+    id                 String       @id @default(cuid())
+    bookingPassengerId String       @unique
+    ticketNumber       String       @unique // e.g. TKT-XXXXXX 
+    issuedAt           DateTime     @default(now())
+    status             TicketStatus @default(ACTIVE)
+
+    bookingPassenger BookingPassenger @relation(fields: [bookingPassengerId], references: [id], onDelete: Cascade)
+
+    @@map("tickets")
+}

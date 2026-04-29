@@ -1,0 +1,13 @@
+model Payment {
+    id             String        @id @default(cuid())
+    bookingId      String        @unique
+    amount         Float
+    method         PaymentMethod
+    transactionRef String? // M-Pesa code, card auth code, etc.
+    paidAt         DateTime      @default(now())
+    createdAt      DateTime      @default(now())
+
+    booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+    @@map("payments")
+}

@@ -1,0 +1,15 @@
+model BookingPassenger {
+    id          String  @id @default(cuid())
+    bookingId   String
+    passengerId String
+    seatId      String? @unique
+    seatNumber  String?
+
+    booking   Booking   @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+    passenger Passenger @relation(fields: [passengerId], references: [id])
+    seat      Seat?     @relation("SeatAssignment", fields: [seatId], references: [id])
+    ticket    Ticket?
+
+    @@unique([bookingId, passengerId])
+    @@map("booking_passengers")
+}
