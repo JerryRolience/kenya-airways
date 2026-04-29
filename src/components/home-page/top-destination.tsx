@@ -6,42 +6,42 @@ const destinations = [
   {
     city: "London",
     from: "Nairobi",
-    price: 612,
+    price: 61200,
     img: "/dest-london.jpg",
     tag: "Direct",
   },
   {
     city: "Dubai",
     from: "Nairobi",
-    price: 458,
+    price: 45800,
     img: "/dest-dubai.jpg",
     tag: "Bestseller",
   },
   {
     city: "New York",
     from: "Nairobi",
-    price: 890,
+    price: 89000,
     img: "/dest-new-york.jpg",
     tag: "Direct",
   },
   {
     city: "Paris",
     from: "Nairobi",
-    price: 705,
+    price: 70500,
     img: "/dest-paris.jpg",
     tag: "Romantic",
   },
   {
     city: "Cape Town",
     from: "Nairobi",
-    price: 380,
+    price: 38000,
     img: "/dest-capetown.jpg",
     tag: "Scenic",
   },
   {
     city: "Bangkok",
     from: "Nairobi",
-    price: 640,
+    price: 64000,
     img: "/dest-bangkok.jpg",
     tag: "Cultural",
   },
@@ -103,7 +103,7 @@ function DestinationCard({
     >
       <Image
         src={img}
-        alt={`${city} skyline`}
+        alt={`${city} kenya airways flight`}
         width={800}
         height={1000}
         loading="lazy"
@@ -130,14 +130,14 @@ function DestinationCard({
               From
             </div>
             <div className="font-display text-2xl font-semibold text-accent">
-              ${price}
+              KSh {price.toLocaleString()}
             </div>
           </div>
         </div>
         <div className="mt-4 flex items-center justify-between border-t border-white/15 pt-3 text-xs">
           <span className="opacity-80">Round trip · economy</span>
           <span className="inline-flex items-center gap-1 font-medium transition-transform group-hover:translate-x-0.5">
-            Explore <ArrowUpRight className="h-3.5 w-3.5" />
+            Book now <ArrowUpRight className="h-3.5 w-3.5" />
           </span>
         </div>
       </div>
