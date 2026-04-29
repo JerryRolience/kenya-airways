@@ -32,7 +32,7 @@ export function Hero() {
             Book flights <span className="text-accent">seamlessly</span>
             <br className="hidden md:block" /> across the world.
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-base  text-gray-600 font-medium md:text-lg">
+          <p className="mx-auto mt-5 max-w-xl text-base font-medium md:text-lg">
             Premium fares, transparent pricing, and a booking flow built for the
             way you actually travel.
           </p>
