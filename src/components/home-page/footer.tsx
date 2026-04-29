@@ -1,5 +1,6 @@
 import { Plane } from "lucide-react";
-import { SiX, SiInstagram, SiFacebook, SiLinkerd } from "react-icons/si";
+import { SiX, SiInstagram, SiFacebook } from "react-icons/si";
+import { FaLinkedinIn } from "react-icons/fa";
 
 const groups = [
   {
@@ -20,6 +21,13 @@ const groups = [
   },
 ];
 
+const socials = [
+  { Icon: SiX, href: "#", label: "Follow us on X (Twitter)" },
+  { Icon: SiInstagram, href: "#", label: "Follow us on Instagram" },
+  { Icon: SiFacebook, href: "#", label: "Follow us on Facebook" },
+  { Icon: FaLinkedinIn, href: "#", label: "Connect on LinkedIn" },
+];
+
 export function Footer() {
   return (
     <footer className="border-t border-border/60 bg-card">
@@ -28,22 +36,22 @@ export function Footer() {
           <div className="md:col-span-4">
             <div className="flex items-center gap-2">
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-                <Plane className="h-4.5 w-4.5" />
+                <Plane className="h-4 w-4 -rotate-45" />
               </span>
               <span className="font-display text-lg font-semibold">
-                Skyline<span className="text-accent">.</span>
+                Kenya <span className="text-accent">Airways</span>
               </span>
             </div>
             <p className="mt-4 max-w-xs text-sm text-muted-foreground">
-              Premium flights to 240+ destinations. Built for the way you
-              actually travel.
+              Kenya Airways Online — book, manage, and track your flights across
+              the world, 24/7.
             </p>
             <div className="mt-5 flex items-center gap-3">
-              {[SiX, SiInstagram, SiFacebook, SiLinkerd].map((Icon, i) => (
+              {socials.map(({ Icon, href, label }) => (
                 <a
-                  key={i}
-                  href="#"
-                  aria-label="social link"
+                  key={label}
+                  href={href}
+                  aria-label={label}
                   className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
                 >
                   <Icon className="h-4 w-4" />
@@ -77,7 +85,8 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-border pt-6 text-xs text-muted-foreground md:flex-row md:items-center">
           <div>
-            © {new Date().getFullYear()} Skyline Airways. All rights reserved.
+            © {new Date().getFullYear()} Kenya Airways Online Systems. All
+            rights reserved.
           </div>
           <div className="flex gap-5">
             <a href="#" className="hover:text-foreground">
