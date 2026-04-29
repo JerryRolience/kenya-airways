@@ -83,8 +83,8 @@
   --primary: oklch(0.28 0.09 260); /* deep navy */
   --primary-foreground: oklch(0.99 0.005 95);
 
-  --accent: oklch(0.78 0.16 65); /* warm amber */
-  --accent-foreground: oklch(0.18 0.04 260);
+  --accent: oklch(0.47 0.22 25); /* Kenya Airways red ≈ #C8102E */
+  --accent-foreground: oklch(0.99 0.005 95); /* white text on red */
 
   /* UI */
   --card: oklch(1 0 0);
@@ -128,8 +128,8 @@
   --primary: oklch(0.35 0.1 260);
   --primary-foreground: oklch(0.99 0.005 95);
 
-  --accent: oklch(0.75 0.14 70);
-  --accent-foreground: oklch(0.13 0.04 265);
+  --accent: oklch(0.58 0.2 25);
+  --accent-foreground: oklch(0.99 0.005 95);
 
   --card: oklch(0.2 0.04 265);
   --card-foreground: oklch(0.98 0.003 248);
@@ -206,13 +206,13 @@
     background-image:
       radial-gradient(
         at 12% 8%,
-        oklch(0.78 0.16 70 / 0.18) 0px,
-        transparent 55%
+        oklch(0.47 0.22 25 / 0.1) 0px,
+        /* red tint top-left */ transparent 55%
       ),
       radial-gradient(
         at 88% 6%,
         oklch(0.55 0.18 260 / 0.22) 0px,
-        transparent 55%
+        /* navy tint top-right */ transparent 55%
       ),
       radial-gradient(
         at 50% 100%,
@@ -237,15 +237,12 @@
       0 1px 2px oklch(0.18 0.04 260 / 0.06),
       0 12px 32px -8px oklch(0.18 0.04 260 / 0.18);
   }
-  .shadow-glow-amber {
-    box-shadow: 0 20px 60px -20px oklch(0.78 0.16 70 / 0.55);
+  /* ✅ FIX 1: glow updated to red */
+  .shadow-glow-accent {
+    box-shadow: 0 20px 60px -20px oklch(0.47 0.22 25 / 0.4);
   }
-  .text-gradient-amber {
-    background: linear-gradient(
-      135deg,
-      oklch(0.82 0.16 75),
-      oklch(0.68 0.18 50)
-    );
+  .text-gradient-accent {
+    background: linear-gradient(135deg, oklch(0.58 0.2 25), oklch(0.4 0.22 20));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
