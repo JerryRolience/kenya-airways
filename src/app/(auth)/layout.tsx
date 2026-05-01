@@ -6,11 +6,10 @@ export default function AuthLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    // Full page background + centering wrapper
     <div className="flex min-h-screen w-full items-center justify-center bg-muted/40 p-4 lg:p-8">
       {/* The card — constrained to 3/4 of the page, never full screen */}
-      <div className="flex w-full max-w-5xl min-h-150 overflow-hidden rounded-2xl border border-border shadow-elegant bg-card">
-        {/*  Left panel: branding image  */}
+      <div className="flex w-full max-w-5xl h-150 overflow-hidden rounded-2xl border border-border shadow-elegant bg-card">
+        {/* Left panel — fixed, never scrolls */}
         <div className="relative hidden lg:flex lg:w-[52%] flex-col shrink-0">
           <div className="absolute inset-0">
             <Image
@@ -67,8 +66,8 @@ export default function AuthLayout({
           </div>
         </div>
 
-        {/*  Right panel: form  */}
-        <div className="flex flex-1 flex-col items-center justify-center px-8 py-10 lg:px-12">
+        {/*  Right panel — scrollable, left panel stays fixed */}
+        <div className="flex flex-1 flex-col overflow-y-auto px-8 py-10 lg:px-12">
           {/* Mobile logo */}
           <div className="mb-7 flex items-center gap-2 lg:hidden">
             <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary">
@@ -82,8 +81,8 @@ export default function AuthLayout({
             </span>
           </div>
 
-          {/* Form content */}
-          <div className="w-full max-w-sm">{children}</div>
+          {/* Centred form — uses margin auto to stay vertically centred when content is short */}
+          <div className="my-auto w-full max-w-sm mx-auto">{children}</div>
         </div>
       </div>
     </div>
