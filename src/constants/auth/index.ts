@@ -1,18 +1,32 @@
-import { InputType, Option } from "@/components/forms/form-generator/types";
-import { FaLinkedinIn } from "react-icons/fa";
-import { SiFacebook, SiInstagram, SiX } from "react-icons/si";
+import { InputType, Option } from "@/components/forms/form-generator/types"
+import { FaLinkedinIn } from "react-icons/fa"
+import { SiFacebook, SiInstagram, SiX } from "react-icons/si"
+import { Title } from "../../../generated/prisma/browser"
+import { countries } from "../countries"
 
 interface AuthFormProps {
-  id: string;
-  type: "email" | "text" | "password";
-  inputType: InputType;
-  options?: Option[];
-  label: string;
-  placeholder: string;
-  name: string;
+  id: string
+  type: "email" | "text" | "password"
+  inputType: InputType
+  options?: Option[]
+  label: string
+  placeholder: string
+  name: string
+  required?: boolean
+  maxDate?: string
 }
 
-export const SIGN_UP_FORM: AuthFormProps[] = [
+export const TITLE_OPTIONS: Option[] = Object.values(Title).map(title => ({
+  value: title,
+  label: title,
+}))
+
+export const NATIONALITY_OPTIONS: Option[] = countries.map(country => ({
+  value: country.nationality,
+  label: country.nationality,
+}))
+
+export const PASSENGER_SIGN_UP_FORM: AuthFormProps[] = [
   {
     id: "1",
     inputType: "input",
@@ -20,6 +34,7 @@ export const SIGN_UP_FORM: AuthFormProps[] = [
     label: "First name",
     name: "firstName",
     type: "text",
+    required: true,
   },
   {
     id: "2",
@@ -28,32 +43,60 @@ export const SIGN_UP_FORM: AuthFormProps[] = [
     label: "Last name",
     name: "lastName",
     type: "text",
+    required: true,
   },
   {
     id: "3",
-    inputType: "input",
-    placeholder: "Enter your email address",
-    label: "Email",
-    name: "email",
-    type: "email",
+    inputType: "select",
+    label: "Select your title",
+    placeholder: "Select your title",
+    type: "text",
+    name: "title",
+    required: true,
+    options: TITLE_OPTIONS,
   },
   {
     id: "4",
+    inputType: "date",
+    type: "text",
+    label: "Date of Birth *",
+    placeholder: new Date().toLocaleDateString("en-US", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    }), // "DD/MMM/YYYY"
+    name: "dateOfBirth",
+    maxDate: new Date().toISOString().split("T")[0],
+  },
+  {
+    id: "5",
     inputType: "phone-input",
     type: "text",
     label: "Enter your phone number",
     placeholder: "+254700000000",
     name: "phone",
+    required: true,
   },
   {
-    id: "5",
+    id: "6",
     inputType: "input",
-    placeholder: "Enter your password",
-    label: "Password",
-    name: "password",
-    type: "password",
+    placeholder: "Enter your passport number",
+    label: "Passport number",
+    name: "passportNumber",
+    type: "text",
+    required: true,
   },
-];
+  {
+    id: "7",
+    inputType: "select",
+    placeholder: "Select your nationality",
+    label: "Nationality",
+    name: "nationality",
+    type: "text",
+    required: true,
+    options: NATIONALITY_OPTIONS,
+  },
+]
 
 export const AUTH_FORM: AuthFormProps[] = [
   {
@@ -64,7 +107,7 @@ export const AUTH_FORM: AuthFormProps[] = [
     name: "email",
     type: "email",
   },
-];
+]
 
 export const socialLinks = [
   {
@@ -87,4 +130,4 @@ export const socialLinks = [
     link: "#",
     icon: FaLinkedinIn,
   },
-];
+]
