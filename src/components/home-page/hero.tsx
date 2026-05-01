@@ -1,5 +1,5 @@
 import { Plane } from "lucide-react";
-import { BookingCard } from "./booking-card";
+import { BookingCard } from "./booking-card/booking-card";
 import Image from "next/image";
 
 export function Hero() {
