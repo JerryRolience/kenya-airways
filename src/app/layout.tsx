@@ -29,16 +29,18 @@ export default function RootLayout({
           className={`${geist.className} antialiased`}
           suppressHydrationWarning
         >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
+          <ClerkProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+          </ClerkProvider>
 
-          <Toaster richColors position="top-center" />
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>

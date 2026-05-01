@@ -187,11 +187,13 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    @apply overflow-x-hidden;
   }
 
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    @apply !min-w-full;
   }
 
   .font-display {
