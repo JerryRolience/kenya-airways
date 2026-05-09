@@ -7,7 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "db:seed": "tsx prisma/seed/index.ts",
+    "db:seed:airports": "tsx prisma/seed/seed-airports.ts",
+    "db:seed:layouts": "tsx prisma/seed/seed-aircraft-layouts.ts",
+    "db:seed:flights": "tsx prisma/seed/seed-flights.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.2.8",
