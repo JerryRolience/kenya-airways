@@ -1,6 +1,6 @@
-import { Plane } from "lucide-react";
-import { BookingCard } from "./booking-card/booking-card";
-import Image from "next/image";
+import { Plane } from "lucide-react"
+import { BookingCard } from "./booking-card"
+import Image from "next/image"
 
 export function Hero() {
   return (
@@ -23,32 +23,21 @@ export function Hero() {
         <div className="mx-auto max-w-3xl text-center animate-fade-up">
           <div className="inline-flex items-center gap-2 border border-border/60 bg-white/40  rounded-full px-4 py-2 mb-8">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-[12px] font-medium">
-              Live seat availability • Instant booking
-            </span>
+            <span className="text-[12px] font-medium">Live seat availability • Instant booking</span>
             <Plane className="w-3 h-3 text-accent -rotate-45" />
           </div>
           <h1 className="font-display mt-5 text-4xl font-semibold leading-[1.05] tracking-tight text-foreground md:text-6xl lg:text-7xl">
             Book flights <span className="text-accent">seamlessly</span>
             <br className="hidden md:block" /> across the world.
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-base font-medium md:text-lg">
-            Premium fares, transparent pricing, and a booking flow built for the
-            way you actually travel.
-          </p>
+          <p className="mx-auto mt-5 max-w-xl text-base font-medium md:text-lg">Premium fares, transparent pricing, and a booking flow built for the way you actually travel.</p>
         </div>
 
-        <div
-          className="mx-auto mt-10 max-w-5xl animate-fade-up"
-          style={{ animationDelay: "120ms" }}
-        >
+        <div className="mx-auto mt-10 max-w-5xl animate-fade-up" style={{ animationDelay: "120ms" }}>
           <BookingCard />
         </div>
 
-        <div
-          className="mx-auto mt-8 flex max-w-3xl flex-wrap items-center justify-center gap-x-8 gap-y-2 text-xs text-muted-foreground animate-fade-up"
-          style={{ animationDelay: "240ms" }}
-        >
+        <div className="mx-auto mt-8 flex max-w-3xl flex-wrap items-center justify-center gap-x-8 gap-y-2 text-xs text-muted-foreground animate-fade-up" style={{ animationDelay: "240ms" }}>
           <Trust label="Best Price Guarantee" />
           <Trust label="24/7 Support" />
           <Trust label="Flexible Cancellation" />
@@ -56,7 +45,7 @@ export function Hero() {
         </div>
       </div>
     </section>
-  );
+  )
 }
 
 function Trust({ label }: { label: string }) {
@@ -65,5 +54,5 @@ function Trust({ label }: { label: string }) {
       <span className="h-1.5 w-1.5 rounded-full bg-accent" />
       <span>{label}</span>
     </div>
-  );
+  )
 }
