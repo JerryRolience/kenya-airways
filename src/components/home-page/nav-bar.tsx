@@ -59,7 +59,7 @@ export function Navbar() {
                 Log out
               </Button>
             ) : (
-              <Link href="/sign-in">
+              <Link href="/auth">
                 <Button variant="ghost" size="sm" className="hidden md:inline-flex text-sm hover:cursor-pointer ">
                   Sign in
                   <ArrowRight className="w-5 h-5" />
@@ -88,7 +88,7 @@ export function Navbar() {
                       {l.label}
                     </Link>
                   ))}
-                  <Link href="/sign-in">
+                  <Link href="/auth">
                     <Button variant="outline" className="mt-3 w-full rounded-xl hover:cursor-pointer">
                       Sign in
                     </Button>
