@@ -12,16 +12,32 @@ interface FlightCardProps {
   flight: FlightSearchResult
   searchParams: FlightSearchParams
   direction: "outbound" | "return"
+  isHighlighted: boolean
 }
 
-export function FlightCard({ flight, searchParams, direction }: FlightCardProps) {
+export function FlightCard({ flight, searchParams, direction, isHighlighted }: FlightCardProps) {
   const seatClass = flight.seatClasses[0]
   const isSelectable = seatClass && !seatClass.isFull
 
   return (
     <div
-      className={cn("group relative rounded-2xl border bg-card transition-all duration-200", "hover:border-border hover:shadow-sm", isSelectable ? "border-border/60" : "border-border/40 opacity-70")}
+      // scroll into view on mount if highlighted
+      ref={el => {
+        if (el && isHighlighted) el.scrollIntoView({ behavior: "smooth", block: "center" })
+      }}
+      className={cn(
+        "group relative rounded-2xl border bg-card transition-all duration-200",
+        "hover:border-border hover:shadow-sm",
+        isSelectable ? "border-border/60 cursor-pointer" : "border-border/40 opacity-70",
+        isHighlighted && "border-amber-400/60 ring-2 ring-amber-400/20 shadow-sm",
+      )}
     >
+      {isHighlighted && (
+        <div className="absolute -top-2.5 left-4">
+          <span className="inline-flex items-center gap-1 rounded-full bg-amber-500 px-2.5 py-0.5 text-[10px] font-bold text-white">Next available</span>
+        </div>
+      )}
+
       {/* Left accent line */}
       <div
         className={cn(

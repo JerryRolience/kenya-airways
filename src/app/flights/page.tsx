@@ -41,7 +41,9 @@ export default async function FlightsPage({ searchParams }: FlightsPageProps) {
     passengers: parseInt(params.passengers || "1"),
   }
 
+  const highlightFlightId = params.highlight ?? null
+
   const result = await searchFlights(searchData)
 
-  return <FlightsPageClient searchResults={result.success ? result.data! : null} searchParams={searchData} error={!result.success ? result.message : undefined} />
+  return <FlightsPageClient searchResults={result.success ? result.data! : null} searchParams={searchData} error={!result.success ? result.message : undefined} highlightFlightId={highlightFlightId} />
 }
