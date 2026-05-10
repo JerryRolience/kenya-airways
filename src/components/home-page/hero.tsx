@@ -33,7 +33,7 @@ export function Hero() {
           <p className="mx-auto mt-5 max-w-xl text-base font-medium md:text-lg">Premium fares, transparent pricing, and a booking flow built for the way you actually travel.</p>
         </div>
 
-        <div className="mx-auto mt-10 max-w-5xl animate-fade-up" style={{ animationDelay: "120ms" }}>
+        <div id="booking-card" className="mx-auto mt-10 max-w-5xl animate-fade-up" style={{ animationDelay: "120ms" }}>
           <BookingCard />
         </div>
 
