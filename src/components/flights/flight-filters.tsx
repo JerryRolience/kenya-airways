@@ -5,6 +5,7 @@ import { Slider } from "@/components/ui/slider"
 import { FlightSearchResponse } from "@/types/flights"
 import { SlidersHorizontal, X } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useState } from "react"
 
 interface FlightFiltersProps {
   filters: FlightSearchResponse["filters"]
@@ -26,14 +27,24 @@ function FilterSection({ title, children }: { title: string; children: React.Rea
 }
 
 export function FlightFilters({ filters, directOnly, onDirectOnlyChange, selectedAirlines, onAirlinesChange, priceRange, onPriceRangeChange }: FlightFiltersProps) {
+  const [sliderValue, setSliderValue] = useState<number[]>([priceRange[0], priceRange[1]])
+
   const hasActiveFilters = directOnly || selectedAirlines.length > 0
+
   const toggle = (airline: string) => onAirlinesChange(selectedAirlines.includes(airline) ? selectedAirlines.filter(a => a !== airline) : [...selectedAirlines, airline])
 
   const reset = () => {
     onDirectOnlyChange(false)
     onAirlinesChange([])
-    onPriceRangeChange([filters.priceRange.min, filters.priceRange.max])
+    const defaultMin = filters.priceRange.min || 0
+    const defaultMax = filters.priceRange.max || 500000
+    setSliderValue([defaultMin, defaultMax])
+    onPriceRangeChange([defaultMin, defaultMax])
   }
+
+  const sliderMin = filters.priceRange.min || 0
+  const sliderMax = filters.priceRange.max || 500000
+  const effectiveMax = sliderMax > sliderMin ? sliderMax : sliderMin + 100000
 
   return (
     <div className="sticky top-20 rounded-2xl border border-border/60 bg-card overflow-hidden">
@@ -91,24 +102,34 @@ export function FlightFilters({ filters, directOnly, onDirectOnlyChange, selecte
           </FilterSection>
         )}
 
-        {/* Price */}
-        {filters.priceRange.max > 0 && (
-          <FilterSection title="Price per person">
-            <div className="space-y-4 pt-1">
-              <Slider min={filters.priceRange.min} max={filters.priceRange.max} step={1000} value={priceRange} onValueChange={v => onPriceRangeChange(v as [number, number])} />
-              <div className="flex items-center justify-between">
-                <div className="rounded-lg border border-border/50 bg-muted/30 px-2.5 py-1.5">
-                  <p className="text-[10px] text-muted-foreground">Min</p>
-                  <p className="text-xs font-semibold text-foreground">KES {priceRange[0].toLocaleString()}</p>
-                </div>
-                <div className="rounded-lg border border-border/50 bg-muted/30 px-2.5 py-1.5 text-right">
-                  <p className="text-[10px] text-muted-foreground">Max</p>
-                  <p className="text-xs font-semibold text-foreground">KES {priceRange[1].toLocaleString()}</p>
-                </div>
+        {/* Price — always visible */}
+        <FilterSection title="Price per person">
+          <div className="space-y-4 pt-1">
+            <Slider
+              key={`price-slider-${sliderMin}-${effectiveMax}`}
+              defaultValue={[priceRange[0], priceRange[1]]}
+              min={sliderMin}
+              max={effectiveMax}
+              step={1000}
+              minStepsBetweenThumbs={1}
+              onValueChange={value => setSliderValue(value)}
+              onValueCommit={value => {
+                onPriceRangeChange([value[0], value[1]])
+              }}
+            />
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex-1 rounded-lg border border-border/50 bg-muted/30 px-2.5 py-1.5">
+                <p className="text-[10px] text-muted-foreground">Min</p>
+                <p className="text-xs font-semibold text-foreground">KES {sliderValue[0].toLocaleString()}</p>
+              </div>
+              <span className="text-muted-foreground text-xs">—</span>
+              <div className="flex-1 rounded-lg border border-border/50 bg-muted/30 px-2.5 py-1.5 text-right">
+                <p className="text-[10px] text-muted-foreground">Max</p>
+                <p className="text-xs font-semibold text-foreground">KES {sliderValue[1].toLocaleString()}</p>
               </div>
             </div>
-          </FilterSection>
-        )}
+          </div>
+        </FilterSection>
       </div>
     </div>
   )
