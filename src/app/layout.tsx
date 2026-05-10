@@ -5,6 +5,7 @@ import "./globals.css"
 import { Toaster } from "sonner"
 import { ThemeProvider } from "@/components/global/theme/theme-provider"
 import Providers from "@/lib/providers"
+import { TooltipProvider } from "@/components/ui/tooltip"
 
 const geist = Geist({
   subsets: ["latin"],
@@ -23,7 +24,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <html lang="en" className={geist.variable} suppressHydrationWarning>
         <body className={`${geist.className} antialiased`} suppressHydrationWarning>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <Providers>{children}</Providers>
+            <Providers>
+              <TooltipProvider>{children}</TooltipProvider>
+            </Providers>
           </ThemeProvider>
           <Toaster />
         </body>
