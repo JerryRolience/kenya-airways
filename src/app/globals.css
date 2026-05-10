@@ -111,14 +111,14 @@
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.75rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: oklch(0.28 0.09 260);
+  --sidebar-foreground: oklch(0.98 0.003 248);
+  --sidebar-primary: oklch(0.47 0.22 25);
+  --sidebar-primary-foreground: oklch(0.99 0.005 95);
+  --sidebar-accent: oklch(0.35 0.09 260);
+  --sidebar-accent-foreground: oklch(0.99 0.005 95);
+  --sidebar-border: oklch(0.35 0.08 260 / 0.5);
+  --sidebar-ring: oklch(0.47 0.22 25);
 }
 
 .dark {
@@ -152,14 +152,14 @@
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar: oklch(0.15 0.04 265);
+  --sidebar-foreground: oklch(0.96 0.005 250);
+  --sidebar-primary: oklch(0.58 0.2 25);
+  --sidebar-primary-foreground: oklch(0.99 0.005 95);
+  --sidebar-accent: oklch(0.24 0.06 262);
+  --sidebar-accent-foreground: oklch(0.98 0.003 248);
+  --sidebar-border: oklch(1 0 0 / 8%);
+  --sidebar-ring: oklch(0.58 0.2 25);
 }
 
 :focus-visible {
@@ -206,21 +206,8 @@
 @layer utilities {
   .bg-mesh {
     background-image:
-      radial-gradient(
-        at 12% 8%,
-        oklch(0.47 0.22 25 / 0.1) 0px,
-        /* red tint top-left */ transparent 55%
-      ),
-      radial-gradient(
-        at 88% 6%,
-        oklch(0.55 0.18 260 / 0.22) 0px,
-        /* navy tint top-right */ transparent 55%
-      ),
-      radial-gradient(
-        at 50% 100%,
-        oklch(0.24 0.07 260 / 0.18) 0px,
-        transparent 60%
-      );
+      radial-gradient(at 12% 8%, oklch(0.47 0.22 25 / 0.1) 0px, /* red tint top-left */ transparent 55%),
+      radial-gradient(at 88% 6%, oklch(0.55 0.18 260 / 0.22) 0px, /* navy tint top-right */ transparent 55%), radial-gradient(at 50% 100%, oklch(0.24 0.07 260 / 0.18) 0px, transparent 60%);
   }
   .glass {
     background-color: oklch(1 0 0 / 0.7);
