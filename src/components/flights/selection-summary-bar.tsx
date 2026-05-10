@@ -41,7 +41,7 @@ function LegPill({ flight, label, onClear }: { flight: FlightSearchResult; label
       </div>
       <button
         onClick={onClear}
-        className="shrink-0 ml-1 flex h-5 w-5 items-center justify-center rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+        className="shrink-0 ml-1 flex h-5 w-5 items-center justify-center rounded-full hover:cursor-pointer hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
         aria-label={`Remove ${label} flight`}
       >
         <X className="h-3 w-3" />
@@ -77,7 +77,7 @@ export function SelectionSummaryBar({ searchParams, selectedOutbound, selectedRe
     <div className="fixed bottom-0 inset-x-0 z-50 border-t border-border/60 bg-background/95 backdrop-blur-xl shadow-[0_-4px_24px_-6px_rgba(0,0,0,0.08)]">
       <div className="mx-auto max-w-7xl px-4 py-3">
         <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-          {/* ── Selected legs ── */}
+          {/*  Selected legs  */}
           <div className="flex flex-1 flex-wrap items-center gap-2 min-w-0">
             {selectedOutbound ? <LegPill flight={selectedOutbound} label={isReturn ? "Outbound" : "Flight"} onClear={onClearOutbound} /> : <EmptyLeg label={isReturn ? "Outbound" : "Flight"} />}
 
@@ -89,7 +89,7 @@ export function SelectionSummaryBar({ searchParams, selectedOutbound, selectedRe
             )}
           </div>
 
-          {/* ── Total + CTA ── */}
+          {/*  Total + CTA  */}
           <div className="flex items-center gap-4 shrink-0">
             {totalPerPax > 0 && (
               <div className="text-right">
@@ -107,7 +107,7 @@ export function SelectionSummaryBar({ searchParams, selectedOutbound, selectedRe
               onClick={onConfirm}
               disabled={!canConfirm}
               className={cn(
-                "h-10 px-5 rounded-xl text-sm font-semibold transition-all duration-200",
+                "h-10 px-5 rounded-xl text-sm font-semibold transition-all duration-200 hover:cursor-pointer",
                 canConfirm ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:-translate-y-px shadow-sm" : "bg-muted text-muted-foreground cursor-not-allowed",
               )}
             >

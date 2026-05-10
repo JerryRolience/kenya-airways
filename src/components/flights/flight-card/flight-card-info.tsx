@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { FlightSearchParams, FlightSearchResult } from "@/types/flights"
-import { AlertCircle, Coffee, Luggage, Plane, Wifi } from "lucide-react"
+import { AlertCircle, Check, Coffee, Luggage, Plane, Wifi } from "lucide-react"
 import { ClassType } from "../../../../generated/prisma/enums"
 import { FlightCardTimeAndRoute } from "./flight-card-time-and-route"
 import { useRouter } from "next/navigation"
@@ -15,9 +15,12 @@ interface FlightCardInfoProps {
   flight: FlightSearchResult
   searchParams: FlightSearchParams
   direction: "outbound" | "return"
+  isSelected?: boolean
+  // Present on return trips — stores selection in parent instead of navigating
+  onSelect?: (flight: FlightSearchResult) => void
 }
 
-export function FlightCardInfo({ flight, searchParams, direction }: FlightCardInfoProps) {
+export function FlightCardInfo({ flight, searchParams, direction, isSelected, onSelect }: FlightCardInfoProps) {
   const router = useRouter()
   const seatClass = flight.seatClasses[0]
   const avail = seatClass ? getAvailabilityMeta(seatClass.availableSeats, seatClass.isFull) : null
@@ -33,7 +36,13 @@ export function FlightCardInfo({ flight, searchParams, direction }: FlightCardIn
       })
       return
     }
+    // Return trip — hand control back to parent to manage state
+    if (onSelect) {
+      onSelect(flight)
+      return
+    }
 
+    // One-way — navigate straight to booking
     const p = new URLSearchParams({
       flightId: flight.id,
       flightNumber: flight.flightNumber,
@@ -45,7 +54,6 @@ export function FlightCardInfo({ flight, searchParams, direction }: FlightCardIn
       price: String(seatClass!.priceKES),
       direction,
       tripType: searchParams.tripType,
-      ...(searchParams.tripType === "return" && searchParams.returnDate ? { returnDate: format(searchParams.returnDate, "yyyy-MM-dd") } : {}),
     })
     router.push(`/booking/${flight.id}?${p.toString()}`)
   }
@@ -118,13 +126,18 @@ export function FlightCardInfo({ flight, searchParams, direction }: FlightCardIn
                 <AlertCircle className="h-3 w-3" />
                 Sold out
               </div>
+            ) : isSelected ? (
+              <Button onClick={handleSelect} size="sm" className="rounded-xl text-xs font-semibold h-8 px-4 bg-primary/10 text-primary border border-primary/20 hover:bg-primary/15 shadow-none">
+                <Check className="h-3 w-3 mr-1" />
+                Selected
+              </Button>
             ) : (
               <Button
                 onClick={handleSelect}
                 size="sm"
                 className={cn(
-                  "rounded-xl text-xs font-semibold h-8 px-4 transition-all duration-200 hover:cursor-pointer",
-                  seatClass.availableSeats <= 3 ? "bg-amber-500 hover:bg-amber-600 text-white shadow-none" : "bg-primary hover:bg-primary/90 text-primary-foreground shadow-none hover:-translate-y-px",
+                  "rounded-xl text-xs font-semibold h-8 px-4 transition-all duration-200 shadow-none",
+                  seatClass.availableSeats <= 3 ? "bg-amber-500 hover:bg-amber-600 text-white" : "bg-primary hover:bg-primary/90 text-primary-foreground hover:-translate-y-px",
                 )}
               >
                 {seatClass.availableSeats <= 3 ? "Book now" : "Select"}

@@ -7,10 +7,13 @@ interface FlightListProps {
   flights: FlightSearchResult[]
   searchParams: FlightSearchParams
   direction: "outbound" | "return"
-  highlightFlightId: string | null
+  highlightFlightId?: string | null
+  selectedFlightId: string | null
+  // Provided on return trips so cards call parent state instead of navigating
+  onSelect?: (flight: FlightSearchResult) => void
 }
 
-export function FlightList({ flights, searchParams, direction, highlightFlightId }: FlightListProps) {
+export function FlightList({ flights, searchParams, direction, highlightFlightId, selectedFlightId, onSelect }: FlightListProps) {
   if (flights.length === 0) {
     return (
       <div className="rounded-2xl border border-dashed border-border/60 py-12 text-center">
@@ -22,7 +25,15 @@ export function FlightList({ flights, searchParams, direction, highlightFlightId
   return (
     <div className="space-y-3">
       {flights.map(flight => (
-        <FlightCard key={flight.id} flight={flight} searchParams={searchParams} direction={direction} isHighlighted={flight.id === highlightFlightId} />
+        <FlightCard
+          key={flight.id}
+          flight={flight}
+          searchParams={searchParams}
+          direction={direction}
+          isHighlighted={flight.id === highlightFlightId}
+          isSelected={flight.id === selectedFlightId}
+          onSelect={onSelect}
+        />
       ))}
     </div>
   )

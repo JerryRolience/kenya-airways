@@ -1,15 +1,19 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { FlightSearchParams, FlightSearchResponse } from "@/types/flights"
+import { FlightSearchParams, FlightSearchResponse, FlightSearchResult } from "@/types/flights"
+import { format } from "date-fns"
 import Link from "next/link"
-import { useCallback, useMemo, useState } from "react"
+import { useRouter } from "next/navigation"
+import { useCallback, useMemo, useRef, useState } from "react"
 import { FlightFilters } from "./flight-filters"
 import { FlightList } from "./flight-list"
 import { FlightSearchError } from "./flight-search-error"
 import { NextAvailableBanner } from "./next-available-banner"
 import { NoFlightsFound } from "./no-flights-found"
+import { ReturnStepPrompt } from "./return-step-prompt"
 import { SearchSummaryBar } from "./search-summary-bar"
+import { SelectionSummaryBar } from "./selection-summary-bar"
 import { SortDropdown } from "./sort-dropdown"
 
 interface FlightsPageClientProps {
@@ -19,22 +23,37 @@ interface FlightsPageClientProps {
   error?: string
 }
 
-export function FlightsPageClient({ searchResults, searchParams, highlightFlightId = null, error }: FlightsPageClientProps) {
+export function FlightsPageClient({ searchResults, searchParams, error, highlightFlightId }: FlightsPageClientProps) {
+  const router = useRouter()
+
+  //  Filter / sort state
   const [sortBy, setSortBy] = useState<"price" | "duration" | "departureTime">("departureTime")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
   const [directOnly, setDirectOnly] = useState(false)
   const [selectedAirlines, setSelectedAirlines] = useState<string[]>([])
-  const [priceRange, setPriceRange] = useState<[number, number]>(() => {
-    const min = searchResults?.filters.priceRange.min || 0
-    const max = searchResults?.filters.priceRange.max || 0
-    if (max <= 0) return [0, 500000]
-    if (max === min) return [min, min * 2 || 100000]
-    return [min, max]
-  })
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 500_000])
 
+  //  Return trip selection state
+  const [selectedOutbound, setSelectedOutbound] = useState<FlightSearchResult | null>(null)
+  const [selectedReturn, setSelectedReturn] = useState<FlightSearchResult | null>(null)
+  const returnSectionRef = useRef<HTMLElement>(null)
+
+  const isReturnTrip = searchParams.tripType === "return"
+
+  //  Sort + filter helper
   const sortFlights = useCallback(
-    <T extends { seatClasses: { priceKES: number }[]; duration: number; departureTime: Date; isDirect?: boolean; flightNumber?: string }>(flights: T[]): T[] => {
-      return [...flights]
+    <
+      T extends {
+        seatClasses: { priceKES: number }[]
+        duration: number
+        departureTime: Date
+        isDirect?: boolean
+        flightNumber?: string
+      },
+    >(
+      flights: T[],
+    ): T[] =>
+      [...flights]
         .filter(f => {
           if (directOnly && !f.isDirect) return false
           if (selectedAirlines.length > 0 && !selectedAirlines.some(a => f.flightNumber?.startsWith(a))) return false
@@ -47,31 +66,73 @@ export function FlightsPageClient({ searchResults, searchParams, highlightFlight
           else if (sortBy === "duration") diff = a.duration - b.duration
           else diff = new Date(a.departureTime).getTime() - new Date(b.departureTime).getTime()
           return sortOrder === "asc" ? diff : -diff
-        })
-    },
+        }),
     [directOnly, selectedAirlines, priceRange, sortBy, sortOrder],
   )
 
+  //  Memos — all hooks before any return
   const filteredOutbound = useMemo(() => (searchResults ? sortFlights(searchResults.outboundFlights) : []), [searchResults, sortFlights])
   const filteredReturn = useMemo(() => (searchResults ? sortFlights(searchResults.returnFlights) : []), [searchResults, sortFlights])
 
   const totalResults = filteredOutbound.length + filteredReturn.length
   const filtersActive = directOnly || selectedAirlines.length > 0
-  const isRoundTrip = searchParams.tripType === "return"
 
+  //  Return trip handlers
+  const handleOutboundSelect = (flight: FlightSearchResult) => {
+    setSelectedOutbound(flight)
+    setSelectedReturn(null)
+    setTimeout(() => returnSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 150)
+  }
+
+  const handleReturnSelect = (flight: FlightSearchResult) => {
+    setSelectedReturn(flight)
+  }
+
+  //  Confirm both legs → navigate to booking
+  const handleConfirm = () => {
+    if (!selectedOutbound) return
+
+    const outboundSC = selectedOutbound.seatClasses[0]
+    const returnSC = selectedReturn?.seatClasses[0]
+
+    const p = new URLSearchParams({
+      outboundId: selectedOutbound.id,
+      flightNumber: selectedOutbound.flightNumber,
+      class: searchParams.class,
+      passengers: String(searchParams.passengers),
+      from: selectedOutbound.departure.code,
+      to: selectedOutbound.arrival.code,
+      departDate: format(selectedOutbound.departureTime, "yyyy-MM-dd"),
+      outboundPrice: String(outboundSC?.priceKES ?? 0),
+      tripType: searchParams.tripType,
+      ...(isReturnTrip && selectedReturn
+        ? {
+            returnId: selectedReturn.id,
+            returnDate: format(selectedReturn.departureTime, "yyyy-MM-dd"),
+            returnPrice: String(returnSC?.priceKES ?? 0),
+          }
+        : {}),
+    })
+
+    router.push(`/booking?${p.toString()}`)
+  }
+
+  //  Error state — after all hooks
   if (error || !searchResults) {
     return <FlightSearchError searchParams={searchParams} error={error} />
   }
 
+  const showSelectionBar = isReturnTrip && selectedOutbound !== null
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className={cn("min-h-screen bg-background", showSelectionBar && "pb-24")}>
       <SearchSummaryBar searchParams={searchParams} totalResults={totalResults} />
 
       {searchResults.nextAvailable && <NextAvailableBanner nextAvailable={searchResults.nextAvailable} searchParams={searchParams} />}
 
       <div className="mx-auto max-w-7xl px-4 py-8">
         <div className="grid gap-6 lg:grid-cols-12">
-          {/* Filters Sidebar */}
+          {/* Sidebar */}
           <aside className="lg:col-span-3">
             <FlightFilters
               filters={searchResults.filters}
@@ -84,9 +145,9 @@ export function FlightsPageClient({ searchResults, searchParams, highlightFlight
             />
           </aside>
 
-          {/* Results */}
+          {/* Main */}
           <main className="lg:col-span-9 space-y-8">
-            {/* Results header */}
+            {/* Header */}
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-base font-semibold text-foreground">
@@ -101,51 +162,57 @@ export function FlightsPageClient({ searchResults, searchParams, highlightFlight
               {totalResults > 0 && <SortDropdown sortBy={sortBy} sortOrder={sortOrder} onSortByChange={setSortBy} onSortOrderChange={setSortOrder} />}
             </div>
 
-            {/* Filtered-out empty state */}
             {filtersActive && totalResults === 0 && searchResults.outboundFlights.length > 0 ? (
               <NoFlightsFound
                 searchParams={searchParams}
                 onClearFilters={() => {
                   setDirectOnly(false)
                   setSelectedAirlines([])
-                  const min = searchResults.filters.priceRange.min || 0
-                  const max = searchResults.filters.priceRange.max || 500000
-                  setPriceRange([min, max])
+                  setPriceRange([0, 500_000])
                 }}
               />
             ) : (
               <>
-                {/* Outbound flights */}
+                {/* Outbound */}
                 {filteredOutbound.length > 0 && (
                   <section>
-                    {isRoundTrip && <SectionLabel label="Outbound flights" from={searchParams.from} to={searchParams.to} />}
-                    <FlightList flights={filteredOutbound} searchParams={searchParams} direction="outbound" highlightFlightId={highlightFlightId} />
+                    {isReturnTrip && <SectionLabel label="Outbound flights" from={searchParams.from} to={searchParams.to} />}
+                    <FlightList
+                      flights={filteredOutbound}
+                      searchParams={searchParams}
+                      direction="outbound"
+                      highlightFlightId={highlightFlightId}
+                      selectedFlightId={selectedOutbound?.id ?? null}
+                      onSelect={isReturnTrip ? handleOutboundSelect : undefined}
+                    />
                   </section>
                 )}
 
-                {/* Return flights */}
-                {filteredReturn.length > 0 && (
-                  <section>
+                {/* Return */}
+                {isReturnTrip && filteredReturn.length > 0 && (
+                  <section ref={returnSectionRef} className="scroll-mt-24">
                     <SectionLabel label="Return flights" from={searchParams.to} to={searchParams.from} />
-                    <FlightList flights={filteredReturn} searchParams={searchParams} direction="return" highlightFlightId={highlightFlightId} />
+                    {selectedOutbound && (
+                      <div className="mb-4">
+                        <ReturnStepPrompt selectedOutbound={selectedOutbound} />
+                      </div>
+                    )}
+                    <FlightList flights={filteredReturn} searchParams={searchParams} direction="return" selectedFlightId={selectedReturn?.id ?? null} onSelect={handleReturnSelect} />
                   </section>
                 )}
 
-                {/* No results at all */}
+                {/* Zero results */}
                 {totalResults === 0 && (
                   <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/60 py-20 text-center">
                     <p className="text-sm font-medium text-foreground">No flights on this date</p>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      Try a different date or class
-                      {searchResults.nextAvailable ? " — see the banner above for the next available flight" : "."}
-                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">Try a different date or class{searchResults.nextAvailable ? " — see the banner above for the next available flight" : "."}</p>
                     <Link href="/" className="mt-5 text-xs font-medium text-accent hover:underline">
                       Search again
                     </Link>
                   </div>
                 )}
 
-                {/* All full warning */}
+                {/* All full */}
                 {searchResults.isAllFull && totalResults > 0 && (
                   <div className={cn("rounded-2xl border border-amber-200/60 bg-amber-50/40 px-5 py-4", "dark:border-amber-900/40 dark:bg-amber-950/20")}>
                     <p className="text-sm font-medium text-amber-800 dark:text-amber-200">
@@ -155,11 +222,7 @@ export function FlightsPageClient({ searchResults, searchParams, highlightFlight
                       <p className="mt-1 text-xs text-amber-700/70 dark:text-amber-300/60">
                         The next available flight is on{" "}
                         <span className="font-medium text-amber-800 dark:text-amber-200">
-                          {new Date(searchResults.nextAvailable.date).toLocaleDateString("en-US", {
-                            weekday: "long",
-                            month: "long",
-                            day: "numeric",
-                          })}
+                          {new Date(searchResults.nextAvailable.date).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
                         </span>
                         .
                       </p>
@@ -171,6 +234,21 @@ export function FlightsPageClient({ searchResults, searchParams, highlightFlight
           </main>
         </div>
       </div>
+
+      {/* Sticky bottom bar — return trips only, once outbound is selected */}
+      {showSelectionBar && (
+        <SelectionSummaryBar
+          searchParams={searchParams}
+          selectedOutbound={selectedOutbound}
+          selectedReturn={selectedReturn}
+          onConfirm={handleConfirm}
+          onClearOutbound={() => {
+            setSelectedOutbound(null)
+            setSelectedReturn(null)
+          }}
+          onClearReturn={() => setSelectedReturn(null)}
+        />
+      )}
     </div>
   )
 }

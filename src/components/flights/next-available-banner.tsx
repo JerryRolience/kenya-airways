@@ -1,6 +1,6 @@
 "use client"
 
-import { FlightSearchParams, NextAvailableFlight, TripTypeOptions } from "@/types/flights"
+import { NextAvailableFlight, FlightSearchParams } from "@/types/flights"
 import { Calendar, ArrowRight } from "lucide-react"
 import { format } from "date-fns"
 
@@ -10,17 +10,17 @@ interface NextAvailableBannerProps {
 }
 
 export function NextAvailableBanner({ nextAvailable, searchParams }: NextAvailableBannerProps) {
-  // Build a proper search URL using the next available flight's date.
-  // We keep from/to/class/passengers the same — only the date changes
+  // Preserve the original tripType — only the outbound date changes
   const params = new URLSearchParams({
     from: searchParams.from,
     to: searchParams.to,
     date: format(new Date(nextAvailable.date), "yyyy-MM-dd"),
     class: searchParams.class,
     passengers: String(searchParams.passengers),
-    tripType: searchParams.tripType || TripTypeOptions[0],
-    // Pass the specific flightId so the page can highlight or auto-select it
+    tripType: searchParams.tripType,
     highlight: nextAvailable.flightId,
+    // Keep returnDate if this was a return trip
+    ...(searchParams.tripType === "return" && searchParams.returnDate ? { returnDate: format(new Date(searchParams.returnDate), "yyyy-MM-dd") } : {}),
   })
 
   return (
@@ -36,6 +36,10 @@ export function NextAvailableBanner({ nextAvailable, searchParams }: NextAvailab
               <span className="text-amber-700/80 dark:text-amber-300/70">
                 Next available: <span className="font-medium text-amber-800 dark:text-amber-200">{format(new Date(nextAvailable.date), "EEEE, d MMMM")}</span> — {nextAvailable.flightNumber} · KES{" "}
                 {nextAvailable.priceKES.toLocaleString()} per person
+                {/* Tell the user their return leg is preserved */}
+                {searchParams.tripType === "return" && searchParams.returnDate && (
+                  <span className="ml-1 text-amber-600/70 dark:text-amber-400/60">· return on {format(new Date(searchParams.returnDate), "d MMM")} preserved</span>
+                )}
               </span>
             </div>
           </div>
@@ -44,7 +48,7 @@ export function NextAvailableBanner({ nextAvailable, searchParams }: NextAvailab
             href={`/flights?${params.toString()}`}
             className="shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold text-amber-700 dark:text-amber-300 hover:text-amber-800 dark:hover:text-amber-200 border border-amber-300/60 dark:border-amber-700/50 rounded-xl px-3 py-1.5 bg-amber-100/50 dark:bg-amber-900/30 hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-all"
           >
-            View flight
+            View available flights
             <ArrowRight className="h-3 w-3" />
           </a>
         </div>
