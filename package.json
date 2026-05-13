@@ -11,7 +11,11 @@
     "db:seed": "tsx prisma/seed/index.ts",
     "db:seed:airports": "tsx prisma/seed/seed-airports.ts",
     "db:seed:layouts": "tsx prisma/seed/seed-aircraft-layouts.ts",
-    "db:seed:flights": "tsx prisma/seed/seed-flights.ts"
+    "db:seed:flights": "tsx prisma/seed/seed-flights.ts",
+    "db:seed:passengers": "tsx prisma/seed/seed-passengers.ts",
+    "db:seed:employees": "tsx prisma/seed/seed-employees.ts",
+    "db:seed:openings": "tsx prisma/seed/seed-job-openings.ts",
+    "db:seed:super-admin": "tsx prisma/seed/seed-super-admin/index.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.2.8",
@@ -21,6 +25,7 @@
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "@tanstack/react-query": "^5.100.6",
+    "@tanstack/react-table": "^8.21.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
