@@ -23,10 +23,6 @@ export const adminSidebarData = {
           title: "All Employees",
           url: "/admin/employees",
         },
-        {
-          title: "Add Employee",
-          url: "/admin/employees/new",
-        },
       ],
     },
     {
@@ -37,10 +33,6 @@ export const adminSidebarData = {
         {
           title: "All Openings",
           url: "/admin/job-openings",
-        },
-        {
-          title: "Add Opening",
-          url: "/admin/job-openings/new",
         },
       ],
     },
