@@ -90,6 +90,18 @@
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.18 0.04 260);
 
+  /* States */
+  --success: oklch(0.6 0.22 142);
+  --success-foreground: oklch(0.99 0 0);
+
+  /* Warning */
+  --warning: oklch(0.78 0.16 65);
+  --warning-foreground: oklch(0.18 0.04 260);
+
+  /* Destructive */
+  --destructive: oklch(0.6 0.22 27);
+  --destructive-foreground: oklch(0.99 0 0);
+
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.18 0.04 260);
 
@@ -100,10 +112,6 @@
   --input: oklch(0.93 0.01 255);
 
   --ring: oklch(0.45 0.14 265);
-
-  /* Destructive */
-  --destructive: oklch(0.6 0.22 27);
-  --destructive-foreground: oklch(0.99 0 0);
 
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
@@ -145,7 +153,14 @@
 
   --ring: oklch(0.45 0.14 265);
 
+  --success: oklch(0.6 0.22 142);
+  --success-foreground: oklch(0.99 0 0);
+
+  --warning: oklch(0.75 0.14 70);
+  --warning-foreground: oklch(0.13 0.04 265);
+
   --destructive: oklch(0.65 0.2 25);
+  --destructive-foreground: oklch(0.99 0 0);
 
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
