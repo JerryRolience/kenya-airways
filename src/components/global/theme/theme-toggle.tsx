@@ -1,30 +1,29 @@
-"use client";
+"use client"
 
-import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { Moon, Sun } from "lucide-react"
+import { useTheme } from "next-themes"
+import { useEffect, useState } from "react"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
-  }, []);
+    setMounted(true)
+  }, [])
 
   const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-  };
+    setTheme(theme === "light" ? "dark" : "light")
+  }
 
   if (!mounted) {
     return (
       <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full">
         <div className="h-4 w-4 rounded-full bg-muted-foreground/20" />
       </Button>
-    );
+    )
   }
 
   return (
@@ -41,5 +40,5 @@ export function ThemeToggle() {
         <Moon className="h-4 w-4 text-foreground/60 transition-all duration-300 group-hover:scale-110 group-hover:-rotate-12" />
       )}
     </Button>
-  );
+  )
 }
