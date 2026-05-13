@@ -21,6 +21,7 @@ export async function fetchAirports(): Promise<ApiResponse<AirportInfo[]>> {
     return successResponse({ data: airports })
   } catch (error: any) {
     const resolved = error instanceof HttpError ? error : error
+    console.error("Error fetching airports:", resolved)
 
     return errorResponse({
       error: resolved.name || "Unknown Error",
