@@ -10,8 +10,8 @@
  *  - Human-readable (easy to read over the phone / print on ticket)
  */
 
-import { randomBytes } from "crypto";
-import { Prisma } from "../../../generated/prisma/client";
+import { randomBytes } from "crypto"
+import { Prisma } from "../../../generated/prisma/client"
 
 /**
  * Generate a cryptographically random uppercase alphanumeric string of
@@ -22,17 +22,17 @@ import { Prisma } from "../../../generated/prisma/client";
  */
 function randomAlphaNum(length: number): string {
   // Alphabet with confusable chars removed
-  const ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"; // 32 chars
-  const bytes = randomBytes(length * 2); // over-sample to avoid bias
-  let result = "";
+  const ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789" // 32 chars
+  const bytes = randomBytes(length * 2) // over-sample to avoid bias
+  let result = ""
 
   for (let i = 0; i < bytes.length && result.length < length; i++) {
-    const index = bytes[i] % ALPHABET.length;
+    const index = bytes[i] % ALPHABET.length
     // Modulo bias is negligible here (256 / 32 = exactly 8 — zero bias)
-    result += ALPHABET[index];
+    result += ALPHABET[index]
   }
 
-  return result;
+  return result
 }
 
 /**
@@ -45,9 +45,9 @@ function randomAlphaNum(length: number): string {
  * customer service agents roughly when the booking was made.
  */
 export function generateBookingReference(): string {
-  const year = new Date().getFullYear();
-  const random = randomAlphaNum(6);
-  return `KQ-${year}-${random}`;
+  const year = new Date().getFullYear()
+  const random = randomAlphaNum(6)
+  return `KQ-${year}-${random}`
 }
 
 /**
@@ -60,8 +60,8 @@ export function generateBookingReference(): string {
  * for auditing and must be harder to guess.
  */
 export function generateTicketNumber(): string {
-  const random = randomAlphaNum(10);
-  return `TKT-${random}`;
+  const random = randomAlphaNum(10)
+  return `TKT-${random}`
 }
 
 /**
@@ -72,23 +72,19 @@ export function generateTicketNumber(): string {
  * Usage:
  *   const ref = await generateUniqueBookingReference(prisma)
  */
-export async function generateUniqueBookingReference(
-  tx: Prisma.TransactionClient,
-): Promise<string> {
-  let reference: string;
-  let attempts = 0;
+export async function generateUniqueBookingReference(tx: Prisma.TransactionClient): Promise<string> {
+  let reference: string
+  let attempts = 0
 
   do {
     if (attempts > 10) {
-      throw new Error(
-        "Could not generate a unique booking reference after 10 attempts.",
-      );
+      throw new Error("Could not generate a unique booking reference after 10 attempts.")
     }
-    reference = generateBookingReference();
-    attempts++;
-  } while (await tx.booking.findUnique({ where: { reference } }));
+    reference = generateBookingReference()
+    attempts++
+  } while (await tx.booking.findUnique({ where: { reference } }))
 
-  return reference;
+  return reference
 }
 
 /**
@@ -98,21 +94,34 @@ export async function generateUniqueBookingReference(
  * Usage:
  *   const ticketNo = await generateUniqueTicketNumber(prisma)
  */
-export async function generateUniqueTicketNumber(
-  tx: Prisma.TransactionClient,
-): Promise<string> {
-  let ticketNumber: string;
-  let attempts = 0;
+export async function generateUniqueTicketNumber(tx: Prisma.TransactionClient): Promise<string> {
+  let ticketNumber: string
+  let attempts = 0
 
   do {
     if (attempts > 10) {
-      throw new Error(
-        "Could not generate a unique ticket number after 10 attempts.",
-      );
+      throw new Error("Could not generate a unique ticket number after 10 attempts.")
     }
-    ticketNumber = generateTicketNumber();
-    attempts++;
-  } while (await tx.ticket.findUnique({ where: { ticketNumber } }));
+    ticketNumber = generateTicketNumber()
+    attempts++
+  } while (await tx.ticket.findUnique({ where: { ticketNumber } }))
 
-  return ticketNumber;
+  return ticketNumber
+}
+
+export async function generateCode(
+  tx: Prisma.TransactionClient,
+  prefix: string, // "EMP" for employee numbers, "REF" for booking references, etc.
+): Promise<string> {
+  const year = new Date().getFullYear()
+  const counterName = `${prefix}_${year}`
+
+  const counter = await tx.counter.upsert({
+    where: { name: counterName },
+    update: { value: { increment: 1 } },
+    create: { name: counterName, value: 1 },
+  })
+
+  const sequence = String(counter.value).padStart(6, "0")
+  return `${prefix}-${year}-${sequence}`
 }
