@@ -10,6 +10,7 @@ import { AuthSchema, PassengerSignUpSchema } from "@/validators/auth"
 import z from "zod"
 import { onSignUpPassenger } from "@/actions/auth/on-sign-up-passenger"
 import { onSignInUser } from "@/actions/auth/on-sign-in-user"
+import { Role } from "../../../generated/prisma/enums"
 
 export function useAuthentication() {
   const { signIn, fetchStatus } = useSignIn()
@@ -43,18 +44,29 @@ export function useAuthentication() {
 
   // Helper to finalize sign-in and navigate
   const finalizeSignIn = async () => {
-    await onSignInUser()
+    await signIn.finalize({ navigate: () => {} })
 
-    await signIn.finalize({
-      navigate: ({ decorateUrl }) => {
-        const url = decorateUrl("/")
-        if (url.startsWith("http")) {
-          window.location.href = url
-        } else {
-          router.push(url)
-        }
-      },
+    const result = await onSignInUser()
+
+    if (!result.success) {
+      ErrorHandler({
+        title: "Sign-in error",
+        description: result.message || "An error occurred during sign-in. Please try again.",
+        action: "error",
+      })
+      return
+    }
+
+    ErrorHandler({
+      title: "Welcome back! You have successfully logged back in.",
+      action: "success",
     })
+
+    if (result.data?.role === Role.PASSENGER) {
+      router.push("/passenger/dashboard")
+    } else {
+      router.push("/admin")
+    }
   }
 
   // Helper to finalize sign-up and navigate
@@ -91,8 +103,9 @@ export function useAuthentication() {
       identifier: data.email,
       signUpIfMissing: true,
     })
+
     if (createError) {
-      console.error(JSON.stringify(createError, null, 2))
+      // console.error(JSON.stringify(createError, null, 2))
       ErrorHandler({
         title: createError.message || "Authentication error",
         description: createError.longMessage || "Failed to create sign-in session. Please try again.",
@@ -105,7 +118,7 @@ export function useAuthentication() {
     if (!createError) {
       const { error: sendError } = await signIn.emailCode.sendCode()
       if (sendError) {
-        console.error(JSON.stringify(sendError, null, 2))
+        // console.error(JSON.stringify(sendError, null, 2))
         ErrorHandler({
           title: sendError.message || "Authentication error",
           description: sendError.longMessage || "Failed to send verification code. Please try again.",
@@ -138,7 +151,7 @@ export function useAuthentication() {
       }
 
       // Some other error occurred
-      console.log(JSON.stringify(error, null, 2))
+      // console.log(JSON.stringify(error, null, 2))
       ErrorHandler({
         title: error.message || "Authentication error",
         description: error.longMessage || "Failed to verify email code. Please try again.",
@@ -154,7 +167,7 @@ export function useAuthentication() {
       await finalizeSignIn()
     } else {
       // Check why the sign-in is not complete
-      console.error("Sign-in attempt not complete:", signIn.status)
+      // console.error("Sign-in attempt not complete:", signIn.status)
       ErrorHandler({
         title: "Authentication error",
         description: "Unexpected sign-in status. Please try again.",
@@ -205,7 +218,7 @@ export function useAuthentication() {
         })
       }
     } catch (error: any) {
-      console.error("Error updating sign-up with missing requirements:", error)
+      // console.error("Error updating sign-up with missing requirements:", error)
       ErrorHandler({
         title: "Authentication error",
         description: error.message || "Failed to submit missing requirements. Please try again.",
