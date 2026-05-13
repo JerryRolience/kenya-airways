@@ -9,9 +9,10 @@ model User {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    employee   Employee?
-    passengers Passenger[]
-    bookings   Booking[]
+    employee     Employee?
+    passengers   Passenger[]
+    bookings     Booking[]
+    applications JobApplication[]
 
     @@map("users")
 }

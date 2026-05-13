@@ -69,3 +69,16 @@ enum PaymentMethod {
     BANK_TRANSFER
     CASH // Counter payments
 }
+
+enum ActiveStatus {
+    ACTIVE
+    INACTIVE
+}
+
+enum ApplicationStatus {
+    PENDING
+    REVIEWED
+    SHORTLISTED
+    ACCEPTED
+    REJECTED
+}
