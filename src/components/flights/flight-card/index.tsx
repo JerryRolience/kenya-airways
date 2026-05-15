@@ -7,6 +7,7 @@ import { Check, Coffee, Info, Luggage, Wifi } from "lucide-react"
 import { ClassType } from "../../../../generated/prisma/enums"
 import { FlightDetailsSheet } from "./flight-details-sheet"
 import { FlightCardInfo } from "./flight-card-info"
+import { getAvailabilityState } from "./utils"
 
 interface FlightCardProps {
   flight: FlightSearchResult
@@ -20,7 +21,10 @@ interface FlightCardProps {
 
 export function FlightCard({ flight, searchParams, direction, isHighlighted = false, isSelected = false, onSelect }: FlightCardProps) {
   const seatClass = flight.seatClasses[0]
-  const isSelectable = seatClass && !seatClass.isFull
+  const isBookable = seatClass && !seatClass.isFull && seatClass.hasEnoughSeats
+  const availState = seatClass ? getAvailabilityState(seatClass.availableSeats, seatClass.isFull, seatClass.hasEnoughSeats) : null
+
+  const accentLine = isSelected ? "bg-primary" : availState === "full" ? "bg-border" : availState === "not-enough" ? "bg-border" : availState === "critical" ? "bg-amber-400" : "bg-accent"
 
   return (
     <div
@@ -32,10 +36,15 @@ export function FlightCard({ flight, searchParams, direction, isHighlighted = fa
       }}
       className={cn(
         "group relative rounded-2xl border bg-card transition-all duration-200",
-        isSelectable ? "cursor-pointer" : "opacity-60",
-        !isSelected && !isHighlighted && "border-border/60 hover:border-border hover:shadow-sm",
+        // Default
+        isBookable ? "cursor-pointer" : "opacity-60 cursor-default",
+        !isSelected && !isHighlighted && "border-border/60 hover:border-border",
+        isBookable && !isSelected && !isHighlighted && "hover:shadow-sm",
+        // States
         isHighlighted && !isSelected && "border-amber-400/60 ring-2 ring-amber-400/20 shadow-sm",
         isSelected && "border-white ring-2 ring-white bg-primary/2",
+        // Dim when un-bookable
+        !isBookable && !isSelected && "opacity-70",
       )}
     >
       {/* Next available badge */}
@@ -56,12 +65,7 @@ export function FlightCard({ flight, searchParams, direction, isHighlighted = fa
       )}
 
       {/* Left accent line */}
-      <div
-        className={cn(
-          "absolute left-0 top-4 bottom-4 w-0.75 rounded-full",
-          isSelected ? "bg-primary" : seatClass?.isFull ? "bg-border" : seatClass?.availableSeats && seatClass.availableSeats <= 3 ? "bg-amber-400" : "bg-accent",
-        )}
-      />
+      <div className={cn("absolute left-0 top-4 bottom-4 w-0.75 rounded-full", accentLine)} />
 
       <div className="pl-5 pr-5 py-5">
         {/*  TOP ROW: Flight info, times, amenities, price  */}
