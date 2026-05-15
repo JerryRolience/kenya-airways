@@ -40,7 +40,7 @@ export async function fetchPassengers(input: FetchPassengersInput = { limit: 10 
       : {}
 
     const where: Prisma.PassengerWhereInput = {
-      ...(nationality && { nationality }),
+      ...(nationality && { nationality: Array.isArray(nationality) ? { in: nationality } : { equals: nationality } }),
       ...(hasUserAccount !== undefined && {
         userId: hasUserAccount ? { not: null } : null,
       }),
@@ -112,7 +112,7 @@ export async function fetchPassengers(input: FetchPassengersInput = { limit: 10 
     }
 
     // 7. Map items
-    const mappedItems: PassengerListItem[] = items.slice(0, limit).map(p => ({
+    const mappedItems: PassengerListItem[] = items.map(p => ({
       id: p.id,
       userId: p.userId,
       title: p.title,
