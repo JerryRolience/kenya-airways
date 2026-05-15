@@ -2,7 +2,7 @@ import { InputType, Option } from "@/components/forms/form-generator/types"
 import { Role } from "../../generated/prisma/enums"
 import { formatEnumValue } from "@/utils/format-enums"
 
-interface PatientFormField {
+interface EmployeeFormField {
   id: string
   type?: "text" | "email" | "password" | "number"
   inputType: InputType
@@ -21,7 +21,7 @@ export const STATUS_OPTIONS = [
   { label: "Inactive", value: "false" },
 ]
 
-export const CREATE_EMPLOYEE_FORM: PatientFormField[] = [
+export const CREATE_EMPLOYEE_FORM: EmployeeFormField[] = [
   {
     id: "1",
     inputType: "input",
@@ -69,7 +69,7 @@ export const CREATE_EMPLOYEE_FORM: PatientFormField[] = [
   },
 ]
 
-export const UPDATE_EMPLOYEE_FORM: PatientFormField[] = [
+export const UPDATE_EMPLOYEE_FORM: EmployeeFormField[] = [
   {
     id: "1",
     inputType: "input",
