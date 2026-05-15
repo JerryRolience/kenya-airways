@@ -7,12 +7,7 @@ import { FetchPassengersInput } from "@/validators/passenger"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useRef } from "react"
 
-interface UseFetchPassengersParams {
-  input?: FetchPassengersInput
-  enabled?: boolean
-}
-
-export function useFetchPassengers({ input = { limit: 10 }, enabled = true }: UseFetchPassengersParams = {}) {
+export function useFetchPassengers(input: FetchPassengersInput = { limit: 10 }) {
   const query = useQuery({
     queryKey: ["passengers", input],
     queryFn: async () => {
@@ -20,13 +15,15 @@ export function useFetchPassengers({ input = { limit: 10 }, enabled = true }: Us
       if (!res.success) {
         throw new AppError(res.message ?? "Failed to load passengers.", res.statusCode ?? 500)
       }
+
       return res
     },
-    enabled,
-    staleTime: 1000 * 60 * 2,
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
     placeholderData: prev => prev,
   })
 
+  // ── Toast on error (fires once per error, resets on recovery) ──
   const hasToastedError = useRef(false)
 
   useEffect(() => {
@@ -34,13 +31,12 @@ export function useFetchPassengers({ input = { limit: 10 }, enabled = true }: Us
       hasToastedError.current = true
       const message = query.error instanceof AppError ? query.error.message : "An unexpected error occurred. Please try again."
 
-      ErrorHandler({
-        title: "Error fetching passengers",
-        description: message,
-        action: "error",
-      })
+      ErrorHandler({ title: "Error fetching passengers", description: message, action: "error" })
     }
-    if (!query.isError) hasToastedError.current = false
+
+    if (!query.isError) {
+      hasToastedError.current = false
+    }
   }, [query.isError, query.error])
 
   return query
