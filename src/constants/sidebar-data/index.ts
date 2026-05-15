@@ -26,6 +26,17 @@ export const adminSidebarData = {
       ],
     },
     {
+      title: "Passengers",
+      url: "/admin/passengers",
+      icon: UserCheck,
+      items: [
+        {
+          title: "All Passengers",
+          url: "/admin/passengers",
+        },
+      ],
+    },
+    {
       title: "Job Openings",
       url: "/admin/job-openings",
       icon: Briefcase,
