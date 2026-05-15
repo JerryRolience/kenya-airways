@@ -33,6 +33,21 @@ export interface PassengerListItem {
   userRole: Role | null
   bookingsCount: number
 }
+export interface PassengerStats {
+  totalPassengers: number
+  registeredUsers: number
+  guestPassengers: number
+  newThisMonth: number
+  newLastMonth: number
+  newPassengerChange: number
+  totalBookings: number
+  byNationality: {
+    totalNationalities: number
+    kenyanPassengers: number
+    otherPassengers: number
+  }
+}
 
+export type PassengerStatsResponse = ApiResponse<PassengerStats>
 export type FetchPassengersResponse = ApiResponse<PaginatedResult<PassengerListItem>>
 export type FetchPassengerByIdResponse = ApiResponse<PassengerListItem>

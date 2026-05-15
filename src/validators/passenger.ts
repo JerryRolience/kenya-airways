@@ -18,7 +18,7 @@ export const UpdatePassengerSchema: z.ZodType<UpdatePassengerInputData> = z.obje
 })
 
 export const FetchPassengersSchema = CursorPaginationSchema.extend({
-  nationality: z.string().optional(),
+  nationality: z.union([z.string().min(2), z.array(z.string().min(2))]).optional(),
   hasUserAccount: z.boolean().optional(),
 })
 
