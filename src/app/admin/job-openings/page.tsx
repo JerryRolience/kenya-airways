@@ -6,6 +6,7 @@ import { useFetchJobOpeningStats } from "@/hooks/job/use-fetch-job-opening-stats
 import { Plus, RefreshCw } from "lucide-react"
 import { useState } from "react"
 import { JobOpeningsTable } from "./_components/job-openings-table"
+import { AddJobOpeningForm } from "@/components/forms/job-opening-form"
 
 export default function JobOpeningsPage() {
   const [addOpen, setAddOpen] = useState(false)
@@ -41,7 +42,7 @@ export default function JobOpeningsPage() {
       <JobOpeningsTable />
 
       {/* Add job opening dialog */}
-      {/* <AddJobOpeningForm open={addOpen} setOpen={setAddOpen} /> */}
+      <AddJobOpeningForm open={addOpen} setOpen={setAddOpen} />
     </div>
   )
 }

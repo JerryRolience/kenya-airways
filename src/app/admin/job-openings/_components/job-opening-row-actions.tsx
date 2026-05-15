@@ -1,5 +1,6 @@
 "use client"
 
+import { AddJobOpeningForm } from "@/components/forms/job-opening-form"
 import { DeleteAlertDialog } from "@/components/global/dialogs/deleteAlertDialog"
 import { ToggleStatusDialog } from "@/components/global/dialogs/toggle-status"
 import { JobOpeningDetailSheet } from "@/components/job-openings/job-opening-detail-sheet"
@@ -34,7 +35,12 @@ export function JobOpeningRowActions({ opening }: { opening: JobOpeningListItem 
             Copy opening ID
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="text-xs hover:cursor-pointer" onClick={() => setViewOpen(true)}>
+          <DropdownMenuItem
+            className="text-xs hover:cursor-pointer"
+            onClick={() => {
+              setViewOpen(true)
+            }}
+          >
             View details
           </DropdownMenuItem>
           <DropdownMenuItem className="text-xs hover:cursor-pointer" onClick={() => setEditOpen(true)}>
@@ -50,7 +56,7 @@ export function JobOpeningRowActions({ opening }: { opening: JobOpeningListItem 
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* <AddJobOpeningForm opening={opening} open={editOpen} setOpen={setEditOpen} /> */}
+      <AddJobOpeningForm opening={opening} open={editOpen} setOpen={setEditOpen} />
 
       <DeleteAlertDialog entityName={opening.title} entityType="job opening" open={deleteOpen} onOpenChange={setDeleteOpen} isPending={isDeletePending} onConfirm={() => onDeleteJobOpening()} />
 
