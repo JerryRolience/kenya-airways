@@ -28,4 +28,16 @@ export interface JobOpeningListItem {
   assignmentsCount?: number
 }
 
+export interface JobOpeningStats {
+  totalOpenings: number
+  openCount: number
+  closedCount: number
+  totalApplications: number
+  newThisMonth: number
+  newLastMonth: number
+  newOpeningChange: number
+  departmentsHiring: number
+}
+
+export type JobOpeningStatsResponse = ApiResponse<JobOpeningStats>
 export type FetchJobOpeningResponse = ApiResponse<PaginatedResult<JobOpeningListItem>>
