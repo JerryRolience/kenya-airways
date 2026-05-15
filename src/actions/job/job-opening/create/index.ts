@@ -46,7 +46,7 @@ export async function createJobOpening(data: CreateJobOpeningInputData): Promise
           title: validatedData.title,
           department: validatedData.department,
           description: validatedData.description,
-          isOpen: true,
+          isOpen: validatedData.isOpen ?? true,
         },
         select: { id: true, title: true, department: true },
       })

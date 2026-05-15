@@ -6,6 +6,7 @@ export const _CreateJobOpeningSchema: z.ZodType<CreateJobOpeningInputData> = z.o
   title: z.string().trim().min(5, "Title must be at least 5 characters long.").max(100, "Title must not exceed 100 characters."),
   department: z.string().trim().min(2, "Department is required."),
   description: z.string().trim().min(20, "Description must be at least 20 characters long.").max(5000, "Description must not exceed 5000 characters."),
+  isOpen: z.boolean().optional(),
 })
 
 export const _UpdateJobOpeningSchema: z.ZodType<UpdateJobOpeningInputData> = z.object({

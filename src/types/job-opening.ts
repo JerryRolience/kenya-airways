@@ -5,6 +5,7 @@ export interface CreateJobOpeningInputData {
   title: string
   department: string
   description: string
+  isOpen?: boolean
 }
 
 export interface UpdateJobOpeningInputData {
