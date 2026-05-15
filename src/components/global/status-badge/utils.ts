@@ -50,6 +50,22 @@ export const activeStatusMap: Record<string, StatusMeta> = {
 }
 
 //
+//  JOB OPENING STATUS
+//
+export const jobOpeningStatusMap: Record<string, StatusMeta> = {
+  OPEN: {
+    label: "Open",
+    variant: "success",
+    icon: CheckCircle,
+  },
+  CLOSED: {
+    label: "Closed",
+    variant: "destructive",
+    icon: XCircle,
+  },
+}
+
+//
 // 🧾 TITLE
 //
 export const titleMap: Record<string, StatusMeta> = {

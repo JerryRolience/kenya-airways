@@ -1,10 +1,10 @@
 import { ColumnFiltersState } from "@tanstack/react-table"
 import { useTableFilters } from "./use-table-filters"
 
-export function useEmployeeTableFilters(columnFilters: ColumnFiltersState) {
+export function useJobOpeningTableFilters(columnFilters: ColumnFiltersState) {
   const filters = useTableFilters(columnFilters, {
-    statusColumnId: "isActive",
+    statusColumnId: "isOpen",
   })
 
-  return { status: filters.isActive as boolean | undefined }
+  return { status: filters.isOpen as boolean | undefined }
 }
