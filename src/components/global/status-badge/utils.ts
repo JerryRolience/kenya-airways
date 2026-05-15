@@ -88,6 +88,14 @@ export const passengerRelationMap: Record<string, StatusMeta> = {
 }
 
 //
+// PASSENGER TYPE
+//
+export const passengerTypeMap: Record<string, StatusMeta> = {
+  GUESTS: { label: "Guests", variant: "neutral", icon: User },
+  REGISTERED: { label: "Registered", variant: "success", icon: User },
+}
+
+//
 // ✈️ FLIGHT STATUS
 //
 export const flightStatusMap: Record<string, StatusMeta> = {
