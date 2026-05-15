@@ -3,53 +3,28 @@
 import { STATUS_CODES } from "@/constants/status-codes"
 import { errorResponse, HttpError, successResponse } from "@/lib"
 import { ApiResponse } from "@/types/api-response"
-import { FlightSearchParams, FlightSearchResponse, FlightSearchResult, NextAvailableFlight, TripTypeOptions } from "@/types/flights"
+import { FlightSearchParams, FlightSearchResponse, FlightSearchResult, NextAvailableFlight } from "@/types/flights"
 import { FlightSearchParamsSchema } from "@/validators/flights"
-import { findFlightsByRoute } from "./utils/find-flights-by-route"
-import { findNextAvailableByRoute } from "./utils/find-next-available-by-route"
+import { findNextAvailableByRoute, findFlightsByRoute } from "./utils"
 
 export async function searchFlights(data: FlightSearchParams): Promise<ApiResponse<FlightSearchResponse>> {
-  console.log("Received flight search data:", data)
-
   try {
-    // 1. Validate incoming data
+    //  1. Validate
     const { from: fromCode, to: toCode, date, returnDate, tripType, class: cabinClass, passengers } = FlightSearchParamsSchema.parse(data)
 
-    console.log("Validated search params:", {
-      from: fromCode,
-      to: toCode,
-      date,
-      returnDate,
-      tripType,
-      class: cabinClass,
-      passengers,
-    })
-
     if (fromCode === toCode) {
-      throw new HttpError({
-        statusCode: STATUS_CODES.BAD_REQUEST,
-        message: "Origin and destination must be different.",
-      })
+      throw new HttpError({ statusCode: STATUS_CODES.BAD_REQUEST, message: "Origin and destination must be different." })
     }
 
-    // 2. Fetch outbound flights
-    const outboundFlights = await findFlightsByRoute({
-      fromCode,
-      toCode,
-      date,
-      cabinClass,
-      passengers,
-    })
+    //  2. Outbound flights
+    const outboundFlights = await findFlightsByRoute({ fromCode, toCode, date, cabinClass, passengers })
 
-    console.log(`Found ${outboundFlights.length} outbound flights`)
+    //  3. Next available outbound (when outbound date is fully booked)
+    const hasAvailableOutbound = outboundFlights.some(f => f.seatClasses[0] && !f.seatClasses[0].isFull && f.seatClasses[0].hasEnoughSeats)
+    const isOutboundProblematic = outboundFlights.length === 0 || !hasAvailableOutbound
 
-    // 3. Check if all outbound flights are full
-    const hasAvailableOutbound = outboundFlights.some(f => !f.seatClasses[0]?.isFull)
-    const isAllOutboundFull = outboundFlights.length > 0 && !hasAvailableOutbound
-
-    // 4. Find next available outbound if everything is full
     let nextAvailable: NextAvailableFlight | null = null
-    if (isAllOutboundFull || outboundFlights.length === 0) {
+    if (isOutboundProblematic) {
       nextAvailable = await findNextAvailableByRoute({
         fromCode,
         toCode,
@@ -57,51 +32,63 @@ export async function searchFlights(data: FlightSearchParams): Promise<ApiRespon
         cabinClass,
         passengers,
       })
-
-      if (nextAvailable) {
-        console.log("Next available flight found:", {
-          date: nextAvailable.date,
-          flightNumber: nextAvailable.flightNumber,
-        })
-      }
     }
 
-    // 5. Fetch return flights if round trip
+    //  4. Return flights
     let returnFlights: FlightSearchResult[] = []
-    if (tripType === TripTypeOptions[1] && returnDate) {
+    let nextAvailableReturn: NextAvailableFlight | null = null
+
+    if (tripType === "return" && returnDate) {
       returnFlights = await findFlightsByRoute({
-        fromCode: toCode, // Swap for return
-        toCode: fromCode, // Swap for return
+        fromCode: toCode, // reversed
+        toCode: fromCode, // reversed
         date: returnDate,
         cabinClass,
         passengers,
       })
 
-      console.log(`Found ${returnFlights.length} return flights`)
+      //  5. Next available RETURN (when return date has no flights / all full)
+      const hasAvailableReturn = returnFlights.some(f => f.seatClasses[0] && !f.seatClasses[0].isFull && f.seatClasses[0].hasEnoughSeats)
+      const isReturnProblematic = returnFlights.length === 0 || !hasAvailableReturn
+
+      if (isReturnProblematic) {
+        nextAvailableReturn = await findNextAvailableByRoute({
+          fromCode: toCode, // reversed — return goes from destination back to origin
+          toCode: fromCode,
+          afterDate: returnDate,
+          cabinClass,
+          passengers,
+        })
+      }
     }
 
-    // 6. Build filter metadata
+    //  6. Build filter metadata
     const allFlights = [...outboundFlights, ...returnFlights]
     const totalResults = allFlights.length
-
-    // Extract unique airlines
     const airlines = [...new Set(allFlights.map(f => f.flightNumber.match(/^[A-Z]+/)?.[0] || "KQ"))]
-
-    // Calculate price range
     const prices = allFlights.map(f => f.seatClasses[0]?.priceKES).filter((p): p is number => p !== undefined && p > 0)
-
     const cheapestPrice = prices.length > 0 ? Math.min(...prices) : null
 
-    // Check if everything (outbound + return) is full
-    const hasAvailableReturn = returnFlights.length === 0 || returnFlights.some(f => !f.seatClasses[0]?.isFull)
-    const isAllFull = isAllOutboundFull || !hasAvailableReturn
+    const hasAvailableReturnFinal = returnFlights.length === 0 || returnFlights.some(f => f.seatClasses[0] && !f.seatClasses[0].isFull && f.seatClasses[0].hasEnoughSeats)
+    const isAllFull = !hasAvailableOutbound || !hasAvailableReturnFinal
 
-    // 7. Build response
+    //  7. Response
     const response: FlightSearchResponse = {
-      searchParams: { from: fromCode, to: toCode, date, returnDate, tripType, class: cabinClass, passengers },
+      searchParams: {
+        from: fromCode,
+        to: toCode,
+        date,
+        returnDate,
+        tripType,
+        class: cabinClass,
+        passengers,
+      },
       outboundFlights,
       returnFlights,
       nextAvailable,
+      nextAvailableReturn,
+      isNoOutboundRoute: outboundFlights.length === 0 && !nextAvailable, // true if there are no outbound flights at all (used to show specific messaging in UI) and all outbound flights are full or non-existent
+      isNoReturnRoute: returnFlights.length === 0 && tripType === "return" && !nextAvailableReturn, // true if user searched for return trip but there are no return flights at all (used for specific messaging in UI) and all return flights are full or non-existent
       isAllFull,
       totalResults,
       cheapestPrice,
@@ -119,15 +106,19 @@ export async function searchFlights(data: FlightSearchParams): Promise<ApiRespon
       message: `Found ${totalResults} flight${totalResults !== 1 ? "s" : ""}.`,
       data: response,
     })
-  } catch (error: any) {
-    const resolved = error instanceof HttpError ? error : error
-
-    console.error("Flight search error:", resolved)
-
+  } catch (error: unknown) {
+    if (error instanceof HttpError) {
+      return errorResponse({
+        statusCode: error.statusCode,
+        error: error.name,
+        message: error.message,
+      })
+    }
+    console.error("[searchFlights] unexpected error:", error)
     return errorResponse({
-      statusCode: resolved.statusCode || STATUS_CODES.INTERNAL_SERVER_ERROR,
-      error: resolved.name || "Unknown Error",
-      message: resolved.message || "An unexpected error occurred while searching for flights. Please try again later.",
+      statusCode: STATUS_CODES.INTERNAL_SERVER_ERROR,
+      error: "Internal Server Error",
+      message: "An unexpected error occurred while searching for flights. Please try again later.",
     })
   }
 }

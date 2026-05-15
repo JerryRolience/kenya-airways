@@ -33,6 +33,7 @@ export interface SeatClassAvailability {
   availableSeats: number
   priceKES: number
   isFull: boolean
+  hasEnoughSeats: boolean
 }
 
 //  Flight Result
@@ -80,6 +81,9 @@ export interface FlightSearchResponse {
   outboundFlights: FlightSearchResult[]
   returnFlights: FlightSearchResult[]
   nextAvailable: NextAvailableFlight | null
+  nextAvailableReturn: NextAvailableFlight | null
+  isNoOutboundRoute: boolean // Indicates if there are no outbound flights at all (used to show specific messaging in UI) and all outbound flights are full or non-existent
+  isNoReturnRoute: boolean // Indicates if there are no return flights at all (used to show specific messaging)
   isAllFull: boolean
   totalResults: number
   cheapestPrice: number | null

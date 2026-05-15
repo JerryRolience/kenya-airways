@@ -68,6 +68,7 @@ export async function findFlightsByRoute(params: FindFlightsByRouteParams): Prom
       availableSeats,
       priceKES: seatClass?.priceKES || 0,
       isFull: availableSeats < passengers,
+      hasEnoughSeats: availableSeats >= passengers,
     }
 
     const durationMs = flight.arrivalTime.getTime() - flight.departureTime.getTime()
