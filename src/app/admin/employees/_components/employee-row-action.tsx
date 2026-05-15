@@ -1,5 +1,6 @@
 "use client"
 
+import { EmployeeDetailSheet } from "@/components/employee/employee-details-sheet"
 import { AddEmployeeForm } from "@/components/forms/employee-form"
 import { DeleteAlertDialog } from "@/components/global/dialogs/deleteAlertDialog"
 import { ToggleStatusDialog } from "@/components/global/dialogs/toggle-status"
@@ -15,6 +16,7 @@ export function EmployeeRowActions({ employee }: { employee: EmployeeListItem })
   const [editOpen, setEditOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [toggleOpen, setToggleOpen] = useState(false)
+  const [viewOpen, setViewOpen] = useState(false)
 
   const { onToggleEmployeeStatus, isPending: isTogglePending } = useToggleEmployeeStatus({ employee, onSuccess: () => setToggleOpen(false) })
   const { onDeleteEmployee, isPending: isDeletePending } = useDeleteEmployee({ employeeId: employee.id, onSuccess: () => setDeleteOpen(false) })
@@ -33,10 +35,13 @@ export function EmployeeRowActions({ employee }: { employee: EmployeeListItem })
             Copy employee code
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="text-xs hover:cursor-pointer">View profile</DropdownMenuItem>
+          <DropdownMenuItem className="text-xs hover:cursor-pointer" onClick={() => setViewOpen(true)}>
+            View profile
+          </DropdownMenuItem>
           <DropdownMenuItem className="text-xs hover:cursor-pointer" onClick={() => setEditOpen(true)}>
             Edit details
           </DropdownMenuItem>
+
           <DropdownMenuSeparator />
           <DropdownMenuItem className="text-xs text-warning focus:text-warning hover:cursor-pointer" onClick={() => setToggleOpen(true)}>
             {employee.isActive ? "Deactivate" : "Activate"}
@@ -66,6 +71,17 @@ export function EmployeeRowActions({ employee }: { employee: EmployeeListItem })
         onOpenChange={setToggleOpen}
         isPending={isTogglePending}
         onConfirm={() => onToggleEmployeeStatus()}
+      />
+
+      {/* Employee Detail Sheet */}
+      <EmployeeDetailSheet
+        open={viewOpen}
+        onOpenChange={setViewOpen}
+        employee={employee}
+        onEdit={() => {
+          setViewOpen(false)
+          setEditOpen(true)
+        }}
       />
     </>
   )
