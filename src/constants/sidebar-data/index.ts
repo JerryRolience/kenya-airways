@@ -53,12 +53,8 @@ export const adminSidebarData = {
       icon: UserCheck,
       items: [
         {
-          title: "New Match",
-          url: "/admin/matches",
-        },
-        {
           title: "Match History",
-          url: "/admin/matches/history",
+          url: "/admin/matches",
         },
       ],
     },

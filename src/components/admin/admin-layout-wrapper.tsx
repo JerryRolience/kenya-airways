@@ -23,7 +23,7 @@ export function AdminLayoutWrapper({ children }: { children: React.ReactNode }) 
       <AppSidebar />
       <SidebarInset>
         {/* Header */}
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b border-sidebar-border/30 bg-sidebar/5 px-4">
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b border-sidebar-border/30 bg-sidebar/5 px-4 no-print">
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-2 h-4" />
           <Breadcrumb>
