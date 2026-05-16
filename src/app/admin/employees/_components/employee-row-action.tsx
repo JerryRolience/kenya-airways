@@ -1,6 +1,6 @@
 "use client"
 
-import { EmployeeDetailSheet } from "@/components/employee/employee-details-sheet"
+import { EmployeeDetailSheet } from "@/components/admin/employee/employee-details-sheet"
 import { AddEmployeeForm } from "@/components/forms/employee-form"
 import { DeleteAlertDialog } from "@/components/global/dialogs/deleteAlertDialog"
 import { ToggleStatusDialog } from "@/components/global/dialogs/toggle-status"

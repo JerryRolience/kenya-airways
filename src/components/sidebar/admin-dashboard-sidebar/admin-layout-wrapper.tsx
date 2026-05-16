@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { usePathname } from "next/navigation"
 import { Fragment } from "react"
-import { AppSidebar } from "../dashboard-sidebar/app-sidebar"
+import { AppSidebar } from "./app-sidebar"
 
 export function AdminLayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()

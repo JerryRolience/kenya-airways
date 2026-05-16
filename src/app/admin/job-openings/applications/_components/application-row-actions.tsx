@@ -9,7 +9,7 @@ import { ApplicationStatus } from "../../../../../../generated/prisma/enums"
 import { ApplicationListItem } from "@/types/job-application"
 import { useUpdateJobApplicationStatus } from "@/hooks/job/use-update-job-application-status"
 import { useHireApplicant } from "@/hooks/job/use-hire-applicant"
-import { ApplicationDetailSheet } from "@/components/job-openings/application-details-sheet"
+import { ApplicationDetailSheet } from "@/components/admin/job-openings/application-details-sheet"
 
 export function ApplicationRowActions({ application }: { application: ApplicationListItem }) {
   const [viewOpen, setViewOpen] = useState(false)

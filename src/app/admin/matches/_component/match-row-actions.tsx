@@ -1,7 +1,7 @@
 "use client"
 
 import { DeleteAlertDialog } from "@/components/global/dialogs/deleteAlertDialog"
-import { MatchDetailSheet } from "@/components/job-openings/match"
+import { MatchDetailSheet } from "@/components/admin/job-openings/match"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { useRemoveMatch } from "@/hooks/matches/use-remove-match"

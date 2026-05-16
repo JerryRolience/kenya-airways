@@ -3,7 +3,7 @@
 import { AddJobOpeningForm } from "@/components/forms/job-opening-form"
 import { DeleteAlertDialog } from "@/components/global/dialogs/deleteAlertDialog"
 import { ToggleStatusDialog } from "@/components/global/dialogs/toggle-status"
-import { JobOpeningDetailSheet } from "@/components/job-openings/job-opening-detail-sheet"
+import { JobOpeningDetailSheet } from "@/components/admin/job-openings/job-opening-detail-sheet"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { useDeleteJobOpening } from "@/hooks/job/use-delete-job-opening"

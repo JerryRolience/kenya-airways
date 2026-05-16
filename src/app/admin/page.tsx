@@ -1,4 +1,4 @@
-import { DashboardPage } from "@/components/admin/dashboard/dashboard-stats/dashboard-page"
+import { DashboardPage } from "@/components/admin/dashboard/dashboard-page"
 
 export const metadata = {
   title: "Admin Dashboard | Kenya Airways",
