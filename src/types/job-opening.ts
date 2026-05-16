@@ -40,5 +40,11 @@ export interface JobOpeningStats {
   departmentsHiring: number
 }
 
+export interface AvailableOpeningOption {
+  value: string // openingId
+  label: string // title (department)
+}
+
 export type JobOpeningStatsResponse = ApiResponse<JobOpeningStats>
 export type FetchJobOpeningResponse = ApiResponse<PaginatedResult<JobOpeningListItem>>
+export type AvailableOpeningsResponse = ApiResponse<AvailableOpeningOption[]>
