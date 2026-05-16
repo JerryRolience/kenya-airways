@@ -40,6 +40,7 @@ export function useApplyForJobOpening({ openingId, onSuccess }: UseApplyForJobOp
         queryClient.invalidateQueries({ queryKey: ["public-job-openings"] })
         queryClient.invalidateQueries({ queryKey: ["admin-job-openings"] })
         queryClient.invalidateQueries({ queryKey: ["job-opening-stats"] })
+        queryClient.invalidateQueries({ queryKey: ["user-applications"] })
         onSuccess?.()
         form.reset()
       } else {

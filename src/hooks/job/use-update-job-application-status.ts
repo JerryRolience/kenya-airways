@@ -21,6 +21,7 @@ export function useUpdateJobApplicationStatus(onSuccess?: () => void) {
         })
         // Invalidate first, then close — avoids stale data flash
         queryClient.invalidateQueries({ queryKey: ["job-applications"] })
+        queryClient.invalidateQueries({ queryKey: ["user-applications"] })
         queryClient.invalidateQueries({ queryKey: ["employees"] })
         queryClient.invalidateQueries({ queryKey: ["employee-stats"] })
         queryClient.invalidateQueries({ queryKey: ["matches"] })
