@@ -1,6 +1,6 @@
 "use client"
 
-import { DeleteAlertDialog } from "@/components/global/dialogs/deleteAlertDialog"
+import { DeleteAlertDialog } from "@/components/global/dialogs/delete-alert-dialog"
 import { PassengerDetailSheet } from "@/components/admin/passenger-details-sheet"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"

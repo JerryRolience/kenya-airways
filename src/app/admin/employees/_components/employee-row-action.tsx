@@ -2,7 +2,7 @@
 
 import { EmployeeDetailSheet } from "@/components/admin/employee/employee-details-sheet"
 import { AddEmployeeForm } from "@/components/forms/employee-form"
-import { DeleteAlertDialog } from "@/components/global/dialogs/deleteAlertDialog"
+import { DeleteAlertDialog } from "@/components/global/dialogs/delete-alert-dialog"
 import { ToggleStatusDialog } from "@/components/global/dialogs/toggle-status"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"

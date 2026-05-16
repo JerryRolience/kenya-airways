@@ -1,7 +1,7 @@
 "use client"
 
 import { AddJobOpeningForm } from "@/components/forms/job-opening-form"
-import { DeleteAlertDialog } from "@/components/global/dialogs/deleteAlertDialog"
+import { DeleteAlertDialog } from "@/components/global/dialogs/delete-alert-dialog"
 import { ToggleStatusDialog } from "@/components/global/dialogs/toggle-status"
 import { JobOpeningDetailSheet } from "@/components/admin/job-openings/job-opening-detail-sheet"
 import { Button } from "@/components/ui/button"
