@@ -5,6 +5,7 @@ import { bookingStatusMap, classTypeMap, flightPaymentStatusMap, StatusBadge } f
 import { UserFlight } from "@/types/flights"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
+import { FlightRowActions } from "./flight-row-actions"
 
 export const flightColumns: ColumnDef<UserFlight>[] = [
   {
@@ -89,5 +90,10 @@ export const flightColumns: ColumnDef<UserFlight>[] = [
     accessorKey: "isReturnTrip",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Trip" />,
     cell: ({ row }) => <span className="text-xs text-muted-foreground">{row.getValue<boolean>("isReturnTrip") ? "Return" : "One-way"}</span>,
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => <FlightRowActions flight={row.original} />,
   },
 ]
