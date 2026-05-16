@@ -39,7 +39,7 @@ export function useAddJobOpening(onSuccess?: () => void, opening?: JobOpeningLis
         queryClient.invalidateQueries({ queryKey: ["public-job-openings"] })
         queryClient.invalidateQueries({ queryKey: ["admin-job-openings"] })
         queryClient.invalidateQueries({ queryKey: ["job-opening-stats"] })
-        queryClient.invalidateQueries({ queryKey: ["job-opening-options"] })
+        queryClient.invalidateQueries({ queryKey: ["available-openings"] })
         onSuccess?.()
         form.reset()
       } else {
