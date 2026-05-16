@@ -1,4 +1,6 @@
 import { ClassType, FlightStatus } from "../../generated/prisma/enums"
+import { ApiResponse } from "./api-response"
+import { PaginatedResult } from "./pagination"
 
 export type TripType = "one-way" | "return"
 export const TripTypeOptions = ["one-way", "return"] as const
@@ -96,19 +98,23 @@ export interface FlightSearchResponse {
   }
 }
 
-// //  Booking Flow Types
-// export interface SelectedFlight {
-//   flight: FlightSearchResult
-//   seatClass: SeatClassAvailability
-//   passengers: number
-//   totalPrice: number
-// }
+export interface UserFlight {
+  id: string
+  bookingId: string
+  bookingReference: string
+  bookingStatus: string
+  flightNumber: string
+  from: string
+  fromCity: string
+  to: string
+  toCity: string
+  departureTime: Date
+  arrivalTime: Date
+  classType: string
+  passengerCount: number
+  totalAmount: number
+  paymentStatus: string
+  isReturnTrip: boolean
+}
 
-// export interface SelectedReturnFlight extends SelectedFlight {
-//   // Same structure, just for the return leg
-// }
-
-// export interface BookingSelection {
-//   outbound: SelectedFlight
-//   return?: SelectedReturnFlight
-// }
+export type UserFlightsResponse = ApiResponse<PaginatedResult<UserFlight>>

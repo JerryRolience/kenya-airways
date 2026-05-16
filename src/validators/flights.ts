@@ -1,6 +1,7 @@
 import { FlightSearchParams, TripTypeOptions } from "@/types/flights"
 import z from "zod"
-import { ClassType } from "../../generated/prisma/enums"
+import { BookingStatus, ClassType } from "../../generated/prisma/enums"
+import { CursorPaginationSchema } from "./pagination"
 
 const _FlightSearchParamsSchema = z
   .object({
@@ -58,4 +59,11 @@ const _FlightSearchParamsSchema = z
     message: "Departure and destination cannot be the same.",
   })
 
+export const FetchUserFlightsSchema = CursorPaginationSchema.extend({
+  status: z.union([z.nativeEnum(BookingStatus), z.array(z.nativeEnum(BookingStatus))]).optional(),
+  classType: z.union([z.nativeEnum(ClassType), z.array(z.nativeEnum(ClassType))]).optional(),
+  upcoming: z.boolean().optional(),
+})
+
 export const FlightSearchParamsSchema: z.ZodType<FlightSearchParams> = _FlightSearchParamsSchema
+export type FetchUserFlightsInput = z.infer<typeof FetchUserFlightsSchema>
