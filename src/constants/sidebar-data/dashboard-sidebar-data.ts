@@ -1,4 +1,4 @@
-import { LayoutDashboard, Plane, Ticket, Briefcase, User, CreditCard, Settings, HelpCircle } from "lucide-react"
+import { Briefcase, CreditCard, HelpCircle, LayoutDashboard, Plane, Ticket, User } from "lucide-react"
 
 export const dashboardSidebarData = {
   navMain: [
@@ -34,11 +34,6 @@ export const dashboardSidebarData = {
     },
   ],
   navSecondary: [
-    {
-      title: "Settings",
-      url: "/dashboard/settings",
-      icon: Settings,
-    },
     {
       title: "Help",
       url: "/help",

@@ -1,4 +1,4 @@
-import { Briefcase, Building2, FileBarChart, LayoutDashboard, LifeBuoy, Plane, Settings2, Ticket, UserCheck, Users } from "lucide-react"
+import { Briefcase, FileBarChart, LayoutDashboard, LifeBuoy, Plane, Ticket, UserCheck, Users } from "lucide-react"
 
 export const adminSidebarData = {
   navMain: [
@@ -87,11 +87,6 @@ export const adminSidebarData = {
   ],
   navSecondary: [
     {
-      title: "Settings",
-      url: "/admin/settings",
-      icon: Settings2,
-    },
-    {
       title: "Help & Support",
       url: "/help",
       icon: LifeBuoy,
@@ -102,11 +97,6 @@ export const adminSidebarData = {
       name: "View Site",
       url: "/",
       icon: Plane,
-    },
-    {
-      name: "Manage Flights",
-      url: "/admin/flights",
-      icon: Building2,
     },
   ],
 }
