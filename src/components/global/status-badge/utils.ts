@@ -164,3 +164,14 @@ export const paymentMethodMap: Record<string, StatusMeta> = {
   BANK_TRANSFER: { label: "Bank Transfer", variant: "info", icon: CreditCard },
   CASH: { label: "Cash", variant: "neutral", icon: CreditCard },
 }
+
+//
+// JOB APPLICATION STATUS
+//
+export const jobApplicationStatusMap: Record<string, StatusMeta> = {
+  PENDING: { label: "Pending", variant: "warning", icon: Clock, pulse: true },
+  REVIEWED: { label: "Reviewed", variant: "info", icon: CheckCircle },
+  SHORTLISTED: { label: "Shortlisted", variant: "blue", icon: Users },
+  ACCEPTED: { label: "Accepted", variant: "success", icon: CheckCircle },
+  REJECTED: { label: "Rejected", variant: "destructive", icon: XCircle },
+}
