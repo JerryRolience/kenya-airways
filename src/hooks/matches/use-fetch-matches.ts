@@ -7,12 +7,7 @@ import { FetchMatchesInput } from "@/validators/match"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useRef } from "react"
 
-interface UseFetchMatchesParams {
-  input?: FetchMatchesInput
-  enabled?: boolean
-}
-
-export function useFetchMatches({ input = { limit: 10 }, enabled = true }: UseFetchMatchesParams = {}) {
+export function useFetchMatches(input: FetchMatchesInput = { limit: 10 }) {
   const query = useQuery({
     queryKey: ["matches", input],
     queryFn: async () => {
@@ -20,13 +15,15 @@ export function useFetchMatches({ input = { limit: 10 }, enabled = true }: UseFe
       if (!res.success) {
         throw new AppError(res.message ?? "Failed to load matches.", res.statusCode ?? 500)
       }
+
       return res
     },
-    enabled,
-    staleTime: 1000 * 60 * 2,
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
     placeholderData: prev => prev,
   })
 
+  // ── Toast on error (fires once per error, resets on recovery) ──
   const hasToastedError = useRef(false)
 
   useEffect(() => {
@@ -34,13 +31,12 @@ export function useFetchMatches({ input = { limit: 10 }, enabled = true }: UseFe
       hasToastedError.current = true
       const message = query.error instanceof AppError ? query.error.message : "An unexpected error occurred. Please try again."
 
-      ErrorHandler({
-        title: "Error fetching matches",
-        description: message,
-        action: "error",
-      })
+      ErrorHandler({ title: "Error fetching matches", description: message, action: "error" })
     }
-    if (!query.isError) hasToastedError.current = false
+
+    if (!query.isError) {
+      hasToastedError.current = false
+    }
   }, [query.isError, query.error])
 
   return query
