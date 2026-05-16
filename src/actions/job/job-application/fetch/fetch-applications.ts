@@ -12,16 +12,23 @@ import { Prisma } from "../../../../../generated/prisma/client"
 export async function fetchApplications(input: FetchApplicationsInput = { limit: 10 }): Promise<FetchApplicationsResponse> {
   try {
     const validated = FetchApplicationsSchema.parse(input)
-    const { cursor, limit, search, status, openingId } = validated
+    const { cursor, limit, search, status, openingId, userId } = validated
 
     const res = await isUserAuthenticated()
 
-    if (!res.data?.isAdmin) {
+    if (!res.success || !res.data?.user) {
       throw new HttpError({
         statusCode: STATUS_CODES.UNAUTHORIZED,
-        message: "Access denied. Only administrators can view applications.",
+        message: "You must be authenticated to view applications.",
       })
     }
+
+    // Determine whose applications to fetch
+    // If userId is provided (admin viewing specific user), use that
+    // If no userId and is admin, fetch all (admin view)
+    // If no userId and not admin, fetch own applications (user dashboard)
+    const isAdmin = res.data.isAdmin
+    const targetUserId = userId || (!isAdmin ? res.data.user.id : undefined)
 
     const searchFilter: Prisma.JobApplicationWhereInput = search
       ? {
@@ -36,6 +43,7 @@ export async function fetchApplications(input: FetchApplicationsInput = { limit:
       : {}
 
     const where: Prisma.JobApplicationWhereInput = {
+      ...(targetUserId && { userId: targetUserId }),
       ...(status && { status: Array.isArray(status) ? { in: status } : status }),
       ...(openingId && { openingId: Array.isArray(openingId) ? { in: openingId } : openingId }),
       ...searchFilter,
@@ -81,7 +89,7 @@ export async function fetchApplications(input: FetchApplicationsInput = { limit:
     if (total === 0) {
       return successResponse({
         statusCode: STATUS_CODES.OK,
-        message: "No applications found.",
+        message: targetUserId ? "You haven't submitted any applications yet." : "No applications found.",
         data: buildPaginatedResult<ApplicationListItem>({
           items: [],
           total: 0,
@@ -92,7 +100,7 @@ export async function fetchApplications(input: FetchApplicationsInput = { limit:
       })
     }
 
-    const mappedItems: ApplicationListItem[] = items.map(app => ({
+    const mappedItems: ApplicationListItem[] = items.slice(0, limit).map(app => ({
       id: app.id,
       userId: app.userId,
       openingId: app.openingId,
@@ -119,7 +127,7 @@ export async function fetchApplications(input: FetchApplicationsInput = { limit:
 
     return successResponse({
       statusCode: STATUS_CODES.OK,
-      message: `Found ${total} application${total === 1 ? "" : "s"}.`,
+      message: targetUserId ? `Found ${total} application${total === 1 ? "" : "s"}.` : `Found ${total} application${total === 1 ? "" : "s"} across all users.`,
       data: paginated,
     })
   } catch (error: any) {
