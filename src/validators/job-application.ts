@@ -12,6 +12,7 @@ export const JobApplicationSchema: z.ZodType<JobApplicationInputData> = z.object
 export const FetchApplicationsSchema = CursorPaginationSchema.extend({
   status: z.union([z.nativeEnum(ApplicationStatus), z.array(z.nativeEnum(ApplicationStatus))]).optional(),
   openingId: z.union([z.cuid(), z.array(z.cuid())]).optional(),
+  userId: z.cuid().optional(),
 })
 
 export type FetchApplicationsInput = z.infer<typeof FetchApplicationsSchema>
