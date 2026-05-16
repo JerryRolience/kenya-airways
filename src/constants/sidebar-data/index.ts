@@ -45,6 +45,10 @@ export const adminSidebarData = {
           title: "All Openings",
           url: "/admin/job-openings",
         },
+        {
+          title: "All Applications",
+          url: "/admin/job-openings/applications",
+        },
       ],
     },
     {
