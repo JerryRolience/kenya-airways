@@ -1,39 +1,32 @@
 "use server"
 
+import { isUserAuthenticated } from "@/actions/auth/is-user-authenticated"
 import { STATUS_CODES } from "@/constants/status-codes"
 import { errorResponse, HttpError, successResponse } from "@/lib"
 import prisma from "@/lib/prisma"
 import { ApiResponse } from "@/types/api-response"
 import { BookingDetail } from "@/types/booking"
-import { currentUser } from "@clerk/nextjs/server"
+import { Role } from "../../../../generated/prisma/enums"
 
-export async function getBooking(reference: string): Promise<ApiResponse<BookingDetail>> {
+export async function fetchBooking(reference: string): Promise<ApiResponse<BookingDetail>> {
   try {
     if (!reference?.trim()) {
       throw new HttpError({ statusCode: STATUS_CODES.BAD_REQUEST, message: "Booking reference is required." })
     }
 
-    // ── Auth ──────────────────────────────────────────────────────────────────
-    const clerkUser = await currentUser()
-    if (!clerkUser) {
+    // 1. Authentication
+    const res = await isUserAuthenticated()
+
+    if (!res.success || !res.data) {
       throw new HttpError({
-        statusCode: STATUS_CODES.UNAUTHORIZED,
-        message: "You must be signed in to view a booking.",
+        message: res.message || "Authentication failed. Please log in again.",
+        statusCode: res.statusCode || STATUS_CODES.UNAUTHORIZED,
       })
     }
 
-    const dbUser = await prisma.user.findUnique({
-      where: { clerkId: clerkUser.id },
-      select: { id: true, role: true },
-    })
-    if (!dbUser) {
-      throw new HttpError({
-        statusCode: STATUS_CODES.NOT_FOUND,
-        message: "User account not found.",
-      })
-    }
+    const { user } = res.data
 
-    // ── Fetch booking ─────────────────────────────────────────────────────────
+    //  Fetch booking
     const booking = await prisma.booking.findUnique({
       where: { reference: reference.toUpperCase() },
       select: {
@@ -45,7 +38,6 @@ export async function getBooking(reference: string): Promise<ApiResponse<Booking
         isReturnTrip: true,
         createdAt: true,
         userId: true,
-
         flight: {
           select: {
             id: true,
@@ -66,9 +58,7 @@ export async function getBooking(reference: string): Promise<ApiResponse<Booking
             arrival: { select: { code: true, city: true, name: true } },
           },
         },
-        seatClass: {
-          select: { class: true, priceKES: true },
-        },
+        seatClass: { select: { class: true, priceKES: true } },
         passengers: {
           select: {
             id: true,
@@ -86,23 +76,11 @@ export async function getBooking(reference: string): Promise<ApiResponse<Booking
                 relationship: true,
               },
             },
-            ticket: {
-              select: {
-                id: true,
-                ticketNumber: true,
-                status: true,
-                issuedAt: true,
-              },
-            },
+            ticket: { select: { id: true, ticketNumber: true, status: true, issuedAt: true } },
           },
         },
         payment: {
-          select: {
-            method: true,
-            transactionRef: true,
-            amount: true,
-            paidAt: true,
-          },
+          select: { method: true, transactionRef: true, amount: true, paidAt: true },
         },
       },
     })
@@ -114,17 +92,17 @@ export async function getBooking(reference: string): Promise<ApiResponse<Booking
       })
     }
 
-    // ── Ownership check ───────────────────────────────────────────────────────
+    //  Ownership check
     // Admins can view any booking; passengers can only view their own
-    const isAdmin = dbUser.role === "ADMIN" || dbUser.role === "SUPER_ADMIN"
-    if (!isAdmin && booking.userId !== dbUser.id) {
+    const isAdmin = user.role === Role.ADMIN || user.role === Role.SUPER_ADMIN
+    if (!isAdmin && booking.userId !== user.id) {
       throw new HttpError({
         statusCode: STATUS_CODES.FORBIDDEN,
         message: "You do not have permission to view this booking.",
       })
     }
 
-    // ── Shape response ────────────────────────────────────────────────────────
+    //  Shape response
     const data: BookingDetail = {
       id: booking.id,
       reference: booking.reference,
@@ -164,7 +142,6 @@ export async function getBooking(reference: string): Promise<ApiResponse<Booking
         message: error.message,
       })
     }
-    console.error("[getBooking] unexpected error:", error)
     return errorResponse({
       statusCode: STATUS_CODES.INTERNAL_SERVER_ERROR,
       error: "Internal Server Error",

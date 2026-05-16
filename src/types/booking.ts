@@ -1,4 +1,6 @@
 import { BookingStatus, ClassType, PassengerRelation, PaymentMethod, PaymentStatus, TicketStatus, Title } from "../../generated/prisma/enums"
+import { ApiResponse } from "./api-response"
+import { PaginatedResult } from "./pagination"
 
 export interface PassengerInput {
   title: Title
@@ -136,3 +138,5 @@ export interface BookingListItem {
     departureTime: Date
   }
 }
+
+export type FetchBookingsResponse = ApiResponse<PaginatedResult<BookingListItem>>

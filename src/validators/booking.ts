@@ -1,5 +1,6 @@
 import { z } from "zod"
-import { ClassType, PassengerRelation, PaymentMethod, Title } from "../../generated/prisma/enums"
+import { BookingStatus, ClassType, PassengerRelation, PaymentMethod, PaymentStatus, Title } from "../../generated/prisma/enums"
+import { CursorPaginationSchema } from "./pagination"
 
 const NAME_REGEX = /^[A-Za-z\s'-]+$/
 const PHONE_REGEX = /^\+?[0-9]{10,15}$/
@@ -65,8 +66,6 @@ export const PassengerSchema = z.object({
   }),
 })
 
-export type PassengerFormValues = z.infer<typeof PassengerSchema>
-
 export const BookingFormSchema = z.object({
   passengers: z
     .array(PassengerSchema)
@@ -84,8 +83,6 @@ export const BookingFormSchema = z.object({
       },
     ),
 })
-
-export type BookingFormValues = z.infer<typeof BookingFormSchema>
 
 export const CreateBookingSchema = z
   .object({
@@ -152,14 +149,10 @@ export const CreateBookingSchema = z
     },
   )
 
-export type CreateBookingInput = z.infer<typeof CreateBookingSchema>
-
 export const CancelBookingSchema = z.object({
   bookingId: z.string().min(1, "Booking ID is required."),
   reason: z.string().trim().optional(),
 })
-
-export type CancelBookingInput = z.infer<typeof CancelBookingSchema>
 
 export const ChangeBookingSchema = z.object({
   bookingId: z.string().min(1, "Booking ID is required."),
@@ -170,4 +163,14 @@ export const ChangeBookingSchema = z.object({
   transactionRef: z.string().trim().optional(),
 })
 
+export const FetchBookingsSchema = CursorPaginationSchema.extend({
+  status: z.union([z.array(z.nativeEnum(BookingStatus)), z.nativeEnum(BookingStatus)]).optional(),
+  paymentStatus: z.union([z.array(z.nativeEnum(PaymentStatus)), z.nativeEnum(PaymentStatus)]).optional(),
+})
+
+export type FetchBookingsInput = z.infer<typeof FetchBookingsSchema>
 export type ChangeBookingInput = z.infer<typeof ChangeBookingSchema>
+export type CancelBookingInput = z.infer<typeof CancelBookingSchema>
+export type CreateBookingInput = z.infer<typeof CreateBookingSchema>
+export type BookingFormValues = z.infer<typeof BookingFormSchema>
+export type PassengerFormValues = z.infer<typeof PassengerSchema>
