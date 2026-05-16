@@ -10,7 +10,7 @@ import { BookingStatus, PaymentStatus, TicketStatus } from "../../../../generate
 
 export async function cancelBooking(data: CancelBookingInput): Promise<ApiResponse<{ reference: string }>> {
   try {
-    // ── Validate ──────────────────────────────────────────────────────────────
+    //  Validate
     const parsed = CancelBookingSchema.safeParse(data)
     if (!parsed.success) {
       throw new HttpError({
@@ -20,7 +20,7 @@ export async function cancelBooking(data: CancelBookingInput): Promise<ApiRespon
     }
     const { bookingId } = parsed.data
 
-    // ── Auth ──────────────────────────────────────────────────────────────────
+    //  Auth
     const clerkUser = await currentUser()
     if (!clerkUser) {
       throw new HttpError({
@@ -40,7 +40,7 @@ export async function cancelBooking(data: CancelBookingInput): Promise<ApiRespon
       })
     }
 
-    // ── Fetch booking with everything we need ─────────────────────────────────
+    //  Fetch booking with everything we need
     const booking = await prisma.booking.findUnique({
       where: { id: bookingId },
       select: {
@@ -79,7 +79,7 @@ export async function cancelBooking(data: CancelBookingInput): Promise<ApiRespon
       })
     }
 
-    // ── Ownership check ───────────────────────────────────────────────────────
+    //  Ownership check
     const isAdmin = dbUser.role === "ADMIN" || dbUser.role === "SUPER_ADMIN"
     if (!isAdmin && booking.userId !== dbUser.id) {
       throw new HttpError({
@@ -88,7 +88,7 @@ export async function cancelBooking(data: CancelBookingInput): Promise<ApiRespon
       })
     }
 
-    // ── Status guard: only CONFIRMED bookings can be cancelled ────────────────
+    //  Status guard: only CONFIRMED bookings can be cancelled
     if (booking.status === BookingStatus.CANCELLED) {
       throw new HttpError({
         statusCode: STATUS_CODES.CONFLICT,
@@ -102,7 +102,7 @@ export async function cancelBooking(data: CancelBookingInput): Promise<ApiRespon
       })
     }
 
-    // ── Time guard: cannot cancel within 2 hours of departure ────────────────
+    //  Time guard: cannot cancel within 2 hours of departure
     const twoHoursFromNow = new Date(Date.now() + 2 * 60 * 60 * 1000)
     if (booking.flight.departureTime <= twoHoursFromNow) {
       throw new HttpError({
@@ -113,7 +113,7 @@ export async function cancelBooking(data: CancelBookingInput): Promise<ApiRespon
 
     const passengerCount = booking.passengers.length
 
-    // ── $transaction: cancel everything atomically ────────────────────────────
+    //  $transaction: cancel everything atomically
     await prisma.$transaction(async tx => {
       // 1. Cancel the booking
       await tx.booking.update({
