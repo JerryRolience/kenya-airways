@@ -26,7 +26,8 @@ export function useToggleEmployeeStatus({ employee, onSuccess }: UseToggleEmploy
         // Invalidate first, then close — avoids stale data flash
         queryClient.invalidateQueries({ queryKey: ["employees"] })
         queryClient.invalidateQueries({ queryKey: ["employee-stats"] })
-        queryClient.invalidateQueries({ queryKey: ["employee-options"] })
+        queryClient.invalidateQueries({ queryKey: ["available-employees"] })
+        queryClient.invalidateQueries({ queryKey: ["available-openings"] })
         onSuccess?.()
       } else {
         // Server returned success: false — operational error (validation, conflict, etc.)

@@ -42,7 +42,7 @@ export function useAddEmployee(onSuccess?: () => void, employee?: EmployeeListIt
         // Invalidate first, then close — avoids stale data flash
         queryClient.invalidateQueries({ queryKey: ["employees"] })
         queryClient.invalidateQueries({ queryKey: ["employee-stats"] })
-        queryClient.invalidateQueries({ queryKey: ["employee-options"] })
+        queryClient.invalidateQueries({ queryKey: ["available-employees"] })
         onSuccess?.()
         form.reset()
       } else {
