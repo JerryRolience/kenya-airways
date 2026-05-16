@@ -2,12 +2,14 @@
 
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { DeleteAlertDialog } from "@/components/global/dialogs/delete-alert-dialog"
 import { MoreHorizontal, Eye, Edit, XCircle } from "lucide-react"
 import { useState } from "react"
 import { BookingListItem } from "@/types/booking"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { CancelBookingDialog } from "@/components/global/dialogs/cancel-booking-dialog"
+import { useCancelBooking } from "@/hooks/booking/use-cancel-booking"
+import { BookingStatus } from "../../../../../../generated/prisma/enums"
 
 interface BookingRowActionsProps {
   booking: BookingListItem
@@ -16,10 +18,10 @@ interface BookingRowActionsProps {
 export function BookingRowActions({ booking }: BookingRowActionsProps) {
   const router = useRouter()
   const [cancelOpen, setCancelOpen] = useState(false)
-  const [isCancelling, setIsCancelling] = useState(false)
 
-  const isActive = booking.status === "CONFIRMED" || booking.status === "PENDING"
-  const isCancelled = booking.status === "CANCELLED"
+  const { isPending, onCancelBooking } = useCancelBooking({})
+
+  const isActive = booking.status === BookingStatus.CONFIRMED || booking.status === BookingStatus.PENDING
 
   const handleViewDetails = () => {
     router.push(`/dashboard/bookings/${booking.id}`)
@@ -31,20 +33,6 @@ export function BookingRowActions({ booking }: BookingRowActionsProps) {
       return
     }
     router.push(`/dashboard/bookings/${booking.id}/change`)
-  }
-
-  const handleCancelBooking = async () => {
-    setIsCancelling(true)
-    try {
-      // TODO: Call cancel booking server action
-      // await cancelBooking(booking.id);
-      toast.success("Booking cancelled successfully.")
-      setCancelOpen(false)
-    } catch (error) {
-      toast.error("Failed to cancel booking.")
-    } finally {
-      setIsCancelling(false)
-    }
   }
 
   return (
@@ -85,17 +73,15 @@ export function BookingRowActions({ booking }: BookingRowActionsProps) {
       </DropdownMenu>
 
       {/* Cancel Booking Confirmation Dialog */}
-      <DeleteAlertDialog
-        entityName={`booking ${booking.reference}`}
-        entityType="booking"
+      <CancelBookingDialog
+        bookingReference={booking.reference}
+        flightNumber={booking.outboundFlight.flightNumber}
+        isReturnTrip={booking.isReturnTrip}
+        paymentStatus={booking.paymentStatus}
         open={cancelOpen}
         onOpenChange={setCancelOpen}
-        isPending={isCancelling}
-        onConfirm={handleCancelBooking}
-        title="Cancel Booking"
-        description={`Are you sure you want to cancel booking ${booking.reference}? ${booking.paymentStatus === "PAID" ? "A refund will be processed according to our cancellation policy." : ""}`}
-        confirmLabel="Cancel Booking"
-        variant="destructive"
+        isPending={isPending}
+        onConfirm={reason => onCancelBooking({ bookingId: booking.id, reason })}
       />
     </>
   )
