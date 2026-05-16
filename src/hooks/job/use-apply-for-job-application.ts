@@ -8,7 +8,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import z from "zod"
 import { customZodResolver } from "../custom-zod-resolver"
-import { applyForJobOpening } from "@/actions/job/job-application/create/apply-for-job-opening"
+import { applyForJobOpening } from "@/actions/job/job-application/apply/apply-for-job-opening"
 
 interface UseApplyForJobOpeningParams {
   openingId: string
