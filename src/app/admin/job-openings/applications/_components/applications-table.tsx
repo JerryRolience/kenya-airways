@@ -14,8 +14,9 @@ import { RefreshCw, Users } from "lucide-react"
 import { useCallback, useEffect, useMemo, useState, useTransition } from "react"
 import { applicationColumns } from "./application-columns"
 import { ApplicationTableFilter } from "./application-table-filters"
+import { useFetchUserApplications } from "@/hooks/job/use-fetch-user-job-applications"
 
-export function ApplicationsTable() {
+export function ApplicationsTable({ isUserView }: { isUserView?: boolean }) {
   const [pageSize, setPageSize] = useState(10)
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -30,19 +31,23 @@ export function ApplicationsTable() {
 
   const { currentCursor, currentPage, hasPreviousPage, goToNextPage, goToPreviousPage, goToFirstPage, reset: resetCursor } = useCursorPagination()
 
-  const {
-    data: response,
-    isLoading,
-    isError,
-    isFetching,
-    refetch,
-    error,
-  } = useFetchJobApplications({
-    limit: pageSize,
-    search: debouncedSearch || undefined,
-    cursor: currentCursor,
-    status: statusFilter,
+  const adminQuery = useFetchJobApplications({
+    input: { limit: pageSize, search: debouncedSearch || undefined, cursor: currentCursor, status: statusFilter },
+    enabled: !isUserView, // ← Only fetch when NOT user view
   })
+
+  const userQuery = useFetchUserApplications({
+    input: {
+      limit: pageSize,
+      search: debouncedSearch || undefined,
+      cursor: currentCursor,
+      status: statusFilter,
+    },
+    enabled: isUserView, // ← Only fetch when user view
+  })
+
+  // Use the appropriate query result based on view
+  const { data: response, isLoading, isError, isFetching, refetch, error } = isUserView ? userQuery : adminQuery
 
   // Reset to first page when filters change
   useEffect(() => {

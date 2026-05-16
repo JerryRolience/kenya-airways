@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { usePathname } from "next/navigation"
 import { Fragment } from "react"
-import { AppSidebar } from "./app-sidebar"
+import { AppSidebar } from "../app-sidebar"
 
 export function AdminLayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -20,7 +20,7 @@ export function AdminLayoutWrapper({ children }: { children: React.ReactNode }) 
 
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar type="admin" />
       <SidebarInset>
         {/* Header */}
         <header className="flex h-16 shrink-0 items-center gap-2 border-b border-sidebar-border/30 bg-sidebar/5 px-4 no-print">
