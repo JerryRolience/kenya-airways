@@ -13,6 +13,7 @@ export function useHireApplicant() {
       if (res.success) {
         ErrorHandler({ title: "Applicant hired successfully", description: res.message, action: "success" })
         queryClient.invalidateQueries({ queryKey: ["job-applications"] })
+        queryClient.invalidateQueries({ queryKey: ["user-applications"] })
         queryClient.invalidateQueries({ queryKey: ["employees"] })
         queryClient.invalidateQueries({ queryKey: ["employee-stats"] })
         queryClient.invalidateQueries({ queryKey: ["matches"] })
