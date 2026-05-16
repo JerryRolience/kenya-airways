@@ -6,8 +6,12 @@ import { AppError } from "@/lib/app-error"
 import { FetchApplicationsInput } from "@/validators/job-application"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useRef } from "react"
+interface UseFetchJobApplicationsParams {
+  input?: Omit<FetchApplicationsInput, "userId">
+  enabled?: boolean
+}
 
-export function useFetchJobApplications(input: FetchApplicationsInput = { limit: 10 }) {
+export function useFetchJobApplications({ input, enabled }: UseFetchJobApplicationsParams = {}) {
   const query = useQuery({
     queryKey: ["job-applications", input],
     queryFn: async () => {
@@ -20,6 +24,7 @@ export function useFetchJobApplications(input: FetchApplicationsInput = { limit:
     },
     staleTime: 1000 * 60 * 5,
     retry: 1,
+    enabled,
     placeholderData: prev => prev,
   })
 
