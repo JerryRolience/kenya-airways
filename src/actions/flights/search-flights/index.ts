@@ -114,7 +114,7 @@ export async function searchFlights(data: FlightSearchParams): Promise<ApiRespon
         message: error.message,
       })
     }
-    console.error("[searchFlights] unexpected error:", error)
+    // console.error("[searchFlights] unexpected error:", error)
     return errorResponse({
       statusCode: STATUS_CODES.INTERNAL_SERVER_ERROR,
       error: "Internal Server Error",
