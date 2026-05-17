@@ -8,11 +8,12 @@ import { cn } from "@/lib/utils"
 import { useClerk } from "@clerk/nextjs"
 import { ArrowRight, ChevronDown, LayoutDashboard, LogOut, Menu, Plane, Ticket, User } from "lucide-react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import { ThemeToggle } from "../global/theme/theme-toggle"
 
 const links = [
-  { label: "Flights", href: "/dashboard/flights" },
+  { label: "Flights", href: "/flights" },
   { label: "Manage Booking", href: "/dashboard/bookings" },
   { label: "Careers", href: "/careers" },
   { label: "Help", href: "/help" },
@@ -30,6 +31,7 @@ export function Navbar() {
   const { isSignedIn, user } = useClerk()
   const { handleLogout, isSigningOut } = useSignOut()
   const [isAdmin, setIsAdmin] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20)
@@ -37,13 +39,18 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handler)
   }, [])
 
-  // Check if user is admin
   useEffect(() => {
     if (user?.publicMetadata) {
       const role = (user.publicMetadata as any)?.role
       setIsAdmin(role === "ADMIN" || role === "SUPER_ADMIN")
     }
   }, [user])
+
+  // Helper to check if a link is active
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/"
+    return pathname.startsWith(href)
+  }
 
   return (
     <header className="fixed top-0 z-50 w-full">
@@ -62,7 +69,16 @@ export function Navbar() {
           {/* Desktop Navigation Links */}
           <div className="hidden items-center gap-1 md:flex">
             {links.map(l => (
-              <Link key={l.label} href={l.href} className="rounded-lg px-3 py-2 text-sm font-medium text-foreground/70 transition-colors hover:bg-secondary hover:text-accent">
+              <Link
+                key={l.label}
+                href={l.href}
+                className={cn(
+                  "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                  isActive(l.href)
+                    ? "bg-accent/10 text-accent" // Active style
+                    : "text-foreground/70 hover:bg-secondary hover:text-accent", // Default style
+                )}
+              >
                 {l.label}
               </Link>
             ))}
@@ -105,7 +121,6 @@ export function Navbar() {
                         </DropdownMenuItem>
                       ))}
 
-                      {/* Admin Links */}
                       {isAdmin && (
                         <>
                           <DropdownMenuSeparator />
@@ -183,7 +198,14 @@ export function Navbar() {
                 <div className="mt-6 flex flex-col gap-1">
                   {/* Main Links */}
                   {links.map(l => (
-                    <Link key={l.label} href={l.href} className="rounded-lg px-3 py-3 text-base font-medium hover:bg-secondary hover:text-accent hover:cursor-pointer transition-colors">
+                    <Link
+                      key={l.label}
+                      href={l.href}
+                      className={cn(
+                        "rounded-lg px-3 py-3 text-base font-medium hover:bg-secondary hover:text-accent hover:cursor-pointer transition-colors",
+                        isActive(l.href) && "bg-accent/10 text-accent", // Active on mobile too
+                      )}
+                    >
                       {l.label}
                     </Link>
                   ))}
@@ -197,14 +219,16 @@ export function Navbar() {
                         <Link
                           key={item.label}
                           href={item.href}
-                          className="rounded-lg px-3 py-3 text-base font-medium hover:bg-secondary hover:text-accent hover:cursor-pointer transition-colors flex items-center gap-3"
+                          className={cn(
+                            "rounded-lg px-3 py-3 text-base font-medium hover:bg-secondary hover:text-accent hover:cursor-pointer transition-colors flex items-center gap-3",
+                            isActive(item.href) && "bg-accent/10 text-accent",
+                          )}
                         >
                           <item.icon className="h-4 w-4 text-muted-foreground" />
                           {item.label}
                         </Link>
                       ))}
 
-                      {/* Admin Links */}
                       {isAdmin && (
                         <>
                           <div className="my-2 border-t border-border/60" />
@@ -213,7 +237,10 @@ export function Navbar() {
                             <Link
                               key={item.label}
                               href={item.href}
-                              className="rounded-lg px-3 py-3 text-base font-medium hover:bg-secondary hover:text-accent hover:cursor-pointer transition-colors flex items-center gap-3"
+                              className={cn(
+                                "rounded-lg px-3 py-3 text-base font-medium hover:bg-secondary hover:text-accent hover:cursor-pointer transition-colors flex items-center gap-3",
+                                isActive(item.href) && "bg-accent/10 text-accent",
+                              )}
                             >
                               <item.icon className="h-4 w-4 text-muted-foreground" />
                               {item.label}
