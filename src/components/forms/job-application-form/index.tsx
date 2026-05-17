@@ -11,6 +11,7 @@ import Link from "next/link"
 import { FormGenerator } from "../form-generator"
 import { FormDebug } from "../form-generator/utils/form-debug"
 import { useUser } from "@clerk/nextjs"
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 
 interface JobApplicationFormProps {
   openingId: string
@@ -42,31 +43,47 @@ export function JobApplicationForm({ openingId, openingTitle, open, setOpen, onS
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-xl p-0 gap-0 max-h-[90vh] flex flex-col">
-        {!isLoaded ? (
-          /*  Loading State  */
-          <div className="flex items-center justify-center py-20">
-            <Loader loading={true}>
-              <span className="text-sm text-muted-foreground">Loading application form...</span>
-            </Loader>
-          </div>
-        ) : !user ? (
-          /*  Not Logged In State  */
-          <div className="p-8 text-center">
-            <Send className="h-12 w-12 text-muted-foreground/40 mx-auto" />
-            <h2 className="font-display text-xl font-bold text-foreground mt-4">Sign in to apply</h2>
-            <p className="mt-2 text-sm text-muted-foreground max-w-md mx-auto">You need to sign in or create an account to apply for this position.</p>
-            <Link href="/auth">
-              <Button className="mt-5 rounded-xl text-sm gap-2 hover:cursor-pointer">
-                Sign in to continue
-                <ArrowRight className="h-4 w-4" />
+        {/*  Loading State  */}
+        {!isLoaded && (
+          <>
+            <VisuallyHidden>
+              <DialogTitle>Loading application form</DialogTitle>
+            </VisuallyHidden>
+            <div className="flex items-center justify-center py-20">
+              <Loader loading={true}>
+                <span className="text-sm text-muted-foreground">Loading application form...</span>
+              </Loader>
+            </div>
+          </>
+        )}
+
+        {/*  Not Logged In State  */}
+        {isLoaded && !user && (
+          <>
+            <DialogHeader className="px-6 pt-6 pb-4 text-center">
+              <DialogTitle className="text-lg text-center font-semibold">Sign in to apply</DialogTitle>
+              <DialogDescription></DialogDescription>
+            </DialogHeader>
+            <div className="p-8 text-center pt-0">
+              <Send className="h-12 w-12 text-muted-foreground/40 mx-auto" />
+              <p className="mt-4 text-sm text-muted-foreground max-w-md mx-auto">
+                Create your account or sign in to submit your application for <span className="font-medium text-foreground">{openingTitle}</span>.
+              </p>
+              <Link href="/auth">
+                <Button className="mt-5 rounded-xl text-sm gap-2 hover:cursor-pointer">
+                  Sign in to continue
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+              <Button variant="ghost" className="mt-2 text-xs hover:cursor-pointer" onClick={() => handleOpenChange(false)}>
+                Maybe later
               </Button>
-            </Link>
-            <Button variant="ghost" className="mt-2 text-xs hover:cursor-pointer" onClick={() => handleOpenChange(false)}>
-              Maybe later
-            </Button>
-          </div>
-        ) : (
-          /*  Form State  */
+            </div>
+          </>
+        )}
+
+        {/*  Form State  */}
+        {isLoaded && user && (
           <>
             <DialogHeader className="px-6 pt-6 pb-4 border-b shrink-0">
               <DialogTitle className="text-lg font-semibold">Apply for {openingTitle}</DialogTitle>
