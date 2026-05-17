@@ -6,28 +6,24 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/s
 import { useSignOut } from "@/hooks/authentication/use-sign-out"
 import { cn } from "@/lib/utils"
 import { useClerk } from "@clerk/nextjs"
-import { ArrowRight, Briefcase, ChevronDown, LayoutDashboard, LogOut, Menu, Plane, Settings, Ticket, User } from "lucide-react"
+import { ArrowRight, ChevronDown, LayoutDashboard, LogOut, Menu, Plane, Ticket, User } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { ThemeToggle } from "../global/theme/theme-toggle"
 
 const links = [
-  { label: "Flights", href: "/flights" },
-  { label: "Manage Booking", href: "/bookings" },
+  { label: "Flights", href: "/dashboard/flights" },
+  { label: "Manage Booking", href: "/dashboard/bookings" },
   { label: "Careers", href: "/careers" },
   { label: "Help", href: "/help" },
 ]
 
 const userMenuLinks = [
-  { label: "My Bookings", href: "/bookings", icon: Ticket },
-  { label: "Profile", href: "/profile", icon: User },
-  { label: "Settings", href: "/settings", icon: Settings },
+  { label: "My Bookings", href: "/dashboard/bookings", icon: Ticket },
+  { label: "Profile", href: "/dashboard/profile", icon: User },
 ]
 
-const adminLinks = [
-  { label: "Admin Dashboard", href: "/admin", icon: LayoutDashboard },
-  { label: "Careers", href: "/careers", icon: Briefcase },
-]
+const adminLinks = [{ label: "Admin Dashboard", href: "/admin", icon: LayoutDashboard }]
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -140,7 +136,7 @@ export function Navbar() {
                     </DropdownMenuContent>
                   </DropdownMenu>
 
-                  <Link href="/book">
+                  <Link href="/#booking-card">
                     <Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-xl hover:cursor-pointer text-xs">
                       Book Now
                     </Button>
@@ -162,7 +158,7 @@ export function Navbar() {
                       <ArrowRight className="w-4 h-4 ml-1" />
                     </Button>
                   </Link>
-                  <Link href="/book">
+                  <Link href="/#booking-card">
                     <Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-xl hover:cursor-pointer">
                       Book Now
                     </Button>
@@ -248,7 +244,7 @@ export function Navbar() {
                     </>
                   )}
 
-                  <Link href="/book" className="mt-2">
+                  <Link href="/#booking-card" className="mt-2">
                     <Button className="w-full rounded-xl bg-accent text-accent-foreground hover:bg-accent/90 hover:cursor-pointer">
                       <Plane className="w-4 h-4 mr-2 -rotate-45" />
                       Book Now
