@@ -1,6 +1,7 @@
 import { ApiResponse } from "./api-response"
 import { PaginatedResult } from "./pagination"
 import { PassengerRelation, Title, Role } from "../../generated/prisma/enums"
+import { PassengerFormValues } from "@/validators/booking"
 
 export interface UpdatePassengerInputData {
   id: string
@@ -51,3 +52,4 @@ export interface PassengerStats {
 export type PassengerStatsResponse = ApiResponse<PassengerStats>
 export type FetchPassengersResponse = ApiResponse<PaginatedResult<PassengerListItem>>
 export type FetchPassengerByIdResponse = ApiResponse<PassengerListItem>
+export type PassengerProfileResponse = ApiResponse<Partial<PassengerFormValues>>
