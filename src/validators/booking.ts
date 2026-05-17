@@ -23,9 +23,7 @@ const coercedDate = z.preprocess(
 )
 
 export const PassengerSchema = z.object({
-  title: z.nativeEnum(Title, {
-    message: "Please select a valid title.",
-  }),
+  title: z.nativeEnum(Title, { message: "Please select a valid title." }),
 
   firstName: z
     .string()
@@ -94,9 +92,7 @@ export const CreateBookingSchema = z
     isReturnTrip: z.boolean(),
 
     // Class
-    classType: z.nativeEnum(ClassType, {
-      message: "Invalid class type.",
-    }),
+    classType: z.nativeEnum(ClassType, { message: "Invalid class type." }),
 
     // Passengers — reuse the same per-passenger schema
     passengers: z
