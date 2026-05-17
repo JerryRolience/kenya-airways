@@ -1,7 +1,7 @@
 import { z } from "zod"
 import { JobApplicationInputData } from "@/types/job-application"
 import { CursorPaginationSchema } from "./pagination"
-import { ApplicationStatus } from "../../generated/prisma/client"
+import { ApplicationStatus } from "../../generated/prisma/enums"
 
 export const JobApplicationSchema: z.ZodType<JobApplicationInputData> = z.object({
   openingId: z.string().min(1, "Opening ID is required."),
