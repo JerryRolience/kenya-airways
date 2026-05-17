@@ -63,7 +63,7 @@ export function useAuthentication() {
     })
 
     if (result.data?.role === Role.PASSENGER) {
-      router.push("/passenger/dashboard")
+      router.push("/dashboard")
     } else {
       router.push("/admin")
     }
@@ -91,7 +91,7 @@ export function useAuthentication() {
       description: result.message || "Your account has been created successfully!",
       action: "success",
     })
-    router.push("/passenger/dashboard")
+    router.push("/dashboard")
     resetSignUp()
   }
 
