@@ -10,7 +10,7 @@ import { CreateBookingSchema, CreateBookingInput } from "@/validators/booking"
 import { currentUser } from "@clerk/nextjs/server"
 import { FlightStatus, BookingStatus, PaymentStatus, ClassType } from "../../../../generated/prisma/enums"
 
-// ─── Helper: resolve seatClass from flightId + classType ─────────────────────
+//  Helper: resolve seatClass from flightId + classType
 
 async function resolveSeatClass(tx: Omit<typeof prisma, "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends">, flightId: string, classType: ClassType) {
   const seatClass = await tx.seatClass.findUnique({
@@ -34,8 +34,7 @@ async function resolveSeatClass(tx: Omit<typeof prisma, "$connect" | "$disconnec
   return seatClass
 }
 
-// ─── Helper: check seat availability ─────────────────────────────────────────
-
+//  Helper: check seat availability
 function assertSeatsAvailable(seatClass: { id: string; totalSeats: number; bookedSeats: number; class: ClassType }, passengers: number, flightLabel: string) {
   const available = seatClass.totalSeats - seatClass.bookedSeats
   if (available < passengers) {
@@ -49,7 +48,7 @@ function assertSeatsAvailable(seatClass: { id: string; totalSeats: number; booke
   }
 }
 
-// ─── Helper: validate flight is still bookable ────────────────────────────────
+//  Helper: validate flight is still bookable
 
 async function assertFlightBookable(tx: Omit<typeof prisma, "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends">, flightId: string, label: string) {
   const flight = await tx.flight.findUnique({
@@ -92,7 +91,7 @@ async function assertFlightBookable(tx: Omit<typeof prisma, "$connect" | "$disco
   return flight
 }
 
-// ─── Helper: validate total amount matches DB prices ─────────────────────────
+//  Helper: validate total amount matches DB prices
 
 function assertTotalAmountCorrect(outboundPriceKES: number, returnPriceKES: number, passengers: number, submittedTotal: number) {
   const expectedTotal = (outboundPriceKES + returnPriceKES) * passengers
@@ -106,11 +105,9 @@ function assertTotalAmountCorrect(outboundPriceKES: number, returnPriceKES: numb
   }
 }
 
-// ─── Main server action ───────────────────────────────────────────────────────
-
 export async function createBooking(data: CreateBookingInput): Promise<ApiResponse<CreatedBookingResult>> {
   try {
-    // ── 1. Validate input ─────────────────────────────────────────────────────
+    //  1. Validate input
     const parsed = CreateBookingSchema.safeParse(data)
 
     if (!parsed.success) {
@@ -124,7 +121,7 @@ export async function createBooking(data: CreateBookingInput): Promise<ApiRespon
 
     const { outboundFlightId, returnFlightId, isReturnTrip, classType, passengers, paymentMethod, transactionRef, totalAmount } = parsed.data
 
-    // ── 2. Auth check ─────────────────────────────────────────────────────────
+    //  2. Auth check
     const clerkUser = await currentUser()
     if (!clerkUser) {
       throw new HttpError({
@@ -150,146 +147,151 @@ export async function createBooking(data: CreateBookingInput): Promise<ApiRespon
     const ticketNumbers = await Promise.all(passengers.map(() => generateUniqueTicketNumber(prisma)))
 
     // ── 4. The $transaction ───────────────────────────────────────────────────
-    const result = await prisma.$transaction(async tx => {
-      // ── 4a. Validate both flights ──────────────────────────────────────────
-      const outboundFlight = await assertFlightBookable(tx, outboundFlightId, "outbound")
-      let returnFlight = null
-      if (isReturnTrip && returnFlightId) {
-        returnFlight = await assertFlightBookable(tx, returnFlightId, "return")
-      }
+    const result = await prisma.$transaction(
+      async tx => {
+        // ── 4a. Validate both flights ──────────────────────────────────────────
+        const outboundFlight = await assertFlightBookable(tx, outboundFlightId, "outbound")
+        let returnFlight = null
+        if (isReturnTrip && returnFlightId) {
+          returnFlight = await assertFlightBookable(tx, returnFlightId, "return")
+        }
 
-      // ── 4b. Resolve + check seat classes ───────────────────────────────────
-      const outboundSeatClass = await resolveSeatClass(tx, outboundFlightId, classType)
-      assertSeatsAvailable(outboundSeatClass, passengers.length, "outbound")
+        // ── 4b. Resolve + check seat classes ───────────────────────────────────
+        const outboundSeatClass = await resolveSeatClass(tx, outboundFlightId, classType)
+        assertSeatsAvailable(outboundSeatClass, passengers.length, "outbound")
 
-      let returnSeatClass = null
-      if (isReturnTrip && returnFlightId) {
-        returnSeatClass = await resolveSeatClass(tx, returnFlightId, classType)
-        assertSeatsAvailable(returnSeatClass, passengers.length, "return")
-      }
+        let returnSeatClass = null
+        if (isReturnTrip && returnFlightId) {
+          returnSeatClass = await resolveSeatClass(tx, returnFlightId, classType)
+          assertSeatsAvailable(returnSeatClass, passengers.length, "return")
+        }
 
-      // ── 4c. Validate submitted total against DB prices ────────────────────
-      assertTotalAmountCorrect(outboundSeatClass.priceKES, returnSeatClass?.priceKES ?? 0, passengers.length, totalAmount)
+        // ── 4c. Validate submitted total against DB prices ────────────────────
+        assertTotalAmountCorrect(outboundSeatClass.priceKES, returnSeatClass?.priceKES ?? 0, passengers.length, totalAmount)
 
-      // ── 4d. Upsert passengers ─────────────────────────────────────────────
-      // upsert: if same user books same passport again, update details
-      const passengerRecords = await Promise.all(
-        passengers.map(p =>
-          tx.passenger.upsert({
-            where: {
-              userId_passportNumber: {
-                userId: dbUser.id,
-                passportNumber: p.passportNumber.toUpperCase(),
+        // ── 4d. Upsert passengers ─────────────────────────────────────────────
+        // upsert: if same user books same passport again, update details
+        const passengerRecords = await Promise.all(
+          passengers.map(p =>
+            tx.passenger.upsert({
+              where: {
+                userId_passportNumber: {
+                  userId: dbUser.id,
+                  passportNumber: p.passportNumber.toUpperCase(),
+                },
               },
-            },
-            update: {
-              title: p.title,
-              firstName: p.firstName,
-              lastName: p.lastName,
-              email: p.email,
-              phone: p.phone,
-              nationality: p.nationality,
-              dateOfBirth: p.dateOfBirth,
-              relationship: p.relationship,
-            },
-            create: {
-              userId: dbUser.id,
-              title: p.title,
-              firstName: p.firstName,
-              lastName: p.lastName,
-              email: p.email,
-              phone: p.phone,
-              passportNumber: p.passportNumber.toUpperCase(),
-              nationality: p.nationality,
-              dateOfBirth: p.dateOfBirth,
-              relationship: p.relationship,
-            },
-            select: { id: true, firstName: true, lastName: true },
-          }),
-        ),
-      )
+              update: {
+                title: p.title,
+                firstName: p.firstName,
+                lastName: p.lastName,
+                email: p.email,
+                phone: p.phone,
+                nationality: p.nationality,
+                dateOfBirth: p.dateOfBirth,
+                relationship: p.relationship,
+              },
+              create: {
+                userId: dbUser.id,
+                title: p.title,
+                firstName: p.firstName,
+                lastName: p.lastName,
+                email: p.email,
+                phone: p.phone,
+                passportNumber: p.passportNumber.toUpperCase(),
+                nationality: p.nationality,
+                dateOfBirth: p.dateOfBirth,
+                relationship: p.relationship,
+              },
+              select: { id: true, firstName: true, lastName: true },
+            }),
+          ),
+        )
 
-      // ── 4e. Create the Booking record ──────────────────────────────────────
-      const booking = await tx.booking.create({
-        data: {
-          reference: bookingReference,
-          userId: dbUser.id,
-          flightId: outboundFlightId,
-          seatClassId: outboundSeatClass.id,
-          returnFlightId: returnFlightId ?? null,
-          isReturnTrip,
-          status: BookingStatus.PENDING,
-          totalAmount,
-          paymentStatus: PaymentStatus.UNPAID,
-        },
-        select: { id: true },
-      })
+        // ── 4e. Create the Booking record ──────────────────────────────────────
+        const booking = await tx.booking.create({
+          data: {
+            reference: bookingReference,
+            userId: dbUser.id,
+            flightId: outboundFlightId,
+            seatClassId: outboundSeatClass.id,
+            returnFlightId: returnFlightId ?? null,
+            isReturnTrip,
+            status: BookingStatus.PENDING,
+            totalAmount,
+            paymentStatus: PaymentStatus.UNPAID,
+          },
+          select: { id: true },
+        })
 
-      // ── 4f. Create BookingPassenger for each passenger ─────────────────────
-      const bookingPassengers = await Promise.all(
-        passengerRecords.map(passenger =>
-          tx.bookingPassenger.create({
-            data: {
-              bookingId: booking.id,
-              passengerId: passenger.id,
-            },
-            select: { id: true },
-          }),
-        ),
-      )
+        // ── 4f. Create BookingPassenger for each passenger ─────────────────────
+        const bookingPassengers = await Promise.all(
+          passengerRecords.map(passenger =>
+            tx.bookingPassenger.create({
+              data: {
+                bookingId: booking.id,
+                passengerId: passenger.id,
+              },
+              select: { id: true },
+            }),
+          ),
+        )
 
-      // ── 4g. Increment outbound SeatClass.bookedSeats ───────────────────────
-      await tx.seatClass.update({
-        where: { id: outboundSeatClass.id },
-        data: { bookedSeats: { increment: passengers.length } },
-      })
-
-      // ── 4h. Increment return SeatClass.bookedSeats (if round trip) ────────
-      if (returnSeatClass) {
+        // ── 4g. Increment outbound SeatClass.bookedSeats ───────────────────────
         await tx.seatClass.update({
-          where: { id: returnSeatClass.id },
+          where: { id: outboundSeatClass.id },
           data: { bookedSeats: { increment: passengers.length } },
         })
-      }
 
-      // ── 4i. Create Payment record ──────────────────────────────────────────
-      await tx.payment.create({
-        data: {
+        // ── 4h. Increment return SeatClass.bookedSeats (if round trip) ────────
+        if (returnSeatClass) {
+          await tx.seatClass.update({
+            where: { id: returnSeatClass.id },
+            data: { bookedSeats: { increment: passengers.length } },
+          })
+        }
+
+        // ── 4i. Create Payment record ──────────────────────────────────────────
+        await tx.payment.create({
+          data: {
+            bookingId: booking.id,
+            amount: totalAmount,
+            method: paymentMethod,
+            transactionRef: transactionRef ?? null,
+          },
+        })
+
+        // ── 4j. Create one Ticket per BookingPassenger ─────────────────────────
+        await Promise.all(
+          bookingPassengers.map((bp, index) =>
+            tx.ticket.create({
+              data: {
+                bookingPassengerId: bp.id,
+                ticketNumber: ticketNumbers[index]!,
+              },
+            }),
+          ),
+        )
+
+        // ── 4k. Confirm the Booking ────────────────────────────────────────────
+        await tx.booking.update({
+          where: { id: booking.id },
+          data: {
+            status: BookingStatus.CONFIRMED,
+            paymentStatus: PaymentStatus.PAID,
+          },
+        })
+
+        return {
           bookingId: booking.id,
-          amount: totalAmount,
-          method: paymentMethod,
-          transactionRef: transactionRef ?? null,
-        },
-      })
-
-      // ── 4j. Create one Ticket per BookingPassenger ─────────────────────────
-      await Promise.all(
-        bookingPassengers.map((bp, index) =>
-          tx.ticket.create({
-            data: {
-              bookingPassengerId: bp.id,
-              ticketNumber: ticketNumbers[index]!,
-            },
-          }),
-        ),
-      )
-
-      // ── 4k. Confirm the Booking ────────────────────────────────────────────
-      await tx.booking.update({
-        where: { id: booking.id },
-        data: {
-          status: BookingStatus.CONFIRMED,
-          paymentStatus: PaymentStatus.PAID,
-        },
-      })
-
-      return {
-        bookingId: booking.id,
-        reference: bookingReference,
-        outboundFlight,
-        returnFlight,
-      }
-    }) // end $transaction
+          reference: bookingReference,
+          outboundFlight,
+          returnFlight,
+        }
+      },
+      {
+        timeout: 15000, // 15 seconds (up from default 5s)
+      },
+    ) // end $transaction
 
     // ── 5. Build response ─────────────────────────────────────────────────────
     return successResponse<CreatedBookingResult>({
