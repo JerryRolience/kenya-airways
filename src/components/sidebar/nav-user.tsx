@@ -6,7 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar"
 import { useSignOut } from "@/hooks/authentication/use-sign-out"
 import { useClerk } from "@clerk/nextjs"
-import { BadgeCheck, ChevronsUpDown, LogOut, Shield, User } from "lucide-react"
+import { BadgeCheck, ChevronsUpDown, Home, LogOut, Shield, User } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
@@ -73,6 +73,12 @@ export function NavUser({ type }: { type?: "admin" | "dashboard" }) {
                 <Link href={type === "admin" ? "/admin/profile" : "/dashboard/profile"} className="cursor-pointer">
                   <User className="mr-2 h-4 w-4" />
                   Profile
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/" className="cursor-pointer">
+                  <Home className="mr-2 h-4 w-4" />
+                  Home
                 </Link>
               </DropdownMenuItem>
               {type === "admin" && (
