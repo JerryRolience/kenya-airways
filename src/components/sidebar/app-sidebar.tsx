@@ -48,7 +48,7 @@ export function AppSidebar({ type, ...props }: React.ComponentProps<typeof Sideb
 
       {/* Footer with User */}
       <SidebarFooter>
-        <NavUser />
+        <NavUser type={type} />
       </SidebarFooter>
     </Sidebar>
   )

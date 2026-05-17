@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/static-components */
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -11,7 +10,7 @@ import { BadgeCheck, ChevronsUpDown, LogOut, Shield, User } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
-export function NavUser() {
+export function NavUser({ type }: { type?: "admin" | "dashboard" }) {
   const { isMobile } = useSidebar()
   const { user } = useClerk()
   const { handleLogout, isSigningOut } = useSignOut()
@@ -21,8 +20,8 @@ export function NavUser() {
     setMounted(true)
   }, [])
 
-  const fullName = mounted ? (user?.fullName ?? "Admin User") : ""
-  const email = mounted ? (user?.primaryEmailAddress?.emailAddress ?? "admin@kenyaairways.co.ke") : ""
+  const fullName = mounted ? (user?.fullName ?? (type === "admin" ? "Admin User" : "Passenger")) : ""
+  const email = mounted ? (user?.primaryEmailAddress?.emailAddress ?? (type === "admin" ? "admin@kenyaairways.co.ke" : "passenger@kenyaairways.co.ke")) : ""
   const imageUrl = mounted ? (user?.imageUrl ?? "") : ""
   const initials = fullName
     ? fullName
@@ -35,7 +34,7 @@ export function NavUser() {
 
   const UserAvatar = ({ className }: { className?: string }) => (
     <Avatar className={className}>
-      {imageUrl && <AvatarImage src={imageUrl} alt={fullName || "Admin"} />}
+      {imageUrl && <AvatarImage src={imageUrl} alt={fullName || type === "admin" ? "Admin" : "Passenger"} />}
       <AvatarFallback className="rounded-lg text-xs bg-primary text-primary-foreground">{initials}</AvatarFallback>
     </Avatar>
   )
@@ -71,23 +70,27 @@ export function NavUser() {
 
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
-                <Link href="/admin/settings" className="cursor-pointer">
+                <Link href={type === "admin" ? "/admin/profile" : "/dashboard/profile"} className="cursor-pointer">
                   <User className="mr-2 h-4 w-4" />
                   Profile
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/admin/settings" className="cursor-pointer">
-                  <BadgeCheck className="mr-2 h-4 w-4" />
-                  Account
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/admin" className="cursor-pointer">
-                  <Shield className="mr-2 h-4 w-4" />
-                  Admin Panel
-                </Link>
-              </DropdownMenuItem>
+              {type === "admin" && (
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard" className="cursor-pointer">
+                    <BadgeCheck className="mr-2 h-4 w-4" />
+                    Account
+                  </Link>
+                </DropdownMenuItem>
+              )}
+              {type === "dashboard" && (
+                <DropdownMenuItem asChild>
+                  <Link href="/admin" className="cursor-pointer">
+                    <Shield className="mr-2 h-4 w-4" />
+                    Admin Panel
+                  </Link>
+                </DropdownMenuItem>
+              )}
             </DropdownMenuGroup>
 
             <DropdownMenuSeparator />
