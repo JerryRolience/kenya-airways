@@ -1,22 +1,15 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
 import { useFetchJobOpening } from "@/hooks/job/use-fetch-public-job-opening"
-import { useUser } from "@clerk/nextjs"
-import { useState } from "react"
-import { toast } from "sonner"
-import { JobApplicationSuccess } from "./job-application-success"
+import { AppError } from "@/lib/app-error"
+import { AlertCircle, ArrowLeft, Briefcase, RefreshCw } from "lucide-react"
+import Link from "next/link"
 import { JobDetailsPageContent } from "./job-details-page-content"
 import { JobDetailsPageHeader } from "./job-details-page-header"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Button } from "@/components/ui/button"
-import { AlertCircle, ArrowLeft, RefreshCw, Briefcase } from "lucide-react"
-import Link from "next/link"
-import { AppError } from "@/lib/app-error"
 
 export function JobDetailPage({ openingId }: { openingId: string }) {
-  const { user, isLoaded } = useUser()
-  const [submitting, setSubmitting] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
 
   const { data: response, isLoading, isError, error, refetch, isFetching } = useFetchJobOpening(openingId)
 
@@ -24,28 +17,8 @@ export function JobDetailPage({ openingId }: { openingId: string }) {
 
   const errorMessage = error instanceof AppError ? error.message : "We couldn't load this job opening. Please try again."
 
-  const handleApply = async () => {
-    if (!isLoaded || !user) {
-      toast.error("Please sign in to apply.")
-      return
-    }
+  
 
-    setSubmitting(true)
-
-    // TODO: Call actual apply action
-    // const result = await applyForOpening({ openingId, coverLetter, cvUrl });
-
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-
-    setSubmitted(true)
-    toast.success("Application submitted successfully!")
-    setSubmitting(false)
-  }
-
-  if (submitted) {
-    return <JobApplicationSuccess title={opening?.title || "this position"} />
-  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -130,10 +103,7 @@ export function JobDetailPage({ openingId }: { openingId: string }) {
 
           {/* Content */}
           <JobDetailsPageContent
-            handleApply={handleApply}
             opening={opening}
-            submitting={submitting}
-            // isLoggedIn={isLoaded && !!user}
           />
         </>
       )}

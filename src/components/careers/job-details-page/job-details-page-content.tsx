@@ -1,11 +1,10 @@
-// components/careers/job-details-page-content.tsx
 "use client"
 
 import { JobApplicationForm } from "@/components/forms/job-application-form"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { JobOpeningListItem } from "@/types/job-opening"
-import { Briefcase, Building2, CheckCircle2, MapPin, Send } from "lucide-react"
+import { Briefcase, Building2, MapPin, Send } from "lucide-react"
 import { useState } from "react"
 import { JobApplicationSuccess } from "./job-application-success"
 
@@ -62,15 +61,7 @@ export function JobDetailsPageContent({ opening }: JobDetailsPageContentProps) {
                   </Button>
                 </div>
               ) : (
-                <div className="text-center py-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 mx-auto">
-                    <CheckCircle2 className="h-7 w-7 text-emerald-600" />
-                  </div>
-                  <h3 className="font-display text-lg font-semibold text-foreground mt-3">Application Submitted!</h3>
-                  <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
-                    Thank you for applying for <span className="font-medium text-foreground">{opening.title}</span>. We&apos;ll review your application and get back to you within 2 weeks.
-                  </p>
-                </div>
+                <JobApplicationSuccess title={opening.title} />
               )}
             </Card>
 
