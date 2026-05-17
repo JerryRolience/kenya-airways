@@ -13,7 +13,7 @@ import { useEffect, useState } from "react"
 import { ThemeToggle } from "../global/theme/theme-toggle"
 
 const links = [
-  { label: "Flights", href: "/flights" },
+  { label: "Flights", href: "/dashboard/flights" },
   { label: "Manage Booking", href: "/dashboard/bookings" },
   { label: "Careers", href: "/careers" },
   { label: "Help", href: "/help" },
@@ -197,6 +197,15 @@ export function Navbar() {
                 {/* Mobile Menu Content */}
                 <div className="mt-6 flex flex-col gap-1">
                   {/* Main Links */}
+                  <Link
+                    href="/"
+                    className={cn(
+                      "rounded-lg px-3 py-3 text-base font-medium hover:bg-secondary hover:text-accent hover:cursor-pointer transition-colors",
+                      isActive("/") && "bg-accent/10 text-accent",
+                    )}
+                  >
+                    Home
+                  </Link>
                   {links.map(l => (
                     <Link
                       key={l.label}
