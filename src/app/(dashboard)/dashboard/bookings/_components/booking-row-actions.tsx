@@ -24,7 +24,7 @@ export function BookingRowActions({ booking }: BookingRowActionsProps) {
   const isActive = booking.status === BookingStatus.CONFIRMED || booking.status === BookingStatus.PENDING
 
   const handleViewDetails = () => {
-    router.push(`/dashboard/bookings/${booking.id}`)
+    router.push(`/dashboard/bookings/${booking.reference}`)
   }
 
   const handleChangeBooking = () => {
