@@ -27,7 +27,6 @@ interface FlightsPageClientProps {
 }
 
 export function FlightsPageClient({ searchResults: initialResults, searchParams, error, highlightFlightId }: FlightsPageClientProps) {
-  console.log("Initial search results:", initialResults)
   const router = useRouter()
 
   //  Live results state (can be updated when user changes dates)

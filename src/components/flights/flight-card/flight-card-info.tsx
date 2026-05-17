@@ -54,18 +54,19 @@ export function FlightCardInfo({ flight, searchParams, direction, isSelected, on
 
     // One-way — navigate straight to booking
     const p = new URLSearchParams({
-      flightId: flight.id,
+      outboundId: flight.id,
       flightNumber: flight.flightNumber,
       class: searchParams.class,
       passengers: String(searchParams.passengers),
       from: flight.departure.code,
       to: flight.arrival.code,
       departDate: format(flight.departureTime, "yyyy-MM-dd"),
-      price: String(seatClass!.priceKES),
+      outboundPrice: String(seatClass!.priceKES),
       direction,
       tripType: searchParams.tripType,
     })
-    router.push(`/booking/${flight.id}?${p.toString()}`)
+
+    router.push(`/booking?${p.toString()}`)
   }
 
   return (
