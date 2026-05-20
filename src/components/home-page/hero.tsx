@@ -2,7 +2,14 @@ import { Plane } from "lucide-react"
 import { BookingCard } from "./booking-card"
 import Image from "next/image"
 
-export function Hero() {
+interface BookingCardProps {
+  prefillDestination?: {
+    from: string
+    to: string
+  } | null
+}
+
+export function Hero({ prefillDestination }: BookingCardProps) {
   return (
     <section className="relative isolate overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24">
       {/* Background image */}
@@ -34,7 +41,7 @@ export function Hero() {
         </div>
 
         <div id="booking-card" className="mx-auto mt-10 max-w-5xl animate-fade-up" style={{ animationDelay: "120ms" }}>
-          <BookingCard />
+          <BookingCard prefillDestination={prefillDestination} />
         </div>
 
         <div className="mx-auto mt-8 flex max-w-3xl flex-wrap items-center justify-center gap-x-8 gap-y-2 text-xs text-muted-foreground animate-fade-up" style={{ animationDelay: "240ms" }}>

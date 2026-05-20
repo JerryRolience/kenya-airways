@@ -8,7 +8,7 @@ import { useSearchFlight } from "@/hooks/flight/search-flight"
 import { useFetchAirports } from "@/hooks/airport/use-fetch-airports"
 import { cn } from "@/lib/utils"
 import { ArrowLeftRight, CalendarIcon, Loader2, MapPin, Plane, Search } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ClassType } from "../../../../generated/prisma/enums"
 import { TripType } from "@/types/flights"
 
@@ -22,12 +22,26 @@ const TRIP_TYPE_OPTIONS = [
   { value: "one-way", label: "One Way" },
   { value: "return", label: "Return" },
 ]
+interface BookingCardProps {
+  prefillDestination?: {
+    from: string
+    to: string
+  } | null
+}
 
-export function BookingCard() {
+export function BookingCard({ prefillDestination }: BookingCardProps) {
   const [tripType, setTripType] = useState<TripType>("one-way")
   const { onSubmit, control, errors, isPending, register, setValue, watch } = useSearchFlight()
 
   const { data: airportsData, isLoading: airportsLoading } = useFetchAirports()
+
+  // Watch for prefill changes
+  useEffect(() => {
+    if (prefillDestination) {
+      setValue("from", prefillDestination.from)
+      setValue("to", prefillDestination.to)
+    }
+  }, [prefillDestination, setValue])
 
   const airports: Option[] = airportsData?.data?.map(a => ({ value: a.code, label: a.label })) || []
 
