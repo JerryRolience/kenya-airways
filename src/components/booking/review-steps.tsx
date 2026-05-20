@@ -39,8 +39,10 @@ interface ReviewStepProps {
   passengers: PassengerFormValues[]
 
   // Seat selection
-  selectedSeats?: Record<number, SeatData>
-  onEditSeats?: () => void
+  selectedOutboundSeats?: Record<number, SeatData>
+  selectedReturnSeats?: Record<number, SeatData>
+  onEditOutboundSeats?: () => void
+  onEditReturnSeats?: () => void
 
   // Payment state (lifted to wizard)
   paymentMethod: PaymentMethod | null
@@ -75,8 +77,10 @@ export function ReviewStep({
   isReturnTrip,
   classType,
   passengers,
-  selectedSeats,
-  onEditSeats,
+  selectedOutboundSeats,
+  selectedReturnSeats,
+  onEditOutboundSeats,
+  onEditReturnSeats,
   paymentMethod,
   transactionRef,
   onMethodChange,
@@ -93,7 +97,8 @@ export function ReviewStep({
 
   const canConfirm = paymentMethod !== null && (paymentMethod !== PaymentMethod.MPESA || transactionRef.length >= 6)
 
-  const hasSelectedSeats = selectedSeats && Object.keys(selectedSeats).length > 0 && Object.values(selectedSeats).some(s => s !== null && s !== undefined)
+  const hasSelectedOutboundSeats = selectedOutboundSeats && Object.keys(selectedOutboundSeats).length > 0 && Object.values(selectedOutboundSeats).some(s => s !== null && s !== undefined)
+  const hasSelectedReturnSeats = selectedReturnSeats && Object.keys(selectedReturnSeats).length > 0 && Object.values(selectedReturnSeats).some(s => s !== null && s !== undefined)
 
   return (
     <div className="grid gap-8 lg:grid-cols-12">
@@ -160,13 +165,13 @@ export function ReviewStep({
           </div>
         </section>
 
-        {/* Selected Seats */}
-        {hasSelectedSeats && (
+        {/* Selected Outbound Seats */}
+        {hasSelectedOutboundSeats && (
           <section>
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-semibold text-foreground">Selected seats</h3>
-              {onEditSeats && (
-                <Button type="button" variant="ghost" size="sm" onClick={onEditSeats} className="h-7 rounded-lg text-xs text-muted-foreground gap-1">
+              {onEditOutboundSeats && (
+                <Button type="button" variant="ghost" size="sm" onClick={onEditOutboundSeats} className="h-7 rounded-lg text-xs text-muted-foreground gap-1">
                   <Pencil className="h-3 w-3" />
                   Change
                 </Button>
@@ -174,11 +179,34 @@ export function ReviewStep({
             </div>
 
             <div className="space-y-2">
-              {Object.entries(selectedSeats!).map(([index, seat]) => {
+              {Object.entries(selectedOutboundSeats!).map(([index, seat]) => {
                 if (!seat) return null
                 const passenger = passengers[Number(index)]
                 if (!passenger) return null
                 return <SeatCard key={index} seat={seat} passengerName={`${passenger.firstName} ${passenger.lastName}`} passengerIndex={Number(index)} />
+              })}
+            </div>
+          </section>
+        )}
+
+        {/* Return Selected Seats */}
+        {isReturnTrip && hasSelectedReturnSeats && (
+          <section>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-semibold text-foreground">Return flight seats</h3>
+              {onEditReturnSeats && (
+                <Button type="button" variant="ghost" size="sm" onClick={onEditReturnSeats} className="h-7 rounded-lg text-xs text-muted-foreground gap-1">
+                  <Pencil className="h-3 w-3" />
+                  Change
+                </Button>
+              )}
+            </div>
+            <div className="space-y-2">
+              {Object.entries(selectedReturnSeats!).map(([index, seat]) => {
+                if (!seat) return null
+                const passenger = passengers[Number(index)]
+                if (!passenger) return null
+                return <SeatCard key={`return-${index}`} seat={seat} passengerName={`${passenger.firstName} ${passenger.lastName}`} passengerIndex={Number(index)} />
               })}
             </div>
           </section>
