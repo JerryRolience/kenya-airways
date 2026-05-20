@@ -16,9 +16,24 @@ const _FlightSearchParamsSchema = z
         },
         z.date({ error: () => ({ message: "Please enter a valid departure date." }) }),
       )
-      .refine(date => date >= new Date(), {
-        message: "Departure date cannot be in the past.",
-      }),
+      .refine(
+        date => {
+          // Get today at midnight for comparison
+          const today = new Date()
+          today.setHours(0, 0, 0, 0)
+          return date >= today
+        },
+        { message: "Departure date cannot be in the past." },
+      ),
+    // .refine(
+    //   date => {
+    //     // Check it's not today (optional — remove if you want to allow today)
+    //     const today = new Date()
+    //     today.setHours(0, 0, 0, 0)
+    //     return date.getTime() !== today.getTime()
+    //   },
+    //   { message: "Departure date cannot be today. Please select a future date." },
+    // ),
     returnDate: z
       .preprocess(
         val => {
@@ -28,9 +43,14 @@ const _FlightSearchParamsSchema = z
         },
         z.date({ error: () => ({ message: "Please enter a valid return date." }) }),
       )
-      .refine(date => date >= new Date(), {
-        message: "Return date cannot be in the past.",
-      })
+      .refine(
+        date => {
+          const today = new Date()
+          today.setHours(0, 0, 0, 0)
+          return date >= today
+        },
+        { message: "Return date cannot be in the past." },
+      )
       .optional(),
     tripType: z.enum(TripTypeOptions, { message: "Please select a trip type." }),
     class: z.nativeEnum(ClassType, { message: "Please select a cabin class." }),
@@ -53,10 +73,12 @@ const _FlightSearchParamsSchema = z
     },
     {
       message: "Return date must be after departure date for return trips.",
+      path: ["returnDate"],
     },
   )
   .refine(data => data.from !== data.to, {
     message: "Departure and destination cannot be the same.",
+    path: ["to"],
   })
 
 export const FetchUserFlightsSchema = CursorPaginationSchema.extend({
