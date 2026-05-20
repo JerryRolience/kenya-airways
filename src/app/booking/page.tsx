@@ -1,8 +1,9 @@
-import { BookingWizard, BookingContext } from "@/components/booking/booking-wizard"
+import { BookingWizard } from "@/components/booking/booking-wizard/booking-wizard"
 import { ClassType } from "../../../generated/prisma/enums"
 import { AlertTriangle, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import prisma from "@/lib/prisma"
+import { BookingContext } from "@/components/booking/booking-wizard/types"
 
 interface BookingPageProps {
   searchParams: Promise<{ [key: string]: string | undefined }>
@@ -113,7 +114,7 @@ export default async function BookingPage({ searchParams }: BookingPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <div className="mx-auto max-w-5xl px-4 py-10">
         {/* Page title */}
         <div className="mb-8">
