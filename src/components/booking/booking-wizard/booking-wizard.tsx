@@ -1,93 +1,24 @@
 "use client"
 
-import { useState, useTransition } from "react"
-import { useRouter } from "next/navigation"
-import { PassengerFormValues } from "@/validators/booking"
-import { ClassType, PaymentMethod } from "../../../generated/prisma/enums"
-import { SeatData } from "@/types/seat"
-import { PassengerStep } from "./passenger-steps"
-import { SeatSelectionStep } from "./seat-selection/seat-selection-step"
-import { ReviewStep } from "./review-steps"
-import { BookingFlightCard } from "./booking-flight-card"
-import { cn } from "@/lib/utils"
-import { Check } from "lucide-react"
 import { createBooking } from "@/actions/bookings/create"
-
-// ─── Booking context derived from URL params ───
-export interface BookingContext {
-  // Outbound
-  outboundFlightId: string
-  outboundNumber: string
-  outboundDep: Date
-  outboundArr: Date
-  outboundFrom: string
-  outboundTo: string
-  outboundFromCity: string
-  outboundToCity: string
-  outboundPrice: number
-
-  // Return (optional)
-  returnFlightId?: string
-  returnNumber?: string
-  returnDep?: Date
-  returnArr?: Date
-  returnFrom?: string
-  returnTo?: string
-  returnFromCity?: string
-  returnToCity?: string
-  returnPrice?: number
-
-  isReturnTrip: boolean
-  classType: ClassType
-  passengerCount: number
-}
+import { SeatData } from "@/types/seat"
+import { PassengerFormValues } from "@/validators/booking"
+import { useRouter } from "next/navigation"
+import { useState, useTransition } from "react"
+import { PaymentMethod } from "../../../../generated/prisma/enums"
+import { BookingFlightCard } from "../booking-flight-card"
+import { PassengerStep } from "../passenger-steps"
+import { ReviewStep } from "../review-steps"
+import { SeatSelectionStep } from "../seat-selection/seat-selection-step"
+import { BookingContext } from "./types"
+import { WizardStep, StepIndicator } from "./step-indicator"
+import { ErrorHandler } from "@/components/global/error-handler"
 
 interface BookingWizardProps {
   context: BookingContext
 }
 
-// ─── Step Indicator ───
-type WizardStep = 1 | 2 | 3
-
-function StepIndicator({ currentStep }: { currentStep: WizardStep }) {
-  const steps = [
-    { num: 1, label: "Passengers" },
-    { num: 2, label: "Seats" },
-    { num: 3, label: "Review & pay" },
-  ]
-
-  return (
-    <div className="flex items-center gap-0 mb-8 overflow-x-auto">
-      {steps.map((step, i) => {
-        const isDone = currentStep > step.num
-        const isActive = currentStep === step.num
-        return (
-          <div key={step.num} className="flex items-center">
-            {/* Step circle */}
-            <div className="flex items-center gap-2.5 shrink-0">
-              <div
-                className={cn(
-                  "flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold transition-all",
-                  isDone && "bg-primary text-primary-foreground",
-                  isActive && "bg-primary text-primary-foreground ring-4 ring-primary/20",
-                  !isDone && !isActive && "bg-muted text-muted-foreground",
-                )}
-              >
-                {isDone ? <Check className="h-3.5 w-3.5" strokeWidth={3} /> : step.num}
-              </div>
-              <span className={cn("text-sm font-medium hidden sm:block", isActive ? "text-foreground" : "text-muted-foreground")}>{step.label}</span>
-            </div>
-
-            {/* Connector */}
-            {i < steps.length - 1 && <div className={cn("h-px w-8 sm:w-16 mx-2 transition-all", currentStep > step.num ? "bg-primary" : "bg-border")} />}
-          </div>
-        )
-      })}
-    </div>
-  )
-}
-
-// ─── Main Wizard ───
+//  Main Wizard
 export function BookingWizard({ context }: BookingWizardProps) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
@@ -95,30 +26,47 @@ export function BookingWizard({ context }: BookingWizardProps) {
   // Step state
   const [step, setStep] = useState<WizardStep>(1)
   const [passengers, setPassengers] = useState<PassengerFormValues[]>([])
-  const [selectedSeats, setSelectedSeats] = useState<Record<number, SeatData>>({})
+  const [selectedOutboundSeats, setSelectedOutboundSeats] = useState<Record<number, SeatData>>({})
+  const [selectedReturnSeats, setSelectedReturnSeats] = useState<Record<number, SeatData>>({})
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(null)
   const [transactionRef, setTransactionRef] = useState("")
   const [submitError, setSubmitError] = useState<string | null>(null)
 
   const totalAmount = (context.outboundPrice + (context.isReturnTrip && context.returnPrice ? context.returnPrice : 0)) * context.passengerCount
 
-  // ─── Step 1 → 2: Passengers complete → go to seat selection ───
-  const handlePassengersComplete = (filled: PassengerFormValues[]) => {
-    setPassengers(filled)
+  //  Step 1 → 2: Passengers complete → go to seat selection
+  const handlePassengersComplete = (passengers: PassengerFormValues[]) => {
+    setPassengers(passengers)
     setStep(2)
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
-  // ─── Step 2 → 3: Seats selected → go to review ───
-  const handleSeatsComplete = (seats: Record<number, SeatData>) => {
-    setSelectedSeats(seats)
-    setStep(3)
+  //  Step 2 → 3: Seats selected → go to review
+  // After outbound seats complete, go to return seats (if return trip)
+  const handleOutboundSeatsComplete = (seats: Record<number, SeatData>) => {
+    setSelectedOutboundSeats(seats)
+
+    if (context.isReturnTrip && context.returnFlightId) {
+      setStep(3) // Go to return seat selection
+    } else {
+      setStep(4) // Go to review (one-way)
+    }
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
-  // ─── Step 3: Confirm & pay ───
+  // After return seats complete, go to review
+  const handleReturnSeatsComplete = (seats: Record<number, SeatData>) => {
+    setSelectedReturnSeats(seats)
+    setStep(4) // Go to review
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
+
+  //  Step 3 or 4 depending on return trip: Confirm & pay
   const handleConfirm = () => {
-    if (!paymentMethod) return
+    if (!paymentMethod) {
+      ErrorHandler({ title: "Payment Method Required", description: "Please select a payment method to proceed.", action: "error" })
+      return
+    }
     setSubmitError(null)
 
     startTransition(async () => {
@@ -138,9 +86,11 @@ export function BookingWizard({ context }: BookingWizardProps) {
 
       if (!result.success) {
         setSubmitError(result.message ?? "Booking failed. Please try again.")
+        ErrorHandler({ title: "Booking Failed", description: result.message ?? "Booking failed. Please try again.", action: "error" })
         return
       }
 
+      ErrorHandler({ title: "Booking Successful", description: "Your booking was successful! Redirecting to your bookings...", action: "success" })
       // Navigate to confirmation page
       router.push(`/dashboard/bookings/${result.data!.reference}?new=1`)
     })
@@ -149,7 +99,7 @@ export function BookingWizard({ context }: BookingWizardProps) {
   return (
     <div>
       {/* Step indicator */}
-      <StepIndicator currentStep={step} />
+      <StepIndicator currentStep={step} isReturnTrip={context.isReturnTrip} />
 
       {/* Flight summary bar — always visible */}
       <div className="mb-6 space-y-2">
@@ -179,28 +129,45 @@ export function BookingWizard({ context }: BookingWizardProps) {
         )}
       </div>
 
-      {/* ─── Step 1: Passenger Details ─── */}
+      {/*  Step 1: Passenger Details  */}
       {step === 1 && (
         <PassengerStep passengerCount={context.passengerCount} onComplete={handlePassengersComplete} onBack={() => router.back()} initialPassengers={passengers.length > 0 ? passengers : undefined} />
       )}
 
-      {/* ─── Step 2: Seat Selection ─── */}
+      {/*  Step 2: Outbound Seat Selection  */}
       {step === 2 && (
         <SeatSelectionStep
           outboundFlightId={context.outboundFlightId}
           outboundNumber={context.outboundNumber}
           passengerCount={context.passengerCount}
           classType={context.classType}
-          onComplete={handleSeatsComplete}
+          onComplete={handleOutboundSeatsComplete}
           onBack={() => {
             setStep(1)
             window.scrollTo({ top: 0, behavior: "smooth" })
           }}
+          tripType={context.isReturnTrip ? "return" : "outbound"}
         />
       )}
 
-      {/* ─── Step 3: Review & Pay ─── */}
-      {step === 3 && (
+      {/*  Step 3: Return Seat Selection (only for return trips)  */}
+      {step === 3 && context.isReturnTrip && context.returnFlightId && (
+        <SeatSelectionStep
+          outboundFlightId={context.returnFlightId}
+          outboundNumber={context.returnNumber || ""}
+          passengerCount={context.passengerCount}
+          classType={context.classType}
+          onComplete={handleReturnSeatsComplete}
+          onBack={() => {
+            setStep(2)
+            window.scrollTo({ top: 0, behavior: "smooth" })
+          }}
+          tripType="return"
+        />
+      )}
+
+      {/*  Step 4: Review & Pay  */}
+      {(step === 4 || (step === 3 && !context.isReturnTrip)) && (
         <ReviewStep
           outboundFlightId={context.outboundFlightId}
           outboundNumber={context.outboundNumber}
@@ -223,9 +190,14 @@ export function BookingWizard({ context }: BookingWizardProps) {
           isReturnTrip={context.isReturnTrip}
           classType={context.classType}
           passengers={passengers}
-          selectedSeats={selectedSeats}
-          onEditSeats={() => {
+          selectedOutboundSeats={selectedOutboundSeats}
+          selectedReturnSeats={selectedReturnSeats}
+          onEditOutboundSeats={() => {
             setStep(2)
+            window.scrollTo({ top: 0, behavior: "smooth" })
+          }}
+          onEditReturnSeats={() => {
+            setStep(3)
             window.scrollTo({ top: 0, behavior: "smooth" })
           }}
           paymentMethod={paymentMethod}
