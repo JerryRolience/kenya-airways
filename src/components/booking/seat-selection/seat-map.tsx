@@ -97,10 +97,10 @@ export function SeatMap({ flightNumber, aircraftType, classes, selectedSeats, on
   return (
     <div className="space-y-6">
       {/* Flight info header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="font-display text-lg font-semibold text-foreground">Select your seats</h3>
-          <p className="text-sm text-muted-foreground mt-0.5">
+      <div className="flex flex-col md:flex-row gap-3 mx-4 md:mx-0 items-start md:items-center justify-between">
+        <div className="flex flex-row md:flex-col items-start justify-between gap-10 md:gap-0">
+          <h3 className="font-display text-xs md:text-lg font-semibold text-foreground">Select your seats</h3>
+          <p className="text-sm text-muted-foreground md:mt-0.5">
             {flightNumber} · {aircraftType}
           </p>
         </div>

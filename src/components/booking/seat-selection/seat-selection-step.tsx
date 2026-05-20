@@ -17,9 +17,10 @@ interface SeatSelectionStepProps {
   classType: ClassType
   onComplete: (outboundSeats: Record<number, SeatData>) => void
   onBack: () => void
+  tripType: "outbound" | "return"
 }
 
-export function SeatSelectionStep({ outboundFlightId, passengerCount, classType, onComplete, onBack }: SeatSelectionStepProps) {
+export function SeatSelectionStep({ outboundFlightId, passengerCount, classType, onComplete, onBack, tripType }: SeatSelectionStepProps) {
   const [selectedSeats, setSelectedSeats] = useState<Record<number, SeatData | null>>({})
 
   const { data: response, isLoading, isError, error, refetch } = useFetchFlightSeats(outboundFlightId)
@@ -45,7 +46,7 @@ export function SeatSelectionStep({ outboundFlightId, passengerCount, classType,
     onComplete(selectedSeats as Record<number, SeatData>)
   }
 
-  // \ Loading State \
+  // Loading State
   if (isLoading) {
     return (
       <div className="space-y-4">
@@ -61,7 +62,7 @@ export function SeatSelectionStep({ outboundFlightId, passengerCount, classType,
     )
   }
 
-  // \ Error State \
+  // Error State
   if (isError || !seatMap) {
     return (
       <div className="text-center py-12">
@@ -104,7 +105,8 @@ export function SeatSelectionStep({ outboundFlightId, passengerCount, classType,
         </Button>
 
         <Button type="button" onClick={handleContinue} className="rounded-xl h-11 px-6 text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 hover:cursor-pointer">
-          Continue to review
+          <span className="hidden md:inline">{tripType === "outbound" ? "Continue to return flight " : "Continue to review "}</span>
+          <span className="inline md:hidden">{tripType === "outbound" ? "Continue " : "Continue to review"}</span>
           <ArrowRight className="ml-1 h-4 w-4" />
         </Button>
       </div>
