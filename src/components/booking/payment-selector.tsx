@@ -71,7 +71,8 @@ export function PaymentSelector({ selected, transactionRef, totalAmount, onMetho
                 Business number: <span className="font-bold text-foreground">522533</span>
               </li>
               <li>
-                Account number: <span className="font-bold text-foreground">booking reference (generated after confirm)</span>
+                {/* Account number: <span className="font-bold text-foreground">booking reference (generated after confirm)</span> */}
+                Account number: <span className="font-bold text-foreground">your phone number</span>
               </li>
               <li>
                 Amount: <span className="font-bold text-foreground">KES {totalAmount.toLocaleString()}</span>
