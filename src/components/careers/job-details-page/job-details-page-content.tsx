@@ -24,45 +24,31 @@ export function JobDetailsPageContent({ opening }: JobDetailsPageContentProps) {
   return (
     <section className="py-10">
       <div className="mx-auto max-w-4xl px-4">
-        <div className="grid gap-8 lg:grid-cols-3">
-          {/* Job Description */}
-          <div className="lg:col-span-2">
-            <Card className="border-border/60 bg-card p-6">
-              <h2 className="font-display text-xl font-semibold text-foreground mb-4">Job Description</h2>
-              <div className="prose prose-sm max-w-none text-muted-foreground leading-relaxed">
-                <p>{opening.description}</p>
-              </div>
-            </Card>
-
-            {/* Apply Button (Mobile) */}
-            <div className="mt-6 lg:hidden">
-              {!isSubmitted ? (
-                <Button onClick={() => setApplicationOpen(true)} className="w-full rounded-xl h-12 bg-accent text-accent-foreground hover:bg-accent/90 hover:cursor-pointer">
-                  <Send className="mr-2 h-4 w-4" />
-                  Apply for this position
-                </Button>
-              ) : (
-                <JobApplicationSuccess title={opening.title} />
-              )}
+        {/* Job Description */}
+        <div className="lg:col-span-2">
+          <Card className="border-border/60 bg-card p-6">
+            <h2 className="font-display text-xl font-semibold text-foreground mb-4">Job Description</h2>
+            <div className="prose prose-sm max-w-none text-muted-foreground leading-relaxed">
+              <p>{opening.description}</p>
             </div>
-          </div>
+          </Card>
+        </div>
 
-          {/* Sidebar */}
-          <div className="space-y-4">
+        {/* Sidebar */}
+        {isSubmitted ? (
+          <JobApplicationSuccess title={opening.title} />
+        ) : (
+          <div className="space-y-4 grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
             {/* Apply Card (Desktop) */}
-            <Card className="border-border/60 bg-card p-5 sticky top-24">
-              {!isSubmitted ? (
-                <div className="text-center">
-                  <Send className="h-8 w-8 text-accent mx-auto" />
-                  <h3 className="font-display text-lg font-semibold text-foreground mt-3">Interested?</h3>
-                  <p className="text-xs text-muted-foreground mt-1">Submit your application now</p>
-                  <Button onClick={() => setApplicationOpen(true)} className="w-full mt-4 rounded-xl bg-accent text-accent-foreground hover:bg-accent/90 hover:cursor-pointer">
-                    Apply now
-                  </Button>
-                </div>
-              ) : (
-                <JobApplicationSuccess title={opening.title} />
-              )}
+            <Card className="border-border/60 bg-card p-5 ">
+              <div className="text-center">
+                <Send className="h-8 w-8 text-accent mx-auto" />
+                <h3 className="font-display text-lg font-semibold text-foreground mt-3">Interested?</h3>
+                <p className="text-xs text-muted-foreground mt-1">Submit your application now</p>
+                <Button onClick={() => setApplicationOpen(true)} className="w-full mt-6 rounded-xl bg-accent text-accent-foreground hover:bg-accent/90 hover:cursor-pointer">
+                  Apply now
+                </Button>
+              </div>
             </Card>
 
             {/* Quick Info */}
@@ -84,7 +70,7 @@ export function JobDetailsPageContent({ opening }: JobDetailsPageContentProps) {
               </div>
             </Card>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Application Dialog */}
