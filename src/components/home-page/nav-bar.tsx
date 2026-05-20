@@ -52,6 +52,14 @@ export function Navbar() {
     return pathname.startsWith(href)
   }
 
+  const handleCardClick = () => {
+    // Scroll smoothly to the booking card
+    const bookingCard = document.getElementById("booking-card")
+    if (bookingCard) {
+      bookingCard.scrollIntoView({ behavior: "smooth", block: "center" })
+    }
+  }
+
   return (
     <header className="fixed top-0 z-50 w-full">
       <div className="mx-auto mt-3 max-w-7xl px-4">
@@ -151,11 +159,9 @@ export function Navbar() {
                     </DropdownMenuContent>
                   </DropdownMenu>
 
-                  <Link href="/#booking-card">
-                    <Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-xl hover:cursor-pointer text-xs">
-                      Book Now
-                    </Button>
-                  </Link>
+                  <Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-xl hover:cursor-pointer text-xs" onClick={handleCardClick}>
+                    Book Now
+                  </Button>
                 </div>
 
                 {/* Mobile: Simple logout button */}
@@ -173,11 +179,9 @@ export function Navbar() {
                       <ArrowRight className="w-4 h-4 ml-1" />
                     </Button>
                   </Link>
-                  <Link href="/#booking-card">
-                    <Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-xl hover:cursor-pointer">
-                      Book Now
-                    </Button>
-                  </Link>
+                  <Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-xl hover:cursor-pointer" onClick={handleCardClick}>
+                    Book Now
+                  </Button>
                 </div>
               </>
             )}
@@ -280,12 +284,10 @@ export function Navbar() {
                     </>
                   )}
 
-                  <Link href="/#booking-card" className="mt-2">
-                    <Button className="w-full rounded-xl bg-accent text-accent-foreground hover:bg-accent/90 hover:cursor-pointer">
-                      <Plane className="w-4 h-4 mr-2 -rotate-45" />
-                      Book Now
-                    </Button>
-                  </Link>
+                  <Button className="w-full rounded-xl bg-accent text-accent-foreground hover:bg-accent/90 hover:cursor-pointer" onClick={handleCardClick}>
+                    <Plane className="w-4 h-4 mr-2 -rotate-45" />
+                    Book Now
+                  </Button>
                 </div>
               </SheetContent>
             </Sheet>
