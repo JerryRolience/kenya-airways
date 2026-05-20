@@ -2,9 +2,9 @@
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Input } from "@/components/ui/input"
-import { ArrowLeft, ChevronRight, Search } from "lucide-react"
+import { ArrowLeft, Mail, Search } from "lucide-react"
 import Link from "next/link"
-import { useState, useMemo } from "react"
+import { useMemo, useState } from "react"
 
 const faqCategories = [
   {
@@ -104,7 +104,7 @@ export function FAQ() {
       {/* Hero */}
       <section className="bg-linear-to-br from-primary via-primary/95 to-primary/90 py-16">
         <div className="mx-auto max-w-4xl px-4">
-          <Link href="/help" className="inline-flex items-center gap-1 text-sm text-white/70 hover:text-white transition-colors mb-6">
+          <Link href="/help" className="inline-flex items-center gap-1 text-sm text-white/70 hover:text-white transition-colors mb-6 mt-4">
             <ArrowLeft className="h-4 w-4" />
             Back to Help Center
           </Link>
@@ -156,10 +156,16 @@ export function FAQ() {
       <section className="py-16 border-t border-border/60 bg-muted/30">
         <div className="mx-auto max-w-xl px-4 text-center">
           <h2 className="font-display text-xl font-bold text-foreground">Still have questions?</h2>
-          <p className="mt-2 text-sm text-muted-foreground">Our support team is available 24/7.</p>
-          <Link href="/help#contact" className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline">
-            Contact support <ChevronRight className="h-4 w-4" />
-          </Link>
+          <p className="mt-2 text-sm text-muted-foreground">Our support team is available 24/7. Reach out and we&apos;ll get back to you within minutes.</p>
+          <div className="mt-5 flex items-center justify-center gap-3">
+            <a
+              href="mailto:jerryrawling892@gmail.com?subject=FAQ%20Support%20Request&body=Hello%20Kenya%20Airways%20Support%2C%0A%0AI%20have%20a%20question%20about..."
+              className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
+            >
+              <Mail className="h-4 w-4" />
+              Send us an email
+            </a>
+          </div>
         </div>
       </section>
     </div>

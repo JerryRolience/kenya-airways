@@ -3,7 +3,7 @@
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
-import { Armchair, ArrowRight, BookOpen, ChevronRight, Clock, HelpCircle, Luggage, Mail, MessageCircle, Phone, Plane, Search, ShieldCheck, Sparkles, Ticket } from "lucide-react"
+import { Armchair, ArrowRight, BookOpen, ChevronRight, Clock, HelpCircle, Luggage, Mail, Phone, Plane, Search, ShieldCheck, Sparkles, Ticket } from "lucide-react"
 import Link from "next/link"
 import { useMemo, useState } from "react"
 
@@ -68,27 +68,28 @@ const popularArticles = [
 
 //  Quick Actions
 const quickActions = [
-  {
-    title: "Chat with us",
-    description: "Average response time: 2 minutes",
-    icon: MessageCircle,
-    action: "Open chat",
-    href: "#chat",
-    primary: true,
-  },
+  // {
+  //   title: "Chat with us",
+  //   description: "Average response time: 2 minutes",
+  //   icon: MessageCircle,
+  //   action: "Open chat",
+  //   href: "#chat",
+  //   primary: true,
+  // },
   {
     title: "Email support",
     description: "We reply within 4 hours",
     icon: Mail,
     action: "Send email",
-    href: "mailto:support@kenyaairways.co.ke",
+    href: "mailto:jerryrawlings892@gmail.com",
+    primary: true,
   },
   {
     title: "Call us",
-    description: "24/7 toll-free: +254 800 720 000",
+    description: "24/7 toll-free: +254 759 523 907`",
     icon: Phone,
     action: "Call now",
-    href: "tel:+254800720000",
+    href: "tel:+254759523907",
   },
 ]
 
@@ -110,7 +111,7 @@ export function HelpCenter() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* ─── Hero Section ─── */}
+      {/*  Hero Section  */}
       <section className="relative overflow-hidden bg-linear-to-br from-primary via-primary/95 to-primary/90">
         {/* Background pattern */}
         <div className="absolute inset-0 opacity-10">
@@ -154,7 +155,7 @@ export function HelpCenter() {
         </div>
       </section>
 
-      {/* ─── Category Cards ─── */}
+      {/*  Category Cards  */}
       <section className="relative -mt-12 mx-auto max-w-6xl px-4 pb-16">
         {filteredCategories.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -183,7 +184,7 @@ export function HelpCenter() {
         )}
       </section>
 
-      {/* ─── Popular Articles ─── */}
+      {/*  Popular Articles  */}
       {filteredArticles.length > 0 && (
         <section className="border-t border-border/60 bg-muted/30 py-16">
           <div className="mx-auto max-w-4xl px-4">
@@ -211,7 +212,7 @@ export function HelpCenter() {
         </section>
       )}
 
-      {/* ─── Quick Actions / Contact ─── */}
+      {/*  Quick Actions / Contact  */}
       <section className="py-16">
         <div className="mx-auto max-w-4xl px-4">
           <div className="text-center">
@@ -219,7 +220,7 @@ export function HelpCenter() {
             <p className="mt-2 text-sm text-muted-foreground">Our support team is available 24/7</p>
           </div>
 
-          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
             {quickActions.map(action => (
               <a key={action.title} href={action.href}>
                 <Card

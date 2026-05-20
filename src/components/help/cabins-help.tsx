@@ -13,7 +13,7 @@ export function CabinsHelp() {
       {/* Hero */}
       <section className="bg-linear-to-br from-primary via-primary/95 to-primary/90 py-16">
         <div className="mx-auto max-w-4xl px-4">
-          <Link href="/help" className="inline-flex items-center gap-1 text-sm text-white/70 hover:text-white transition-colors mb-6">
+          <Link href="/help" className="inline-flex items-center gap-1 text-sm text-white/70 hover:text-white transition-colors mb-6 mt-4">
             <ArrowLeft className="h-4 w-4" />
             Back to Help Center
           </Link>
@@ -29,7 +29,7 @@ export function CabinsHelp() {
             {CABIN_DATA.map(cabin => (
               <Card key={cabin.class} className="relative overflow-hidden border-border/60 bg-card">
                 {/* Gradient top */}
-                <div className={cn("h-2 bg-linear-to-r", cabin.imageGradient)} />
+                <div className="h-2 bg-linear-to-r" />
 
                 <div className="p-6">
                   {/* Header */}

@@ -24,7 +24,6 @@ export interface CabinInfo {
     checked: string
   }
   fareRules: string[]
-  imageGradient: string
 }
 
 export const CABIN_DATA: CabinInfo[] = [
@@ -60,7 +59,6 @@ export const CABIN_DATA: CabinInfo[] = [
       "Priority standby on earlier flights at no charge",
       "Complimentary chauffeur service in Nairobi and London",
     ],
-    imageGradient: "from-amber-500/20 via-amber-600/10 to-primary/5",
   },
   {
     class: ClassType.MIDDLE,
@@ -93,7 +91,6 @@ export const CABIN_DATA: CabinInfo[] = [
       "SkyMiles earning: 150% base miles",
       "Standby available for a small fee",
     ],
-    imageGradient: "from-blue-500/20 via-blue-600/10 to-primary/5",
   },
   {
     class: ClassType.ECONOMY,
@@ -126,7 +123,6 @@ export const CABIN_DATA: CabinInfo[] = [
       "SkyMiles earning: 100% base miles",
       "Standby not available",
     ],
-    imageGradient: "from-emerald-500/20 via-emerald-600/10 to-primary/5",
   },
 ]
 

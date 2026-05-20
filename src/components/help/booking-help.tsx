@@ -52,7 +52,7 @@ export function BookingHelp() {
       {/* Hero */}
       <section className="bg-linear-to-br from-primary via-primary/95 to-primary/90 py-16">
         <div className="mx-auto max-w-4xl px-4">
-          <Link href="/help" className="inline-flex items-center gap-1 text-sm text-white/70 hover:text-white transition-colors mb-6">
+          <Link href="/help" className="inline-flex items-center gap-1 text-sm text-white/70 hover:text-white transition-colors mb-6 mt-4">
             <ArrowLeft className="h-4 w-4" />
             Back to Help Center
           </Link>
