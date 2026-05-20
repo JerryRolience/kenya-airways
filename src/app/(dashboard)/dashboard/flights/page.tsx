@@ -16,7 +16,7 @@ export default function MyFlightsPage() {
         </div>
 
         <div className="self-start sm:self-auto shrink-0">
-          <Link href="/#booking-card">
+          <Link href="/#booking-card" scroll={true}>
             <Button className="btn-primary h-9 gap-2 hover:cursor-pointer">
               <Plane className="h-4 w-4 -rotate-45" />
               Book a Flight

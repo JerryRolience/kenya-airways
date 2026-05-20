@@ -65,7 +65,7 @@ export default function DashboardOverviewPage() {
               <div className="text-center py-8">
                 <Ticket className="h-8 w-8 text-muted-foreground/40 mx-auto" />
                 <p className="mt-2 text-sm text-muted-foreground">No bookings yet</p>
-                <Link href="/#booking-card">
+                <Link href="/#booking-card" scroll={true}>
                   <Button variant="outline" size="sm" className="mt-3 rounded-xl text-xs">
                     Book a flight
                   </Button>

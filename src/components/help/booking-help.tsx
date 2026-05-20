@@ -90,7 +90,7 @@ export function BookingHelp() {
 
           {/* CTA */}
           <div className="mt-10 text-center">
-            <Link href="/#booking-card">
+            <Link href="/#booking-card" scroll={true}>
               <Button className="rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8">
                 <PlaneTakeoff className="mr-2 h-4 w-4" />
                 Book a flight now

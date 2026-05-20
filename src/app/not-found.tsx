@@ -73,7 +73,7 @@ export default function NotFoundPage() {
               Back to Home
             </Button>
           </Link>
-          <Link href="/#booking-card">
+          <Link href="/#booking-card" scroll={true} className="scroll-smooth scroll-">
             <Button variant="outline" className="rounded-xl gap-2 h-11 px-6 hover:bg-muted/50 transition-all duration-300 hover:cursor-pointer">
               <Plane className="h-4 w-4 -rotate-45" />
               Book a Flight
@@ -96,7 +96,7 @@ export default function NotFoundPage() {
   )
 }
 
-//  Floating Plane Component 
+//  Floating Plane Component
 function FloatingPlane({ delay, top, left, right, bottom, rotation }: { delay: number; top?: string; left?: string; right?: string; bottom?: string; rotation: number }) {
   return (
     <div
