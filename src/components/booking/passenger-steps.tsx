@@ -48,6 +48,8 @@ export function PassengerStep({ passengerCount, initialPassengers = [], onComple
         dateOfBirth: myProfile.dateOfBirth,
         relationship: PassengerRelation.SELF,
       }
+    } else {
+      ErrorHandler({ title: "Profile not found", description: "Unable to fetch your profile details. Please fill in the form manually.", action: "error" })
     }
     return { relationship: PassengerRelation.SELF }
   }
@@ -219,7 +221,8 @@ export function PassengerStep({ passengerCount, initialPassengers = [], onComple
             allConfirmed ? "bg-primary text-primary-foreground hover:bg-primary/90" : "bg-muted text-muted-foreground cursor-not-allowed",
           )}
         >
-          {allConfirmed ? "Continue to seat selection →" : `Confirm all ${passengerCount} passengers`}
+          <span className="hidden md:inline">{allConfirmed ? "Continue to seat selection →" : `Confirm all ${passengerCount} passengers`}</span>
+          <span className="inline md:hidden">{allConfirmed ? "Continue →" : `Confirm passengers`}</span>
         </Button>
       </div>
     </div>
