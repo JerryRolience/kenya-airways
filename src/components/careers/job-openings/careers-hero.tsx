@@ -1,3 +1,4 @@
+import { NumberTicker } from "@/components/ui/number-ticker"
 import { Sparkles } from "lucide-react"
 
 export function CareersHero() {
@@ -20,13 +21,22 @@ export function CareersHero() {
         {/* Stats */}
         <div className="mt-8 grid grid-cols-3 gap-4 max-w-lg mx-auto">
           {[
-            { value: "4,000+", label: "Employees" },
-            { value: "42", label: "Destinations" },
-            { value: "15+", label: "Departments" },
-          ].map(stat => (
-            <div key={stat.label} className="rounded-xl bg-white/10 p-3 backdrop-blur-sm">
-              <p className="text-xl font-bold text-white font-display">{stat.value}</p>
-              <p className="text-xs text-white/60">{stat.label}</p>
+            { value: 4000, label: "Employees", startValue: 3500, valueDominion: "K+" },
+            { value: 42, label: "Destinations" },
+            { value: 15, label: "Departments" },
+          ].map(s => (
+            <div key={s.label} className="flex items-center flex-col  md:text-left rounded-xl bg-white/10 p-3 backdrop-blur-sm">
+              <div className="font-display text-4xl font-semibold tracking-tight md:text-5xl">
+                {typeof s.value === "number" ? (
+                  <div className="flex justify-center">
+                    <NumberTicker value={s.value} startValue={s.startValue ? s.startValue : 0} className="text-accent text-xl" />
+                    {s.valueDominion && <span className="text-sm mt-2 text-accent">{s.valueDominion}</span>}
+                  </div>
+                ) : (
+                  <p className="text-accent">{s.value}</p>
+                )}
+              </div>
+              <div className="mt-2 text-sm text-primary-foreground/70">{s.label}</div>
             </div>
           ))}
         </div>
