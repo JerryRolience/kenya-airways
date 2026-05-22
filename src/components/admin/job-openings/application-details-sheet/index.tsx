@@ -60,7 +60,7 @@ export function ApplicationDetailSheet({ open, onOpenChange, application }: Appl
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full sm:max-w-lg lg:max-w-xl overflow-y-auto p-0">
+      <SheetContent side="right" className="w-full md:max-w-lg lg:max-w-xl overflow-y-auto p-0">
         {/* Header */}
         <div className="bg-linear-to-br from-primary via-primary/95 to-primary/90 text-primary-foreground p-6">
           <SheetHeader>

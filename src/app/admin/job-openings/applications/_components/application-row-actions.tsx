@@ -24,6 +24,7 @@ export function ApplicationRowActions({ application }: { application: Applicatio
   const { mutate: hireApplicant, isPending: isHiring } = useHireApplicant()
 
   const isHired = application.status === ApplicationStatus.ACCEPTED
+  const isPendingOrReviewed = application.status === ApplicationStatus.PENDING || application.status === ApplicationStatus.REVIEWED
 
   return (
     <>
@@ -38,7 +39,7 @@ export function ApplicationRowActions({ application }: { application: Applicatio
             View details
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          {!isHired && (
+          {!isHired && isPendingOrReviewed && (
             <>
               <DropdownMenuItem className="text-xs hover:cursor-pointer" onClick={() => setReviewOpen(true)}>
                 Mark as reviewed
