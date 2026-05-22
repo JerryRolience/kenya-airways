@@ -86,7 +86,7 @@ export async function fetchUserBookings(input: FetchBookingsInput = { limit: 10 
           totalAmount: true,
           isReturnTrip: true,
           createdAt: true,
-          seatClass: { select: { class: true } },
+          seatClass: { select: { class: true, priceKES: true } },
           flight: {
             select: {
               flightNumber: true,
@@ -140,6 +140,7 @@ export async function fetchUserBookings(input: FetchBookingsInput = { limit: 10 
       totalAmount: b.totalAmount,
       isReturnTrip: b.isReturnTrip,
       createdAt: b.createdAt,
+      priceKES: b.seatClass?.priceKES,
       classType: b.seatClass.class,
       passengerCount: b.passengers.length,
       outboundFlight: {
