@@ -8,7 +8,6 @@ import { ChangeBookingInput, ChangeBookingSchema } from "@/validators/booking"
 import { currentUser } from "@clerk/nextjs/server"
 import { BookingStatus, FlightStatus, Role } from "../../../../generated/prisma/enums"
 
-// Response shape
 interface ChangeBookingResult {
   reference: string
   newFlightNumber: string
