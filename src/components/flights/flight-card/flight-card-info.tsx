@@ -122,7 +122,7 @@ export function FlightCardInfo({ flight, searchParams, direction, isSelected, on
               <p className="text-[10px] text-muted-foreground mt-0.5">per person</p>
             </div>
 
-            {/* ── Availability indicator ── */}
+            {/*  Availability indicator  */}
             <div className="hidden sm:block mt-1 text-right">
               {availState === "full" && (
                 <div className="flex items-center justify-end gap-1 text-[10px] text-destructive/70">
@@ -166,7 +166,7 @@ export function FlightCardInfo({ flight, searchParams, direction, isSelected, on
               )}
             </div>
 
-            {/* ── CTA button ── */}
+            {/*  CTA button  */}
             {availState === "full" ? (
               <div className="flex items-center gap-1 text-xs text-destructive/70">
                 <AlertCircle className="h-3 w-3" />
@@ -181,7 +181,11 @@ export function FlightCardInfo({ flight, searchParams, direction, isSelected, on
                 <p className="text-[9px] text-amber-600/70 dark:text-amber-400/60">not enough</p>
               </div>
             ) : isSelected ? (
-              <Button onClick={handleSelect} size="sm" className="rounded-xl text-xs font-semibold h-8 px-4 bg-primary/10 text-primary border border-primary/20 hover:bg-primary/15 shadow-none">
+              <Button
+                onClick={handleSelect}
+                size="sm"
+                className="rounded-xl text-xs font-semibold h-8 px-4 bg-primary/10 text-primary border border-primary/20 hover:bg-primary/15 shadow-none hover:cursor-pointer"
+              >
                 <Check className="h-3 w-3 mr-1" />
                 Selected
               </Button>
@@ -190,7 +194,7 @@ export function FlightCardInfo({ flight, searchParams, direction, isSelected, on
                 onClick={handleSelect}
                 size="sm"
                 className={cn(
-                  "rounded-xl text-xs font-semibold h-8 px-4 shadow-none transition-all duration-200",
+                  "rounded-xl text-xs font-semibold h-8 px-4 shadow-none transition-all duration-200 hover:cursor-pointer",
                   availState === "critical" ? "bg-amber-500 hover:bg-amber-600 text-white" : "bg-primary hover:bg-primary/90 text-primary-foreground hover:-translate-y-px",
                 )}
               >
