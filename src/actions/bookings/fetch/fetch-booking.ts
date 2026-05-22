@@ -37,6 +37,7 @@ export async function fetchBooking(reference: string): Promise<ApiResponse<Booki
         totalAmount: true,
         isReturnTrip: true,
         createdAt: true,
+        updatedAt: true,
         userId: true,
         flight: {
           select: {
@@ -111,6 +112,7 @@ export async function fetchBooking(reference: string): Promise<ApiResponse<Booki
       totalAmount: booking.totalAmount,
       isReturnTrip: booking.isReturnTrip,
       createdAt: booking.createdAt,
+      updatedAt: booking.updatedAt,
       outboundFlight: booking.flight,
       returnFlight: booking.returnFlight ?? undefined,
       seatClass: booking.seatClass,
