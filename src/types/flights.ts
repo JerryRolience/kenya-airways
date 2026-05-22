@@ -98,6 +98,15 @@ export interface FlightSearchResponse {
   }
 }
 
+export interface AvailableFlightOption {
+  value: string // flightId
+  label: string // flightNumber - departureTime (from → to)
+  seatClassId: string // The seat class ID for the selected class
+  priceKES: number
+  availableSeats: number
+  departureTime: Date
+}
+
 export interface UserFlight {
   id: string
   bookingId: string

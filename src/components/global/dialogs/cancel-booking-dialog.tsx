@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Loader2, XCircle, AlertTriangle } from "lucide-react"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
+import { PaymentStatus } from "../../../../generated/prisma/enums"
 
 interface CancelBookingDialogProps {
   // Booking info
@@ -29,7 +30,7 @@ export function CancelBookingDialog({ bookingReference, flightNumber, isReturnTr
   const [internalPending, setInternalPending] = useState(false)
 
   const isPending = externalPending ?? internalPending
-  const isPaid = paymentStatus === "PAID"
+  const isPaid = paymentStatus === PaymentStatus.PAID
 
   const handleConfirm = async () => {
     if (!externalPending) setInternalPending(true)
@@ -49,7 +50,7 @@ export function CancelBookingDialog({ bookingReference, flightNumber, isReturnTr
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="max-w-md">
+      <AlertDialogContent className="max-w-xl">
         <AlertDialogHeader>
           <div className="flex items-center gap-2">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-destructive/10 shrink-0">
@@ -66,7 +67,7 @@ export function CancelBookingDialog({ bookingReference, flightNumber, isReturnTr
 
         <div className="space-y-4 py-2">
           {/* Warning about refund */}
-          <div className={cn("rounded-xl border p-3 text-xs flex items-start gap-2", isPaid ? "border-amber-200 bg-amber-50 text-amber-700" : "border-border/60 bg-muted/30 text-muted-foreground")}>
+          <div className={cn("rounded-xl border p-3 text-xs flex items-start gap-2", isPaid ? "border-green-200 bg-green-50 text-green-700" : "border-border/60 bg-muted/30 text-muted-foreground")}>
             <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
             <div>
               {isPaid ? (

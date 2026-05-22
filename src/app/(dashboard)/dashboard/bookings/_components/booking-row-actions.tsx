@@ -1,14 +1,14 @@
 "use client"
 
+import { ChangeBookingForm } from "@/components/forms/booking-form/change-booking-form"
+import { CancelBookingDialog } from "@/components/global/dialogs/cancel-booking-dialog"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, Eye, Edit, XCircle } from "lucide-react"
-import { useState } from "react"
-import { BookingListItem } from "@/types/booking"
-import { useRouter } from "next/navigation"
-import { toast } from "sonner"
-import { CancelBookingDialog } from "@/components/global/dialogs/cancel-booking-dialog"
 import { useCancelBooking } from "@/hooks/booking/use-cancel-booking"
+import { BookingListItem } from "@/types/booking"
+import { Edit, Eye, MoreHorizontal, XCircle } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { BookingStatus } from "../../../../../../generated/prisma/enums"
 
 interface BookingRowActionsProps {
@@ -18,6 +18,7 @@ interface BookingRowActionsProps {
 export function BookingRowActions({ booking }: BookingRowActionsProps) {
   const router = useRouter()
   const [cancelOpen, setCancelOpen] = useState(false)
+  const [changeDialogOpen, setChangeDialogOpen] = useState(false)
 
   const { isPending, onCancelBooking } = useCancelBooking({})
 
@@ -25,14 +26,6 @@ export function BookingRowActions({ booking }: BookingRowActionsProps) {
 
   const handleViewDetails = () => {
     router.push(`/dashboard/bookings/${booking.reference}`)
-  }
-
-  const handleChangeBooking = () => {
-    if (!isActive) {
-      toast.error("Only active bookings can be modified.")
-      return
-    }
-    router.push(`/dashboard/bookings/${booking.id}/change`)
   }
 
   return (
@@ -53,7 +46,7 @@ export function BookingRowActions({ booking }: BookingRowActionsProps) {
           {isActive && (
             <>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-xs hover:cursor-pointer" onClick={handleChangeBooking}>
+              <DropdownMenuItem className="text-xs hover:cursor-pointer" onClick={() => setChangeDialogOpen(true)}>
                 <Edit className="mr-2 h-3.5 w-3.5" />
                 Change booking
               </DropdownMenuItem>
@@ -83,6 +76,8 @@ export function BookingRowActions({ booking }: BookingRowActionsProps) {
         isPending={isPending}
         onConfirm={reason => onCancelBooking({ bookingId: booking.id, reason })}
       />
+
+      <ChangeBookingForm booking={booking} open={changeDialogOpen} setOpen={setChangeDialogOpen} />
     </>
   )
 }

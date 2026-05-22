@@ -82,7 +82,7 @@ export interface BookingDetail {
   totalAmount: number
   isReturnTrip: boolean
   createdAt: Date
-
+  updatedAt: Date
   outboundFlight: {
     id: string
     flightNumber: string
@@ -124,6 +124,7 @@ export interface BookingListItem {
   isReturnTrip: boolean
   createdAt: Date
   classType: ClassType
+  priceKES: number
   passengerCount: number
   outboundFlight: {
     flightNumber: string
