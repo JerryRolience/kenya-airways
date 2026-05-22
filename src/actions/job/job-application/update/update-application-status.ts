@@ -35,6 +35,27 @@ export async function updateApplicationStatus(data: UpdateStatusInput): Promise<
       })
     }
 
+    if (application.status === data.status) {
+      throw new HttpError({
+        statusCode: STATUS_CODES.BAD_REQUEST,
+        message: `The application is already in the ${data.status.toLowerCase()} status.`,
+      })
+    }
+
+    if (application.status === ApplicationStatus.REJECTED && data.status === ApplicationStatus.ACCEPTED) {
+      throw new HttpError({
+        statusCode: STATUS_CODES.BAD_REQUEST,
+        message: "You cannot accept an application that has already been rejected. Please review the application details and try again.",
+      })
+    }
+
+    if (application.status === ApplicationStatus.ACCEPTED && data.status === ApplicationStatus.REJECTED) {
+      throw new HttpError({
+        statusCode: STATUS_CODES.BAD_REQUEST,
+        message: "You cannot reject an application that has already been accepted. Please review the application details and try again.",
+      })
+    }
+
     await prisma.jobApplication.update({
       where: { id: data.applicationId },
       data: { status: data.status },

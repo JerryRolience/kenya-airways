@@ -46,6 +46,10 @@ export async function hireApplicant(applicationId: string): Promise<ApiResponse>
         })
       }
 
+      if (application.status === ApplicationStatus.REJECTED) {
+        throw new HttpError({ statusCode: STATUS_CODES.BAD_REQUEST, message: "This applicant has already been rejected. You can only hire accepted applicants." })
+      }
+
       if (application.status === ApplicationStatus.ACCEPTED) {
         throw new HttpError({ statusCode: STATUS_CODES.BAD_REQUEST, message: "This applicant has already been hired." })
       }
