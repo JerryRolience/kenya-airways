@@ -24,7 +24,10 @@ export default async function BookingDetailPage({ params, searchParams }: Bookin
           </div>
           <h1 className="mt-5 font-display text-xl font-semibold text-foreground">Booking not found</h1>
           <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{result.message ?? `No booking found with reference "${reference}". Please check the reference and try again.`}</p>
-          <Link href="/bookings" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors">
+          <Link
+            href="/dashboard/bookings"
+            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
+          >
             <ArrowLeft className="h-4 w-4" />
             My bookings
           </Link>
