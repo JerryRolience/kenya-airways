@@ -23,7 +23,7 @@ export function FlightRowActions({ flight }: FlightRowActionsProps) {
   const isActive = flight.bookingStatus === BookingStatus.CONFIRMED || flight.bookingStatus === BookingStatus.PENDING
 
   const handleViewBooking = () => {
-    router.push(`/dashboard/bookings/${flight.bookingId}`)
+    router.push(`/dashboard/bookings/${flight.bookingReference}`)
   }
 
   return (
@@ -39,10 +39,6 @@ export function FlightRowActions({ flight }: FlightRowActionsProps) {
           <DropdownMenuItem className="text-xs hover:cursor-pointer" onClick={handleViewBooking}>
             <Eye className="mr-2 h-3.5 w-3.5" />
             View booking
-          </DropdownMenuItem>
-          <DropdownMenuItem className="text-xs hover:cursor-pointer" onClick={() => router.push(`/dashboard/bookings/${flight.bookingId}`)}>
-            <Ticket className="mr-2 h-3.5 w-3.5" />
-            View ticket
           </DropdownMenuItem>
 
           {isActive && (
