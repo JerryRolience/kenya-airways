@@ -52,15 +52,14 @@ export function StatsMiniCard({ icon: Icon, value, label, href, color }: { icon:
   )
 }
 
-export function LinksCard({ dashboardType, isAdmin }: { dashboardType: "admin" | "user"; isAdmin: boolean }) {
+export function LinksCard({ dashboardType }: { dashboardType: "admin" | "user" }) {
   return (
     <Card className="border-border/60 bg-card">
       <CardHeader className="pb-3">
-        <CardTitle className="text-sm font-semibold">{isAdmin && dashboardType === "admin" ? "Quick Links" : "Admin Panel"}</CardTitle>
+        <CardTitle className="text-sm font-semibold">{dashboardType === "admin" ? "Quick Links" : "Admin Panel"}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
-        {isAdmin &&
-          dashboardType === "admin" &&
+        {dashboardType === "admin" &&
           QUICK_LINKS.map(link => (
             <Link key={link.href} href={link.href}>
               <Button variant="ghost" className="w-full justify-start text-sm rounded-xl hover:cursor-pointer hover:bg-primary/5">
@@ -70,8 +69,7 @@ export function LinksCard({ dashboardType, isAdmin }: { dashboardType: "admin" |
             </Link>
           ))}
 
-        {isAdmin &&
-          dashboardType === "user" &&
+        {dashboardType === "user" &&
           ADMIN_LINKS.map(link => (
             <Link key={link.href} href={link.href}>
               <Button variant="ghost" className="w-full justify-start text-sm rounded-xl hover:cursor-pointer hover:bg-primary/5">

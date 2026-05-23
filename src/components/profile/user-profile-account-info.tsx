@@ -36,7 +36,7 @@ export function UserProfileAccountInfo({ profile, dashboardType }: { profile: Pr
       </Card>
 
       {/* Quick Links */}
-      <LinksCard dashboardType={dashboardType} isAdmin={isAdmin} />
+      {isAdmin && <LinksCard dashboardType={dashboardType} />}
     </div>
   )
 }

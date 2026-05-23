@@ -1,7 +1,6 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
 import { useFetchProfile } from "@/hooks/profile/use-fetch-profile"
 import { AppError } from "@/lib/app-error"
 import { Briefcase, CreditCard, Edit, Ticket } from "lucide-react"
