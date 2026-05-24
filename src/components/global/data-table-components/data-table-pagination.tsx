@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Loader2 } from "lucide-react"
+import { ChevronLeft, ChevronRight, ChevronsLeft, Loader2 } from "lucide-react"
 
 interface DataTableCursorPaginationProps {
   currentPage: number
@@ -55,7 +55,7 @@ export function DataTableCursorPagination({
                 <span className="font-medium text-foreground tabular-nums">
                   {start}–{end}
                 </span>{" "}
-                of <span className="font-medium text-foreground tabular-nums">{total}</span> patient{total === 1 ? "" : "s"}
+                of <span className="font-medium text-foreground tabular-nums">{total}</span> total data{total === 1 ? "" : "s"}
               </>
             )}
           </p>
@@ -97,36 +97,15 @@ export function DataTableCursorPagination({
         </div>
 
         <div className="flex items-center gap-1">
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-8 w-8 p-0 hover:cursor-pointer"
-            onClick={onFirstPage}
-            disabled={!hasPreviousPage || isFetching}
-            title="First page"
-          >
+          <Button variant="outline" size="sm" className="h-8 w-8 p-0 hover:cursor-pointer" onClick={onFirstPage} disabled={!hasPreviousPage || isFetching} title="First page">
             <ChevronsLeft className="h-3.5 w-3.5" />
             <span className="sr-only">First page</span>
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-8 w-8 p-0 hover:cursor-pointer"
-            onClick={onPreviousPage}
-            disabled={!hasPreviousPage || isFetching}
-            title="Previous page"
-          >
+          <Button variant="outline" size="sm" className="h-8 w-8 p-0 hover:cursor-pointer" onClick={onPreviousPage} disabled={!hasPreviousPage || isFetching} title="Previous page">
             <ChevronLeft className="h-3.5 w-3.5" />
             <span className="sr-only">Previous page</span>
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-8 w-8 p-0 hover:cursor-pointer"
-            onClick={onNextPage}
-            disabled={!hasNextPage || isFetching}
-            title="Next page"
-          >
+          <Button variant="outline" size="sm" className="h-8 w-8 p-0 hover:cursor-pointer" onClick={onNextPage} disabled={!hasNextPage || isFetching} title="Next page">
             <ChevronRight className="h-3.5 w-3.5" />
             <span className="sr-only">Next page</span>
           </Button>
