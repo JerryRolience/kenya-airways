@@ -55,7 +55,7 @@ export function DataTableCursorPagination({
                 <span className="font-medium text-foreground tabular-nums">
                   {start}–{end}
                 </span>{" "}
-                of <span className="font-medium text-foreground tabular-nums">{total}</span> total data{total === 1 ? "" : "s"}
+                of <span className="font-medium text-foreground tabular-nums">{total}</span> total data
               </>
             )}
           </p>
