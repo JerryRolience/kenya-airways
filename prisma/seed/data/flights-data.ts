@@ -646,3 +646,220 @@ export const DEMO_FLIGHTS: FlightSeedData[] = [
     ],
   },
 ]
+
+// Helper to create dates relative to a specific date
+// For May 30, 2026 (6 days from today if today is May 24)
+function daysFromNowMombasa(days: number, hours: number, minutes: number = 0): Date {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const date = new Date(today)
+  date.setDate(date.getDate() + days)
+  date.setHours(hours, minutes, 0, 0)
+  return date
+}
+
+export const NBO_MBA_MAY30_FLIGHTS: FlightSeedData[] = [
+  // ═══════════════════════════════════════════════════════════
+  // NBO → MBA (Nairobi to Mombasa) — May 30, 2026
+  // ═══════════════════════════════════════════════════════════
+  {
+    flightNumber: "KQ620",
+    fromCode: "NBO",
+    toCode: "MBA",
+    departureTime: daysFromNowMombasa(6, 6, 0), // May 30 - 6:00 AM
+    arrivalTime: daysFromNowMombasa(6, 7, 0),
+    aircraftType: "Embraer E190",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 28000 },
+      { class: ClassType.MIDDLE, priceKES: 16000 },
+      { class: ClassType.ECONOMY, priceKES: 8900 },
+    ],
+  },
+  {
+    flightNumber: "KQ622",
+    fromCode: "NBO",
+    toCode: "MBA",
+    departureTime: daysFromNowMombasa(6, 7, 30), // May 30 - 7:30 AM
+    arrivalTime: daysFromNowMombasa(6, 8, 30),
+    aircraftType: "Embraer E190",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 32000 },
+      { class: ClassType.MIDDLE, priceKES: 18000 },
+      { class: ClassType.ECONOMY, priceKES: 9500 },
+    ],
+  },
+  {
+    flightNumber: "KQ624",
+    fromCode: "NBO",
+    toCode: "MBA",
+    departureTime: daysFromNowMombasa(6, 10, 0), // May 30 - 10:00 AM
+    arrivalTime: daysFromNowMombasa(6, 11, 0),
+    aircraftType: "Boeing 737-800",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 30000 },
+      { class: ClassType.MIDDLE, priceKES: 17000 },
+      { class: ClassType.ECONOMY, priceKES: 9200 },
+    ],
+  },
+  {
+    flightNumber: "KQ626",
+    fromCode: "NBO",
+    toCode: "MBA",
+    departureTime: daysFromNowMombasa(6, 13, 0), // May 30 - 1:00 PM
+    arrivalTime: daysFromNowMombasa(6, 14, 0),
+    aircraftType: "Embraer E190",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 28000 },
+      { class: ClassType.MIDDLE, priceKES: 16000 },
+      { class: ClassType.ECONOMY, priceKES: 8900 },
+    ],
+  },
+  {
+    flightNumber: "KQ628",
+    fromCode: "NBO",
+    toCode: "MBA",
+    departureTime: daysFromNowMombasa(6, 15, 30), // May 30 - 3:30 PM
+    arrivalTime: daysFromNowMombasa(6, 16, 30),
+    aircraftType: "Boeing 737-800",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 35000 },
+      { class: ClassType.MIDDLE, priceKES: 20000 },
+      { class: ClassType.ECONOMY, priceKES: 11000 },
+    ],
+  },
+  {
+    flightNumber: "KQ630",
+    fromCode: "NBO",
+    toCode: "MBA",
+    departureTime: daysFromNowMombasa(6, 17, 0), // May 30 - 5:00 PM
+    arrivalTime: daysFromNowMombasa(6, 18, 0),
+    aircraftType: "Embraer E190",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 28000 },
+      { class: ClassType.MIDDLE, priceKES: 16000 },
+      { class: ClassType.ECONOMY, priceKES: 8900 },
+    ],
+  },
+  {
+    flightNumber: "KQ632",
+    fromCode: "NBO",
+    toCode: "MBA",
+    departureTime: daysFromNowMombasa(6, 19, 0), // May 30 - 7:00 PM
+    arrivalTime: daysFromNowMombasa(6, 20, 0),
+    aircraftType: "Embraer E190",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 30000 },
+      { class: ClassType.MIDDLE, priceKES: 18000 },
+      { class: ClassType.ECONOMY, priceKES: 9500 },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  // MBA → NBO (Mombasa to Nairobi) — May 30, 2026
+  // ═══════════════════════════════════════════════════════════
+  {
+    flightNumber: "KQ621",
+    fromCode: "MBA",
+    toCode: "NBO",
+    departureTime: daysFromNowMombasa(6, 7, 30), // May 30 - 7:30 AM
+    arrivalTime: daysFromNowMombasa(6, 8, 30),
+    aircraftType: "Embraer E190",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 28000 },
+      { class: ClassType.MIDDLE, priceKES: 16000 },
+      { class: ClassType.ECONOMY, priceKES: 8900 },
+    ],
+  },
+  {
+    flightNumber: "KQ623",
+    fromCode: "MBA",
+    toCode: "NBO",
+    departureTime: daysFromNowMombasa(6, 9, 0), // May 30 - 9:00 AM
+    arrivalTime: daysFromNowMombasa(6, 10, 0),
+    aircraftType: "Embraer E190",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 32000 },
+      { class: ClassType.MIDDLE, priceKES: 18000 },
+      { class: ClassType.ECONOMY, priceKES: 9500 },
+    ],
+  },
+  {
+    flightNumber: "KQ625",
+    fromCode: "MBA",
+    toCode: "NBO",
+    departureTime: daysFromNowMombasa(6, 11, 30), // May 30 - 11:30 AM
+    arrivalTime: daysFromNowMombasa(6, 12, 30),
+    aircraftType: "Boeing 737-800",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 30000 },
+      { class: ClassType.MIDDLE, priceKES: 17000 },
+      { class: ClassType.ECONOMY, priceKES: 9200 },
+    ],
+  },
+  {
+    flightNumber: "KQ627",
+    fromCode: "MBA",
+    toCode: "NBO",
+    departureTime: daysFromNowMombasa(6, 14, 30), // May 30 - 2:30 PM
+    arrivalTime: daysFromNowMombasa(6, 15, 30),
+    aircraftType: "Embraer E190",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 28000 },
+      { class: ClassType.MIDDLE, priceKES: 16000 },
+      { class: ClassType.ECONOMY, priceKES: 8900 },
+    ],
+  },
+  {
+    flightNumber: "KQ629",
+    fromCode: "MBA",
+    toCode: "NBO",
+    departureTime: daysFromNowMombasa(6, 16, 0), // May 30 - 4:00 PM
+    arrivalTime: daysFromNowMombasa(6, 17, 0),
+    aircraftType: "Boeing 737-800",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 35000 },
+      { class: ClassType.MIDDLE, priceKES: 20000 },
+      { class: ClassType.ECONOMY, priceKES: 11000 },
+    ],
+  },
+  {
+    flightNumber: "KQ631",
+    fromCode: "MBA",
+    toCode: "NBO",
+    departureTime: daysFromNowMombasa(6, 18, 0), // May 30 - 6:00 PM
+    arrivalTime: daysFromNowMombasa(6, 19, 0),
+    aircraftType: "Embraer E190",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 28000 },
+      { class: ClassType.MIDDLE, priceKES: 16000 },
+      { class: ClassType.ECONOMY, priceKES: 8900 },
+    ],
+  },
+  {
+    flightNumber: "KQ633",
+    fromCode: "MBA",
+    toCode: "NBO",
+    departureTime: daysFromNowMombasa(6, 20, 30), // May 30 - 8:30 PM
+    arrivalTime: daysFromNowMombasa(6, 21, 30),
+    aircraftType: "Embraer E190",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 30000 },
+      { class: ClassType.MIDDLE, priceKES: 18000 },
+      { class: ClassType.ECONOMY, priceKES: 9500 },
+    ],
+  },
+]
