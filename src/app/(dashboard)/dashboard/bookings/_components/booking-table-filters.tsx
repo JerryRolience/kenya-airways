@@ -4,19 +4,19 @@ import { DataTableFacetedFilter, DataTableViewOptions } from "@/components/globa
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { BookingListItem } from "@/types/booking"
-import { Table } from "@tanstack/react-table"
-import { Search, X, RefreshCw } from "lucide-react"
-import { BookingStatus, PaymentMethod } from "../../../../../../generated/prisma/enums"
 import { formatEnumValue } from "@/utils/format-enums"
+import { Table } from "@tanstack/react-table"
+import { RefreshCw, Search, X } from "lucide-react"
+import { BookingStatus, PaymentStatus } from "../../../../../../generated/prisma/enums"
 
 const STATUS_OPTIONS = Object.values(BookingStatus).map(status => ({
   value: status,
   label: formatEnumValue(status),
 }))
 
-const PAYMENT_OPTIONS = Object.values(PaymentMethod).map(method => ({
-  value: method,
-  label: formatEnumValue(method),
+const PAYMENT_STATUS_OPTIONS = Object.values(PaymentStatus).map(status => ({
+  value: status,
+  label: formatEnumValue(status),
 }))
 
 interface BookingTableFilterProps {
@@ -41,7 +41,7 @@ export function BookingTableFilter({ table, searchInput, handleSearch, isFiltere
 
         {table.getColumn("status") && <DataTableFacetedFilter column={table.getColumn("status")} title="Status" options={STATUS_OPTIONS} />}
 
-        {table.getColumn("paymentStatus") && <DataTableFacetedFilter column={table.getColumn("paymentStatus")} title="Payment" options={PAYMENT_OPTIONS} />}
+        {table.getColumn("paymentStatus") && <DataTableFacetedFilter column={table.getColumn("paymentStatus")} title="Payment Status" options={PAYMENT_STATUS_OPTIONS} />}
 
         {isFiltered && (
           <Button variant="ghost" size="sm" className="h-8 px-2 text-xs" onClick={handleReset}>
