@@ -48,7 +48,7 @@ export const employeeColumns: ColumnDef<EmployeeListItem>[] = [
   },
   {
     accessorKey: "position",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Department" />,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Position" />,
     cell: ({ row }) => {
       const position = row.getValue<string | null>("position")
       return position ? <span className="text-sm">{position}</span> : <span className="text-sm text-muted-foreground">—</span>
