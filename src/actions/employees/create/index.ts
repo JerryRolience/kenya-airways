@@ -92,12 +92,14 @@ export async function createEmployee(data: CreateEmployeeInputData): Promise<Api
       const employee = await tx.employee.create({
         data: {
           employeeNo,
-          userId: existingUser.id,
+          user: { connect: { id: existingUser.id } },
           firstName: existingUser.firstName,
           lastName: existingUser.lastName,
           phone: existingUser.phone,
           isActive: validatedData.isActive ?? true, // Default to active if not provided
-          ...validatedData,
+          email: validatedData.email,
+          position: validatedData.position,
+          department: validatedData.department,
         },
         select: { id: true, firstName: true, lastName: true },
       })
@@ -121,6 +123,8 @@ export async function createEmployee(data: CreateEmployeeInputData): Promise<Api
     // Prisma re-throws as PrismaClientKnownRequestError in transactions
     // but HttpError thrown inside will still be the cause — unwrap it
     const resolved = error?.cause instanceof HttpError ? error.cause : error
+
+    // console.log("ERROR ADDING AN EMPLOYEE", resolved)
 
     return errorResponse({
       statusCode: resolved.statusCode || STATUS_CODES.INTERNAL_SERVER_ERROR,
