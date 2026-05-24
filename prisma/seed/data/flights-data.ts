@@ -338,3 +338,311 @@ export const FLIGHTS: FlightSeedData[] = [
     ],
   },
 ]
+
+// Add these to your FLIGHTS array
+
+export const DEMO_FLIGHTS: FlightSeedData[] = [
+  // ═══════════════════════════════════════════════════════════
+  // NBO → JFK (Nairobi to New York) — May 24-27
+  // ═══════════════════════════════════════════════════════════
+  {
+    flightNumber: "KQ004",
+    fromCode: "NBO",
+    toCode: "JFK",
+    departureTime: daysFromNow(0, 8, 0), // Today 8:00 AM
+    arrivalTime: daysFromNow(0, 15, 30),
+    aircraftType: "Boeing 787-8 Dreamliner",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 320000 },
+      { class: ClassType.MIDDLE, priceKES: 150000 },
+      { class: ClassType.ECONOMY, priceKES: 65000 },
+    ],
+  },
+  {
+    flightNumber: "KQ006",
+    fromCode: "NBO",
+    toCode: "JFK",
+    departureTime: daysFromNow(0, 22, 0), // Today 10:00 PM
+    arrivalTime: daysFromNow(1, 5, 30),
+    aircraftType: "Boeing 787-8 Dreamliner",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 320000 },
+      { class: ClassType.MIDDLE, priceKES: 150000 },
+      { class: ClassType.ECONOMY, priceKES: 65000 },
+    ],
+  },
+  {
+    flightNumber: "KQ008",
+    fromCode: "NBO",
+    toCode: "JFK",
+    departureTime: daysFromNow(1, 10, 0), // Tomorrow 10:00 AM
+    arrivalTime: daysFromNow(1, 17, 30),
+    aircraftType: "Boeing 787-8 Dreamliner",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 310000 },
+      { class: ClassType.MIDDLE, priceKES: 145000 },
+      { class: ClassType.ECONOMY, priceKES: 62000 },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  // JFK → NBO (New York to Nairobi) — Return flights
+  // ═══════════════════════════════════════════════════════════
+  {
+    flightNumber: "KQ005",
+    fromCode: "JFK",
+    toCode: "NBO",
+    departureTime: daysFromNow(2, 20, 0), // May 26
+    arrivalTime: daysFromNow(3, 5, 30),
+    aircraftType: "Boeing 787-8 Dreamliner",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 320000 },
+      { class: ClassType.MIDDLE, priceKES: 150000 },
+      { class: ClassType.ECONOMY, priceKES: 65000 },
+    ],
+  },
+  {
+    flightNumber: "KQ007",
+    fromCode: "JFK",
+    toCode: "NBO",
+    departureTime: daysFromNow(2, 23, 0), // May 26 - Late night
+    arrivalTime: daysFromNow(3, 8, 30),
+    aircraftType: "Boeing 787-8 Dreamliner",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 310000 },
+      { class: ClassType.MIDDLE, priceKES: 145000 },
+      { class: ClassType.ECONOMY, priceKES: 62000 },
+    ],
+  },
+  {
+    flightNumber: "KQ009",
+    fromCode: "JFK",
+    toCode: "NBO",
+    departureTime: daysFromNow(3, 18, 0), // May 27
+    arrivalTime: daysFromNow(4, 5, 30),
+    aircraftType: "Boeing 787-8 Dreamliner",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 320000 },
+      { class: ClassType.MIDDLE, priceKES: 150000 },
+      { class: ClassType.ECONOMY, priceKES: 65000 },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  // NBO → MBA (Nairobi to Mombasa) — May 24-27
+  // ═══════════════════════════════════════════════════════════
+  {
+    flightNumber: "KQ604",
+    fromCode: "NBO",
+    toCode: "MBA",
+    departureTime: daysFromNow(0, 9, 0), // Today 9:00 AM
+    arrivalTime: daysFromNow(0, 10, 0),
+    aircraftType: "Embraer E190",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 28000 },
+      { class: ClassType.MIDDLE, priceKES: 16000 },
+      { class: ClassType.ECONOMY, priceKES: 8900 },
+    ],
+  },
+  {
+    flightNumber: "KQ606",
+    fromCode: "NBO",
+    toCode: "MBA",
+    departureTime: daysFromNow(0, 16, 0), // Today 4:00 PM
+    arrivalTime: daysFromNow(0, 17, 0),
+    aircraftType: "Embraer E190",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 28000 },
+      { class: ClassType.MIDDLE, priceKES: 16000 },
+      { class: ClassType.ECONOMY, priceKES: 8900 },
+    ],
+  },
+  {
+    flightNumber: "KQ608",
+    fromCode: "NBO",
+    toCode: "MBA",
+    departureTime: daysFromNow(1, 7, 0), // Tomorrow 7:00 AM
+    arrivalTime: daysFromNow(1, 8, 0),
+    aircraftType: "Embraer E190",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 28000 },
+      { class: ClassType.MIDDLE, priceKES: 16000 },
+      { class: ClassType.ECONOMY, priceKES: 8900 },
+    ],
+  },
+  {
+    flightNumber: "KQ610",
+    fromCode: "NBO",
+    toCode: "MBA",
+    departureTime: daysFromNow(1, 18, 0), // Tomorrow 6:00 PM
+    arrivalTime: daysFromNow(1, 19, 0),
+    aircraftType: "Embraer E190",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 28000 },
+      { class: ClassType.MIDDLE, priceKES: 16000 },
+      { class: ClassType.ECONOMY, priceKES: 8900 },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  // MBA → NBO (Mombasa to Nairobi) — Return flights
+  // ═══════════════════════════════════════════════════════════
+  {
+    flightNumber: "KQ605",
+    fromCode: "MBA",
+    toCode: "NBO",
+    departureTime: daysFromNow(0, 11, 0), // Today 11:00 AM
+    arrivalTime: daysFromNow(0, 12, 0),
+    aircraftType: "Embraer E190",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 28000 },
+      { class: ClassType.MIDDLE, priceKES: 16000 },
+      { class: ClassType.ECONOMY, priceKES: 8900 },
+    ],
+  },
+  {
+    flightNumber: "KQ607",
+    fromCode: "MBA",
+    toCode: "NBO",
+    departureTime: daysFromNow(0, 18, 0), // Today 6:00 PM
+    arrivalTime: daysFromNow(0, 19, 0),
+    aircraftType: "Embraer E190",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 28000 },
+      { class: ClassType.MIDDLE, priceKES: 16000 },
+      { class: ClassType.ECONOMY, priceKES: 8900 },
+    ],
+  },
+  {
+    flightNumber: "KQ609",
+    fromCode: "MBA",
+    toCode: "NBO",
+    departureTime: daysFromNow(1, 9, 0), // Tomorrow 9:00 AM
+    arrivalTime: daysFromNow(1, 10, 0),
+    aircraftType: "Embraer E190",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 28000 },
+      { class: ClassType.MIDDLE, priceKES: 16000 },
+      { class: ClassType.ECONOMY, priceKES: 8900 },
+    ],
+  },
+  {
+    flightNumber: "KQ611",
+    fromCode: "MBA",
+    toCode: "NBO",
+    departureTime: daysFromNow(1, 20, 0), // Tomorrow 8:00 PM
+    arrivalTime: daysFromNow(1, 21, 0),
+    aircraftType: "Embraer E190",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 28000 },
+      { class: ClassType.MIDDLE, priceKES: 16000 },
+      { class: ClassType.ECONOMY, priceKES: 8900 },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  // NBO → DUB (Nairobi to Dublin) — May 24-27
+  // ═══════════════════════════════════════════════════════════
+  {
+    flightNumber: "KQ890",
+    fromCode: "NBO",
+    toCode: "DUB",
+    departureTime: daysFromNow(0, 6, 0), // Today 6:00 AM
+    arrivalTime: daysFromNow(0, 13, 30),
+    aircraftType: "Boeing 787-8 Dreamliner",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 195000 },
+      { class: ClassType.MIDDLE, priceKES: 92000 },
+      { class: ClassType.ECONOMY, priceKES: 40000 },
+    ],
+  },
+  {
+    flightNumber: "KQ892",
+    fromCode: "NBO",
+    toCode: "DUB",
+    departureTime: daysFromNow(0, 20, 0), // Today 8:00 PM
+    arrivalTime: daysFromNow(1, 3, 30),
+    aircraftType: "Boeing 787-8 Dreamliner",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 195000 },
+      { class: ClassType.MIDDLE, priceKES: 92000 },
+      { class: ClassType.ECONOMY, priceKES: 40000 },
+    ],
+  },
+  {
+    flightNumber: "KQ894",
+    fromCode: "NBO",
+    toCode: "DUB",
+    departureTime: daysFromNow(1, 14, 0), // Tomorrow 2:00 PM
+    arrivalTime: daysFromNow(1, 21, 30),
+    aircraftType: "Boeing 787-8 Dreamliner",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 190000 },
+      { class: ClassType.MIDDLE, priceKES: 89000 },
+      { class: ClassType.ECONOMY, priceKES: 38000 },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  // DUB → NBO (Dublin to Nairobi) — Return flights
+  // ═══════════════════════════════════════════════════════════
+  {
+    flightNumber: "KQ891",
+    fromCode: "DUB",
+    toCode: "NBO",
+    departureTime: daysFromNow(2, 15, 0), // May 26 - 3:00 PM
+    arrivalTime: daysFromNow(3, 0, 30),
+    aircraftType: "Boeing 787-8 Dreamliner",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 195000 },
+      { class: ClassType.MIDDLE, priceKES: 92000 },
+      { class: ClassType.ECONOMY, priceKES: 40000 },
+    ],
+  },
+  {
+    flightNumber: "KQ893",
+    fromCode: "DUB",
+    toCode: "NBO",
+    departureTime: daysFromNow(3, 8, 0), // May 27 - 8:00 AM
+    arrivalTime: daysFromNow(3, 17, 30),
+    aircraftType: "Boeing 787-8 Dreamliner",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 190000 },
+      { class: ClassType.MIDDLE, priceKES: 89000 },
+      { class: ClassType.ECONOMY, priceKES: 38000 },
+    ],
+  },
+  {
+    flightNumber: "KQ895",
+    fromCode: "DUB",
+    toCode: "NBO",
+    departureTime: daysFromNow(3, 21, 0), // May 27 - 9:00 PM
+    arrivalTime: daysFromNow(4, 6, 30),
+    aircraftType: "Boeing 787-8 Dreamliner",
+    status: FlightStatus.SCHEDULED,
+    seatClasses: [
+      { class: ClassType.EXECUTIVE, priceKES: 195000 },
+      { class: ClassType.MIDDLE, priceKES: 92000 },
+      { class: ClassType.ECONOMY, priceKES: 40000 },
+    ],
+  },
+]

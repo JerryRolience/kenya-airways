@@ -3,7 +3,7 @@ import chalk from "chalk"
 import * as dotenv from "dotenv"
 import * as path from "path"
 import { PrismaClient } from "../../generated/prisma/client"
-import { FLIGHTS } from "./data/flights-data"
+import { DEMO_FLIGHTS, FLIGHTS } from "./data/flights-data"
 import { SeatPosition, ClassType } from "../../generated/prisma/enums"
 
 const envPath = path.resolve(process.cwd(), ".env")
@@ -81,7 +81,7 @@ export async function seedFlights() {
   const layouts = await prisma.aircraftLayout.findMany()
   const layoutMap = new Map(layouts.map(l => [l.aircraftType, l]))
 
-  for (const flightData of FLIGHTS) {
+  for (const flightData of [...FLIGHTS, ...DEMO_FLIGHTS]) {
     try {
       const departure = airportMap.get(flightData.fromCode)
       const arrival = airportMap.get(flightData.toCode)
