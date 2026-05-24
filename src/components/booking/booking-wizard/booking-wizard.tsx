@@ -162,7 +162,7 @@ export function BookingWizard({ context }: BookingWizardProps) {
             setStep(2)
             window.scrollTo({ top: 0, behavior: "smooth" })
           }}
-          tripType="return"
+          tripType="return-final"
         />
       )}
 

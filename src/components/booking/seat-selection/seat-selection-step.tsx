@@ -17,7 +17,7 @@ interface SeatSelectionStepProps {
   classType: ClassType
   onComplete: (outboundSeats: Record<number, SeatData>) => void
   onBack: () => void
-  tripType: "outbound" | "return"
+  tripType: "outbound" | "return" | "return-final"
 }
 
 export function SeatSelectionStep({ outboundFlightId, passengerCount, classType, onComplete, onBack, tripType }: SeatSelectionStepProps) {
@@ -105,8 +105,8 @@ export function SeatSelectionStep({ outboundFlightId, passengerCount, classType,
         </Button>
 
         <Button type="button" onClick={handleContinue} className="rounded-xl h-11 px-6 text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 hover:cursor-pointer">
-          <span className="hidden md:inline">{tripType === "outbound" ? "Continue to return flight " : "Continue to review "}</span>
-          <span className="inline md:hidden">{tripType === "outbound" ? "Continue " : "Continue to review"}</span>
+          <span className="hidden md:inline">{tripType === "outbound" || tripType === "return-final" ? "Continue to review " : "Continue to return flight "}</span>
+          <span className="inline md:hidden">{tripType === "outbound" || tripType === "return-final" ? "Continue to review " : "Continue"}</span>
           <ArrowRight className="ml-1 h-4 w-4" />
         </Button>
       </div>
