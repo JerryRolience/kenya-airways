@@ -402,7 +402,7 @@ This project is created strictly for educational purposes.
 
 # 👨‍💻 Developer
 
-Developed by **Jerry Rolience**
+Developed by **Jerry Rolince**
 
 ---
 
